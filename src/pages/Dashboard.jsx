@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
-import { creditsApi, gamificationApi, donationApi, donorApi } from "../lib/api";
+import { creditsApi, gamificationApi, donationApi, donorApi, matchingApi } from "../lib/api";
 import { useCountUp } from "../lib/useCountUp";
 
 export default function Dashboard() {
@@ -17,6 +17,7 @@ export default function Dashboard() {
   const [credits, setCredits] = useState(null);
   const [badges, setBadges] = useState([]);
   const [history, setHistory] = useState([]);
+  const [pendingRequestCount, setPendingRequestCount] = useState(0);
   const [availability, setAvailability] = useState(donorProfile?.availability_status ?? true);
   const [loading, setLoading] = useState(true);
   const [savingAvailability, setSavingAvailability] = useState(false);
@@ -26,15 +27,20 @@ export default function Dashboard() {
     let active = true;
     async function load() {
       try {
-        const [creditsRes, badgesRes, historyRes] = await Promise.allSettled([
+        const [creditsRes, badgesRes, historyRes, requestsRes] = await Promise.allSettled([
           creditsApi.balance(),
           gamificationApi.badges(),
           donationApi.history(),
+          matchingApi.myContactRequests(),
         ]);
         if (!active) return;
         if (creditsRes.status === "fulfilled") setCredits(creditsRes.value);
         if (badgesRes.status === "fulfilled") setBadges(badgesRes.value.results || []);
         if (historyRes.status === "fulfilled") setHistory(historyRes.value.results || []);
+        if (requestsRes.status === "fulfilled") {
+          const pending = (requestsRes.value.results || []).filter((r) => r.status === "pending");
+          setPendingRequestCount(pending.length);
+        }
       } catch {
         if (active) setError("Couldn't load everything just now. Pull to refresh in a bit.");
       } finally {
@@ -98,6 +104,27 @@ export default function Dashboard() {
           Your blood type{donorProfile?.blood_type ? ` — ${donorProfile.blood_type}` : ""} could be
           exactly what someone needs today.
         </p>
+
+        {pendingRequestCount > 0 && (
+          <Link
+            to="/requests"
+            className="flex items-center justify-between gap-4 rounded-2xl bg-clementine-soft border border-clementine/25 px-5 py-4 mb-8 hover:border-clementine/50 transition-colors"
+          >
+            <div>
+              <p className="font-body text-sm font-semibold text-ink">
+                {pendingRequestCount === 1
+                  ? "A hospital is waiting on your response"
+                  : `${pendingRequestCount} hospitals are waiting on your response`}
+              </p>
+              <p className="font-body text-xs text-ink/55 mt-0.5">
+                Review the request before it expires
+              </p>
+            </div>
+            <span className="font-body text-sm font-semibold text-clementine whitespace-nowrap">
+              View →
+            </span>
+          </Link>
+        )}
 
         <div className="grid md:grid-cols-3 gap-5 mb-10">
           {/* Credit balance — ruby, the core metric */}
