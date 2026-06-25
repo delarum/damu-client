@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 import AuthSidePanel from "../components/AuthSidePanel";
+import { useLanguage } from "../lib/LanguageContext";
 
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { t } = useLanguage();
   const [form, setForm] = useState({ phone: "", password: "" });
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -22,7 +24,7 @@ export default function Login() {
       await login(form);
       navigate("/dashboard");
     } catch (err) {
-      setError(err.message || "Couldn't log you in. Check your details and try again.");
+      setError(err.message || t("auth.login.error"));
     } finally {
       setSubmitting(false);
     }
@@ -31,24 +33,24 @@ export default function Login() {
   return (
     <div className="min-h-screen flex bg-clay">
       <AuthSidePanel
-        eyebrow="Welcome back"
-        heading="Your blood type is needed somewhere, right now."
-        body="Log in to check your credits, badges, and the donations that got you here."
+        eyebrow={t("auth.login.eyebrow")}
+        heading={t("auth.login.sideHeading")}
+        body={t("auth.login.sideBody")}
       />
 
       <main className="flex-1 flex items-center justify-center px-6 py-16">
         <div className="w-full max-w-md">
           <div className="lg:hidden mb-10">
             <Link to="/" className="font-display text-xl tracking-tight text-ruby">
-              DamuLink
+              {t("common.brand")}
             </Link>
           </div>
 
           <h1 className="font-display font-medium text-3xl text-ink mb-2">
-            Log in
+            {t("auth.login.title")}
           </h1>
           <p className="font-body text-sm text-ink/55 mb-8">
-            Enter the phone number and password you registered with.
+            {t("auth.login.body")}
           </p>
 
           {error && (
@@ -60,7 +62,7 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <label className="block">
               <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide">
-                Phone number
+                {t("field.phone")}
               </span>
               <input
                 type="tel"
@@ -74,7 +76,7 @@ export default function Login() {
 
             <label className="block">
               <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide">
-                Password
+                {t("field.password")}
               </span>
               <input
                 type="password"
@@ -90,14 +92,14 @@ export default function Login() {
               disabled={submitting}
               className="w-full mt-2 font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-cream hover:bg-ruby-deep transition-colors disabled:opacity-50 shadow-[0_10px_24px_-10px_rgba(87,3,0,0.5)]"
             >
-              {submitting ? "Logging in…" : "Log in"}
+              {submitting ? t("auth.login.submitting") : t("common.logIn")}
             </button>
           </form>
 
           <p className="font-body text-sm text-ink/55 text-center mt-7">
-            New to DamuLink?{" "}
+            {t("auth.login.new")}{" "}
             <Link to="/signup" className="text-ruby-warm font-semibold">
-              Register as a donor
+              {t("auth.login.register")}
             </Link>
           </p>
         </div>

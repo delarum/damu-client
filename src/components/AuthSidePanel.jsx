@@ -1,3 +1,5 @@
+import { useLanguage } from "../lib/LanguageContext";
+
 const BLOOD_TYPES = ["O+", "A+", "B+", "AB+", "O-", "A-", "B-", "AB-"];
 
 /**
@@ -7,10 +9,12 @@ const BLOOD_TYPES = ["O+", "A+", "B+", "AB+", "O-", "A-", "B-", "AB-"];
  * a different, generic app bolted onto a colorful marketing site.
  */
 export default function AuthSidePanel({ eyebrow, heading, body }) {
+  const { t } = useLanguage();
+
   return (
     <div className="hidden lg:flex lg:w-[44%] bg-ruby-night relative overflow-hidden flex-col justify-between px-12 py-10">
       <span className="font-display text-xl tracking-tight text-cream relative z-10">
-        DamuLink
+        {t("common.brand")}
       </span>
 
       <div className="relative z-10">

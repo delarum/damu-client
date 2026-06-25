@@ -3,10 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 import { creditsApi, gamificationApi, donationApi, donorApi, matchingApi } from "../lib/api";
 import { useCountUp } from "../lib/useCountUp";
+import { useLanguage } from "../lib/LanguageContext";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const { user, donorProfile, logout, loading: authLoading } = useAuth();
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (!authLoading && user && !donorProfile) {
@@ -42,7 +44,7 @@ export default function Dashboard() {
           setPendingRequestCount(pending.length);
         }
       } catch {
-        if (active) setError("Couldn't load everything just now. Pull to refresh in a bit.");
+        if (active) setError(t("dashboard.loadError"));
       } finally {
         if (active) setLoading(false);
       }
@@ -80,13 +82,13 @@ export default function Dashboard() {
       {/* Dark header — carries the brand across from onboarding */}
       <header className="flex items-center justify-between px-6 md:px-12 py-6 bg-ruby-night">
         <Link to="/" className="font-display text-lg tracking-tight text-cream">
-          DamuLink
+          {t("common.brand")}
         </Link>
         <button
           onClick={handleLogout}
           className="font-body text-sm text-cream/60 hover:text-cream transition-colors"
         >
-          Log out
+          {t("common.logout")}
         </button>
       </header>
 
@@ -98,12 +100,17 @@ export default function Dashboard() {
         )}
 
         <h1 className="font-display font-medium text-3xl text-ink mb-1">
-          {firstName ? `Welcome back, ${firstName}` : "Welcome back"}
+          {firstName ? t("dashboard.welcomeNamed", { name: firstName }) : t("dashboard.welcome")}
         </h1>
         <p className="font-body text-sm text-ink/55 mb-10">
-          Your blood type{donorProfile?.blood_type ? ` — ${donorProfile.blood_type}` : ""} could be
-          exactly what someone needs today.
-        </p>
+  {t("dashboard.bloodTypeCopy", {
+    bloodType: donorProfile?.blood_type
+      ? t("dashboard.bloodTypeValue", {
+          bloodType: donorProfile.blood_type,
+        })
+      : "",
+  })}
+</p>
 
         {pendingRequestCount > 0 && (
           <Link
@@ -113,15 +120,15 @@ export default function Dashboard() {
             <div>
               <p className="font-body text-sm font-semibold text-ink">
                 {pendingRequestCount === 1
-                  ? "A hospital is waiting on your response"
-                  : `${pendingRequestCount} hospitals are waiting on your response`}
+                  ? t("dashboard.oneRequest")
+                  : t("dashboard.manyRequests", { count: pendingRequestCount })}
               </p>
               <p className="font-body text-xs text-ink/55 mt-0.5">
-                Review the request before it expires
+                {t("dashboard.reviewRequest")}
               </p>
             </div>
             <span className="font-body text-sm font-semibold text-clementine whitespace-nowrap">
-              View →
+              {t("dashboard.view")}��
             </span>
           </Link>
         )}
@@ -130,13 +137,13 @@ export default function Dashboard() {
           {/* Credit balance — ruby, the core metric */}
           <div className="md:col-span-1 rounded-3xl bg-ruby-night p-6 flex flex-col justify-between">
             <span className="font-body text-xs font-medium text-cream/50 uppercase tracking-wide">
-              Credit balance
+              {t("dashboard.credits")}
             </span>
             <span className="font-display text-4xl text-mist mt-3">
               {loading ? "—" : creditValue.toLocaleString()}
             </span>
             <span className="font-body text-xs text-cream/45 mt-2">
-              Redeemable at any partnered hospital
+              {t("dashboard.redeemable")}
             </span>
           </div>
 
@@ -147,7 +154,7 @@ export default function Dashboard() {
             }`}
           >
             <span className="font-body text-xs font-medium text-ink/50 uppercase tracking-wide">
-              Availability
+              {t("dashboard.availability")}
             </span>
             <button
               onClick={toggleAvailability}
@@ -165,30 +172,32 @@ export default function Dashboard() {
             </button>
             <span className="font-body text-xs text-ink/55 mt-3">
               {availability
-                ? "Hospitals can find and contact you"
-                : "You're hidden from new requests"}
+                ? t("dashboard.available")
+                : t("dashboard.hidden")}
             </span>
           </div>
 
           {/* Badge count — clementine, celebratory/achievement tone */}
           <div className="md:col-span-1 rounded-3xl bg-clementine-soft p-6 flex flex-col justify-between">
             <span className="font-body text-xs font-medium text-ink/55 uppercase tracking-wide">
-              Badges earned
+              {t("dashboard.badgesEarned")}
             </span>
             <span className="font-display text-4xl text-clementine mt-3">{badges.length}</span>
             <span className="font-body text-xs text-ink/55 mt-2">
-              {badges[0]?.badge ? `Latest: ${badges[0].badge}` : "Donate to earn your first"}
+              {badges[0]?.badge
+                ? t("dashboard.latestBadge", { badge: badges[0].badge })
+                : t("dashboard.firstBadge")}
             </span>
           </div>
         </div>
 
         {/* Badges row */}
         <section className="mb-10">
-          <h2 className="font-body text-sm font-semibold text-ink mb-4">Your badges</h2>
+          <h2 className="font-body text-sm font-semibold text-ink mb-4">{t("dashboard.badgesTitle")}</h2>
           {badges.length === 0 ? (
             <EmptyState
-              title="No badges yet"
-              body="Your first donation unlocks Rookie Lifesaver. It's closer than you think."
+              title={t("dashboard.noBadgesTitle")}
+              body={t("dashboard.noBadgesBody")}
             />
           ) : (
             <div className="flex flex-wrap gap-3">
@@ -201,11 +210,11 @@ export default function Dashboard() {
 
         {/* Donation history */}
         <section>
-          <h2 className="font-body text-sm font-semibold text-ink mb-4">Donation history</h2>
+          <h2 className="font-body text-sm font-semibold text-ink mb-4">{t("dashboard.historyTitle")}</h2>
           {history.length === 0 ? (
             <EmptyState
-              title="No donations recorded yet"
-              body="Once a hospital confirms your donation, it shows up here with the credits you earned."
+              title={t("dashboard.noHistoryTitle")}
+              body={t("dashboard.noHistoryBody")}
             />
           ) : (
             <div className="rounded-3xl bg-white divide-y divide-ink/8 overflow-hidden">

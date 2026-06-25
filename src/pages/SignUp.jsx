@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { authApi, ApiError } from "../lib/api";
 import AuthSidePanel from "../components/AuthSidePanel";
+import { useLanguage } from "../lib/LanguageContext";
 
 const STEPS = ["Account", "Verify", "Done"];
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -38,7 +40,7 @@ export default function SignUp() {
       if (err instanceof ApiError && err.details) {
         setFieldErrors(err.details);
       } else {
-        setError(err.message || "Registration failed. Please try again.");
+        setError(err.message || t("auth.signup.error"));
       }
     } finally {
       setSubmitting(false);
@@ -53,7 +55,7 @@ export default function SignUp() {
       await authApi.verifyOtp({ phone: form.phone, otp });
       setStep(2);
     } catch (err) {
-      setError(err.message || "That code didn't work. Check it and try again.");
+      setError(err.message || t("auth.signup.verifyError"));
     } finally {
       setSubmitting(false);
     }
@@ -64,25 +66,25 @@ export default function SignUp() {
     try {
       await authApi.resendOtp({ phone: form.phone });
     } catch (err) {
-      setError(err.message || "Couldn't resend the code. Try again shortly.");
+      setError(err.message || t("auth.signup.resendError"));
     }
   }
 
   const stepCopy = [
     {
-      eyebrow: "Two minutes, start to finish",
-      heading: "Your details stay yours until you say go.",
-      body: "Full contact details are only shared with a hospital after you personally accept a request.",
+      eyebrow: t("auth.signup.step0.eyebrow"),
+      heading: t("auth.signup.step0.heading"),
+      body: t("auth.signup.step0.body"),
     },
     {
-      eyebrow: "Almost there",
-      heading: "One code, sent straight to your phone.",
-      body: "This confirms the number hospitals will reach you on when it matters.",
+      eyebrow: t("auth.signup.step1.eyebrow"),
+      heading: t("auth.signup.step1.heading"),
+      body: t("auth.signup.step1.body"),
     },
     {
-      eyebrow: "Welcome",
-      heading: "You're part of the network now.",
-      body: "Next, your blood type and location — that's what makes the match.",
+      eyebrow: t("auth.signup.step2.eyebrow"),
+      heading: t("auth.signup.step2.heading"),
+      body: t("auth.signup.step2.body"),
     },
   ][step];
 
@@ -98,7 +100,7 @@ export default function SignUp() {
         <div className="w-full max-w-md">
           <div className="lg:hidden mb-8">
             <Link to="/" className="font-display text-xl tracking-tight text-ruby">
-              DamuLink
+              {t("common.brand")}
             </Link>
           </div>
 
@@ -118,10 +120,10 @@ export default function SignUp() {
           {step === 0 && (
             <form onSubmit={handleRegister}>
               <h1 className="font-display font-medium text-3xl text-ink mb-2">
-                Create your account
+                {t("auth.signup.title")}
               </h1>
               <p className="font-body text-sm text-ink/55 mb-8">
-                You'll verify your phone number next.
+                {t("auth.signup.body")}
               </p>
 
               {error && (
@@ -132,14 +134,14 @@ export default function SignUp() {
 
               <div className="space-y-4">
                 <Field
-                  label="Full legal name"
+                  label={t("field.fullName")}
                   value={form.full_name}
                   onChange={(v) => update("full_name", v)}
                   error={fieldErrors.full_name}
                   required
                 />
                 <Field
-                  label="Phone number"
+                  label={t("field.phone")}
                   type="tel"
                   placeholder="+254712345678"
                   value={form.phone}
@@ -148,21 +150,21 @@ export default function SignUp() {
                   required
                 />
                 <Field
-                  label="Email (optional)"
+                  label={t("field.emailOptional")}
                   type="email"
                   value={form.email}
                   onChange={(v) => update("email", v)}
                   error={fieldErrors.email}
                 />
                 <Field
-                  label="National ID number"
+                  label={t("field.nationalId")}
                   value={form.national_id}
                   onChange={(v) => update("national_id", v)}
                   error={fieldErrors.national_id}
                   required
                 />
                 <Field
-                  label="Date of birth"
+                  label={t("field.birthDate")}
                   type="date"
                   value={form.date_of_birth}
                   onChange={(v) => update("date_of_birth", v)}
@@ -170,7 +172,7 @@ export default function SignUp() {
                   required
                 />
                 <Field
-                  label="Password"
+                  label={t("field.password")}
                   type="password"
                   value={form.password}
                   onChange={(v) => update("password", v)}
@@ -184,13 +186,13 @@ export default function SignUp() {
                 disabled={submitting}
                 className="w-full mt-8 font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-cream hover:bg-ruby-deep transition-colors disabled:opacity-50 shadow-[0_10px_24px_-10px_rgba(87,3,0,0.5)]"
               >
-                {submitting ? "Creating account…" : "Continue"}
+                {submitting ? t("common.creatingAccount") : t("common.continue")}
               </button>
 
               <p className="font-body text-sm text-ink/55 text-center mt-6">
-                Already have an account?{" "}
+                {t("auth.signup.already")}{" "}
                 <Link to="/login" className="text-ruby-warm font-semibold">
-                  Log in
+                  {t("common.logIn")}
                 </Link>
               </p>
             </form>
@@ -199,10 +201,10 @@ export default function SignUp() {
           {step === 1 && (
             <form onSubmit={handleVerify}>
               <h1 className="font-display font-medium text-3xl text-ink mb-2">
-                Verify your phone
+                {t("auth.signup.verifyTitle")}
               </h1>
               <p className="font-body text-sm text-ink/55 mb-8">
-                We sent a code to {form.phone || "your phone"}. Enter it below.
+                {t("auth.signup.verifyBody", { phone: form.phone || t("auth.signup.verifyFallback") })}
               </p>
 
               {error && (
@@ -212,7 +214,7 @@ export default function SignUp() {
               )}
 
               <Field
-                label="Verification code"
+                label={t("field.verificationCode")}
                 value={otp}
                 onChange={setOtp}
                 required
@@ -224,7 +226,7 @@ export default function SignUp() {
                 disabled={submitting}
                 className="w-full mt-8 font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-cream hover:bg-ruby-deep transition-colors disabled:opacity-50 shadow-[0_10px_24px_-10px_rgba(87,3,0,0.5)]"
               >
-                {submitting ? "Verifying…" : "Verify and continue"}
+                {submitting ? t("common.verifying") : t("auth.signup.verifyAction")}
               </button>
 
               <button
@@ -232,7 +234,7 @@ export default function SignUp() {
                 onClick={handleResend}
                 className="w-full mt-3 font-body text-sm text-ink/55 hover:text-ruby-warm py-2"
               >
-                Resend code
+                {t("auth.signup.resend")}
               </button>
             </form>
           )}
@@ -245,17 +247,16 @@ export default function SignUp() {
                 </svg>
               </div>
               <h1 className="font-display font-medium text-3xl text-ink mb-2">
-                You're verified
+                {t("auth.signup.doneTitle")}
               </h1>
               <p className="font-body text-sm text-ink/55 mb-8">
-                Log in with the password you just set, then we'll get your blood type
-                and location so hospitals near you can find a match.
+                {t("auth.signup.doneBody")}
               </p>
               <Link
                 to="/login"
                 className="block w-full font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-cream hover:bg-ruby-deep transition-colors"
               >
-                Log in to continue
+                {t("auth.signup.doneAction")}
               </Link>
             </div>
           )}
