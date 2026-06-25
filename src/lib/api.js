@@ -151,4 +151,11 @@ export const gamificationApi = {
   leaderboard: () => api.get("/gamification/leaderboard/"),
 };
 
+// ---- Matching / contact requests (donor side) ----
+export const matchingApi = {
+  myContactRequests: () => api.get("/matching/contact-requests/mine/"),
+  respond: (requestId, action) =>
+    api.post(`/matching/contact-requests/${requestId}/respond/`, { action }),
+};
+
 export { ApiError };
