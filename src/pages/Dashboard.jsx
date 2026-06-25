@@ -70,15 +70,15 @@ export default function Dashboard() {
   const firstName = (user?.full_name || donorProfile?.full_name || "").split(" ")[0];
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Top bar */}
-      <header className="flex items-center justify-between px-6 md:px-12 py-6 border-b border-ink/10">
-        <Link to="/" className="font-display text-lg tracking-tight text-ruby">
+    <div className="min-h-screen bg-clay">
+      {/* Dark header — carries the brand across from onboarding */}
+      <header className="flex items-center justify-between px-6 md:px-12 py-6 bg-ruby-night">
+        <Link to="/" className="font-display text-lg tracking-tight text-cream">
           DamuLink
         </Link>
         <button
           onClick={handleLogout}
-          className="font-body text-sm text-ink/60 hover:text-ruby transition-colors"
+          className="font-body text-sm text-cream/60 hover:text-cream transition-colors"
         >
           Log out
         </button>
@@ -86,35 +86,39 @@ export default function Dashboard() {
 
       <main className="px-6 md:px-12 py-10 max-w-5xl mx-auto">
         {error && (
-          <p className="font-body text-sm text-ruby bg-ruby-50 border border-ruby/20 rounded-lg px-4 py-3 mb-6">
+          <p className="font-body text-sm text-ruby-warm bg-ruby-50 border border-ruby/15 rounded-xl px-4 py-3 mb-6">
             {error}
           </p>
         )}
 
-        <h1 className="font-display text-2xl md:text-3xl text-ink mb-1">
-          {firstName ? `WELCOME BACK, ${firstName.toUpperCase()}` : "WELCOME BACK"}
+        <h1 className="font-display font-medium text-3xl text-ink mb-1">
+          {firstName ? `Welcome back, ${firstName}` : "Welcome back"}
         </h1>
-        <p className="font-body text-sm text-ink/60 mb-10">
+        <p className="font-body text-sm text-ink/55 mb-10">
           Your blood type{donorProfile?.blood_type ? ` — ${donorProfile.blood_type}` : ""} could be
           exactly what someone needs today.
         </p>
 
         <div className="grid md:grid-cols-3 gap-5 mb-10">
-          {/* Credit balance — the count-up moment */}
-          <div className="md:col-span-1 rounded-2xl border border-ink/10 bg-surface p-6 flex flex-col justify-between">
-            <span className="font-body text-xs font-medium text-ink/50 uppercase tracking-wide">
+          {/* Credit balance — ruby, the core metric */}
+          <div className="md:col-span-1 rounded-3xl bg-ruby-night p-6 flex flex-col justify-between">
+            <span className="font-body text-xs font-medium text-cream/50 uppercase tracking-wide">
               Credit balance
             </span>
-            <span className="font-display text-4xl text-ruby mt-3">
+            <span className="font-display text-4xl text-mist mt-3">
               {loading ? "—" : creditValue.toLocaleString()}
             </span>
-            <span className="font-body text-xs text-ink/50 mt-2">
+            <span className="font-body text-xs text-cream/45 mt-2">
               Redeemable at any partnered hospital
             </span>
           </div>
 
-          {/* Availability toggle — interactive, no decoration */}
-          <div className="md:col-span-1 rounded-2xl border border-ink/10 p-6 flex flex-col justify-between">
+          {/* Availability toggle — sage when on, communicates "active/healthy" */}
+          <div
+            className={`md:col-span-1 rounded-3xl p-6 flex flex-col justify-between transition-colors ${
+              availability ? "bg-sage-soft" : "bg-white"
+            }`}
+          >
             <span className="font-body text-xs font-medium text-ink/50 uppercase tracking-wide">
               Availability
             </span>
@@ -122,7 +126,7 @@ export default function Dashboard() {
               onClick={toggleAvailability}
               disabled={savingAvailability}
               className={`mt-3 self-start flex items-center gap-3 px-1 py-1 rounded-full transition-colors ${
-                availability ? "bg-ruby" : "bg-ink/15"
+                availability ? "bg-sage" : "bg-ink/15"
               }`}
               aria-pressed={availability}
             >
@@ -132,26 +136,26 @@ export default function Dashboard() {
                 }`}
               />
             </button>
-            <span className="font-body text-xs text-ink/50 mt-3">
+            <span className="font-body text-xs text-ink/55 mt-3">
               {availability
                 ? "Hospitals can find and contact you"
                 : "You're hidden from new requests"}
             </span>
           </div>
 
-          {/* Badge count */}
-          <div className="md:col-span-1 rounded-2xl border border-ink/10 p-6 flex flex-col justify-between">
-            <span className="font-body text-xs font-medium text-ink/50 uppercase tracking-wide">
+          {/* Badge count — clementine, celebratory/achievement tone */}
+          <div className="md:col-span-1 rounded-3xl bg-clementine-soft p-6 flex flex-col justify-between">
+            <span className="font-body text-xs font-medium text-ink/55 uppercase tracking-wide">
               Badges earned
             </span>
-            <span className="font-display text-4xl text-ink mt-3">{badges.length}</span>
-            <span className="font-body text-xs text-ink/50 mt-2">
+            <span className="font-display text-4xl text-clementine mt-3">{badges.length}</span>
+            <span className="font-body text-xs text-ink/55 mt-2">
               {badges[0]?.badge ? `Latest: ${badges[0].badge}` : "Donate to earn your first"}
             </span>
           </div>
         </div>
 
-        {/* Badges row — hover/tap interaction lives here */}
+        {/* Badges row */}
         <section className="mb-10">
           <h2 className="font-body text-sm font-semibold text-ink mb-4">Your badges</h2>
           {badges.length === 0 ? (
@@ -177,7 +181,7 @@ export default function Dashboard() {
               body="Once a hospital confirms your donation, it shows up here with the credits you earned."
             />
           ) : (
-            <div className="rounded-2xl border border-ink/10 divide-y divide-ink/10">
+            <div className="rounded-3xl bg-white divide-y divide-ink/8 overflow-hidden">
               {history.map((d) => (
                 <div
                   key={d.donation_id}
@@ -191,7 +195,7 @@ export default function Dashboard() {
                       {d.hospital} · {d.date}
                     </p>
                   </div>
-                  <span className="font-mono text-sm text-ruby">+{d.credits_awarded}</span>
+                  <span className="font-mono text-sm text-clementine">+{d.credits_awarded}</span>
                 </div>
               ))}
             </div>
@@ -205,8 +209,8 @@ export default function Dashboard() {
 function BadgeChip({ label, earnedAt }) {
   return (
     <div
-      className="group relative rounded-xl border border-mist bg-mist-soft px-5 py-4 cursor-default
-        transition-transform hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-8px_rgba(87,3,0,0.25)]"
+      className="group relative rounded-2xl border border-clementine/25 bg-clementine-soft px-5 py-4 cursor-default
+        transition-transform hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-8px_rgba(217,119,66,0.3)]"
     >
       <p className="font-body text-sm font-semibold text-ink">{label}</p>
       {earnedAt && (
@@ -220,7 +224,7 @@ function BadgeChip({ label, earnedAt }) {
 
 function EmptyState({ title, body }) {
   return (
-    <div className="rounded-2xl border border-dashed border-ink/15 px-6 py-8 text-center">
+    <div className="rounded-3xl border border-dashed border-ink/15 bg-white/50 px-6 py-8 text-center">
       <p className="font-body text-sm font-medium text-ink">{title}</p>
       <p className="font-body text-sm text-ink/50 mt-1">{body}</p>
     </div>

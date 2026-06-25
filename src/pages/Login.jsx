@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
+import AuthSidePanel from "../components/AuthSidePanel";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -28,22 +29,30 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <header className="px-6 md:px-12 py-6">
-        <Link to="/" className="font-display text-lg tracking-tight text-ruby">
-          DamuLink
-        </Link>
-      </header>
+    <div className="min-h-screen flex bg-clay">
+      <AuthSidePanel
+        eyebrow="Welcome back"
+        heading="Your blood type is needed somewhere, right now."
+        body="Log in to check your credits, badges, and the donations that got you here."
+      />
 
-      <main className="flex-1 flex items-center justify-center px-6 pb-16">
+      <main className="flex-1 flex items-center justify-center px-6 py-16">
         <div className="w-full max-w-md">
-          <h1 className="font-display text-2xl text-ink mb-2">WELCOME BACK</h1>
-          <p className="font-body text-sm text-ink/60 mb-8">
-            Log in to check your credits, badges, and donation history.
+          <div className="lg:hidden mb-10">
+            <Link to="/" className="font-display text-xl tracking-tight text-ruby">
+              DamuLink
+            </Link>
+          </div>
+
+          <h1 className="font-display font-medium text-3xl text-ink mb-2">
+            Log in
+          </h1>
+          <p className="font-body text-sm text-ink/55 mb-8">
+            Enter the phone number and password you registered with.
           </p>
 
           {error && (
-            <p className="font-body text-sm text-ruby bg-ruby-50 border border-ruby/20 rounded-lg px-4 py-3 mb-5">
+            <p className="font-body text-sm text-ruby-warm bg-ruby-50 border border-ruby/15 rounded-xl px-4 py-3 mb-5">
               {error}
             </p>
           )}
@@ -59,7 +68,7 @@ export default function Login() {
                 placeholder="+254712345678"
                 value={form.phone}
                 onChange={(e) => update("phone", e.target.value)}
-                className="mt-1.5 w-full px-4 py-3 rounded-xl border border-ink/15 font-body text-sm text-ink bg-white focus:outline-none focus:ring-2 focus:ring-ruby/30 focus:border-ruby"
+                className="mt-1.5 w-full px-4 py-3.5 rounded-2xl border border-transparent bg-white font-body text-sm text-ink placeholder:text-ink/35 focus:outline-none focus:ring-2 focus:ring-ruby-warm/35 focus:border-ruby-warm/40 transition-shadow"
               />
             </label>
 
@@ -72,22 +81,22 @@ export default function Login() {
                 required
                 value={form.password}
                 onChange={(e) => update("password", e.target.value)}
-                className="mt-1.5 w-full px-4 py-3 rounded-xl border border-ink/15 font-body text-sm text-ink bg-white focus:outline-none focus:ring-2 focus:ring-ruby/30 focus:border-ruby"
+                className="mt-1.5 w-full px-4 py-3.5 rounded-2xl border border-transparent bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-ruby-warm/35 focus:border-ruby-warm/40 transition-shadow"
               />
             </label>
 
             <button
               type="submit"
               disabled={submitting}
-              className="w-full mt-2 font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-white hover:bg-ruby-deep transition-colors disabled:opacity-50"
+              className="w-full mt-2 font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-cream hover:bg-ruby-deep transition-colors disabled:opacity-50 shadow-[0_10px_24px_-10px_rgba(87,3,0,0.5)]"
             >
               {submitting ? "Logging in…" : "Log in"}
             </button>
           </form>
 
-          <p className="font-body text-sm text-ink/60 text-center mt-6">
+          <p className="font-body text-sm text-ink/55 text-center mt-7">
             New to DamuLink?{" "}
-            <Link to="/signup" className="text-ruby font-medium">
+            <Link to="/signup" className="text-ruby-warm font-semibold">
               Register as a donor
             </Link>
           </p>

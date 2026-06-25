@@ -1,22 +1,25 @@
 import { Link } from "react-router-dom";
-import BloodFlow from "../components/BloodFlow";
+
+const BLOOD_TYPES = ["O+", "A+", "B+", "AB+", "O-", "A-", "B-", "AB-"];
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-ruby-night flex flex-col overflow-hidden">
       {/* Nav */}
-      <header className="flex items-center justify-between px-6 md:px-12 py-6 relative z-10">
-        <span className="font-display text-lg tracking-tight text-ruby">DamuLink</span>
-        <nav className="flex items-center gap-6">
+      <header className="flex items-center justify-between px-6 md:px-12 py-7 relative z-10">
+        <span className="font-display text-xl tracking-tight text-cream">
+          DamuLink
+        </span>
+        <nav className="flex items-center gap-3">
           <Link
             to="/login"
-            className="font-body text-sm font-medium text-ink/70 hover:text-ruby transition-colors"
+            className="font-body text-sm font-medium text-cream/70 hover:text-cream transition-colors px-4 py-2"
           >
             Log in
           </Link>
           <Link
             to="/signup"
-            className="font-body text-sm font-semibold px-4 py-2 rounded-full bg-ruby text-white hover:bg-ruby-deep transition-colors"
+            className="font-body text-sm font-semibold px-5 py-2.5 rounded-full bg-cream text-ruby-night hover:bg-mist transition-colors"
           >
             Become a donor
           </Link>
@@ -24,62 +27,161 @@ export default function Landing() {
       </header>
 
       {/* Hero */}
-      <section className="relative flex-1 flex items-center justify-center min-h-[600px]">
-        <BloodFlow className="absolute inset-0 h-full opacity-90" />
+      <section className="flex-1 px-6 md:px-12 relative" style={{ minHeight: "560px" }}>
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center" style={{ minHeight: "560px" }}>
+          {/* Left: headline */}
+          <div className="relative z-10 py-10">
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-mist/80 mb-5">
+              Kenya's donor network
+            </p>
+            <h1 className="font-display font-medium text-[2.75rem] md:text-6xl leading-[1.08] text-cream mb-6">
+              One drop
+              <br />
+              reaches{" "}
+              <span className="italic text-mist">far</span>
+            </h1>
+            <p className="font-body text-base md:text-lg text-cream/60 max-w-md mb-9 leading-relaxed">
+              DamuLink connects verified blood and organ donors with hospitals
+              across the country — so when someone needs help, the right
+              person isn't far away.
+            </p>
+            <div className="flex flex-wrap items-center gap-4">
+              <Link
+                to="/signup"
+                className="font-body text-sm font-semibold px-7 py-3.5 rounded-full bg-cream text-ruby-night hover:bg-mist transition-colors shadow-[0_10px_28px_-10px_rgba(0,0,0,0.5)]"
+              >
+                Register as a donor
+              </Link>
+              <Link
+                to="/login"
+                className="font-body text-sm font-semibold px-7 py-3.5 rounded-full border border-cream/25 text-cream hover:border-mist/60 hover:text-mist transition-colors"
+              >
+                I have an account
+              </Link>
+            </div>
+          </div>
 
-        <div className="relative z-10 text-center px-6 max-w-3xl">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-ruby/70 mb-5">
-            Kenya's donor network
-          </p>
-          <h1 className="font-display text-4xl md:text-6xl leading-[1.05] text-ink mb-6">
-            ONE DROP
-            <br />
-            <span className="text-ruby">REACHES FAR</span>
-          </h1>
-          <p className="font-body text-base md:text-lg text-ink/70 max-w-xl mx-auto mb-10 leading-relaxed">
-            DamuLink connects verified blood and organ donors with hospitals across
-            the country — so when someone needs help, the right person isn't far away.
-          </p>
-          <div className="flex items-center justify-center gap-4">
-            <Link
-              to="/signup"
-              className="font-body text-sm font-semibold px-7 py-3.5 rounded-full bg-ruby text-white hover:bg-ruby-deep transition-colors shadow-[0_8px_24px_-8px_rgba(87,3,0,0.5)]"
-            >
-              Register as a donor
-            </Link>
-            <Link
-              to="/login"
-              className="font-body text-sm font-semibold px-7 py-3.5 rounded-full border border-ink/15 text-ink hover:border-ruby/40 hover:text-ruby transition-colors"
-            >
-              I have an account
-            </Link>
+          {/* Right: illustrated blood bag with radial blood-type wheel */}
+          <div className="relative flex items-center justify-center md:justify-end">
+            <BagWithWheel />
           </div>
         </div>
       </section>
 
-      {/* Quiet stats strip — no animation, just facts */}
-      <section className="border-t border-ink/10 px-6 md:px-12 py-10">
-        <div className="max-w-5xl mx-auto grid grid-cols-3 gap-8 text-center">
-          <div>
-            <p className="font-display text-2xl md:text-3xl text-ruby">8</p>
-            <p className="font-mono text-xs uppercase tracking-wide text-ink/50 mt-1">
-              Blood types matched
-            </p>
-          </div>
-          <div>
-            <p className="font-display text-2xl md:text-3xl text-ruby">24/7</p>
-            <p className="font-mono text-xs uppercase tracking-wide text-ink/50 mt-1">
-              Urgent request alerts
-            </p>
-          </div>
-          <div>
-            <p className="font-display text-2xl md:text-3xl text-ruby">USSD</p>
-            <p className="font-mono text-xs uppercase tracking-wide text-ink/50 mt-1">
-              Works without internet
-            </p>
-          </div>
+      {/* Stat strip — quiet, on dark */}
+      <section className="px-6 md:px-12 py-12 border-t border-cream/10 relative z-10">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <StatCard value="8" label="Blood types matched" />
+          <StatCard value="24/7" label="Urgent request alerts" />
+          <StatCard value="USSD" label="Works without internet" />
         </div>
       </section>
+    </div>
+  );
+}
+
+function BagWithWheel() {
+  const radius = 175;
+  const center = 200;
+
+  return (
+    <div
+      className="relative"
+      style={{ width: "320px", height: "320px" }}
+      aria-hidden="true"
+    >
+      <svg viewBox="0 0 400 400" className="w-full h-full">
+        {/* dotted orbit ring */}
+        <circle
+          cx="200"
+          cy="200"
+          r={radius}
+          fill="none"
+          stroke="#FFFBF5"
+          strokeOpacity="0.14"
+          strokeWidth="1.5"
+          strokeDasharray="2 8"
+        />
+
+        {/* blood type labels around the ring */}
+        {BLOOD_TYPES.map((type, i) => {
+          const angle = (i / BLOOD_TYPES.length) * 2 * Math.PI - Math.PI / 2;
+          const x = center + radius * Math.cos(angle);
+          const y = center + radius * Math.sin(angle);
+          return (
+            <g key={type}>
+              <circle cx={x} cy={y} r="22" fill="#220301" stroke="#F7E493" strokeOpacity="0.35" strokeWidth="1.5" />
+              <text
+                x={x}
+                y={y + 5}
+                textAnchor="middle"
+                fontFamily="IBM Plex Mono, monospace"
+                fontSize="13"
+                fill="#F7E493"
+              >
+                {type}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* flat illustrated blood bag, cream/mist line-work */}
+        <g transform="translate(200,200)">
+          {/* bag body */}
+          <path
+            d="M -68 -50
+               Q -72 -10, -68 50
+               Q -64 95, 0 100
+               Q 64 95, 68 50
+               Q 72 -10, 68 -50
+               Q 68 -78, 40 -82
+               L -40 -82
+               Q -68 -78, -68 -50 Z"
+            fill="#FFFBF5"
+            fillOpacity="0.08"
+            stroke="#FFFBF5"
+            strokeWidth="2.5"
+          />
+          {/* fill level inside bag */}
+          <path
+            d="M -64 5
+               Q -60 92, 0 96
+               Q 60 92, 64 5
+               Q 64 30, 0 34
+               Q -64 30, -64 5 Z"
+            fill="#F7E493"
+            fillOpacity="0.85"
+          />
+          {/* top spout */}
+          <rect x="-12" y="-100" width="24" height="22" rx="6" fill="none" stroke="#FFFBF5" strokeWidth="2.5" />
+          {/* tubing */}
+          <path
+            d="M -12 -100 Q -30 -118, -10 -130"
+            fill="none"
+            stroke="#FFFBF5"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          />
+          {/* drop emblem on bag face */}
+          <path
+            d="M 0 -25
+               C 14 -10, 18 5, 0 18
+               C -18 5, -14 -10, 0 -25 Z"
+            fill="#570300"
+          />
+        </g>
+      </svg>
+    </div>
+  );
+}
+
+function StatCard({ value, label }) {
+  return (
+    <div className="text-center">
+      <p className="font-display text-3xl text-mist mb-1.5">{value}</p>
+      <p className="font-mono text-xs uppercase tracking-wide text-cream/45">
+        {label}
+      </p>
     </div>
   );
 }

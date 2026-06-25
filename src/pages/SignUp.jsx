@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { authApi, ApiError } from "../lib/api";
-
-const BLOOD_TYPES = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+import AuthSidePanel from "../components/AuthSidePanel";
 
 const STEPS = ["Account", "Verify", "Done"];
 
@@ -69,18 +68,42 @@ export default function SignUp() {
     }
   }
 
-  return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <header className="px-6 md:px-12 py-6">
-        <Link to="/" className="font-display text-lg tracking-tight text-ruby">
-          DamuLink
-        </Link>
-      </header>
+  const stepCopy = [
+    {
+      eyebrow: "Two minutes, start to finish",
+      heading: "Your details stay yours until you say go.",
+      body: "Full contact details are only shared with a hospital after you personally accept a request.",
+    },
+    {
+      eyebrow: "Almost there",
+      heading: "One code, sent straight to your phone.",
+      body: "This confirms the number hospitals will reach you on when it matters.",
+    },
+    {
+      eyebrow: "Welcome",
+      heading: "You're part of the network now.",
+      body: "Next, your blood type and location — that's what makes the match.",
+    },
+  ][step];
 
-      <main className="flex-1 flex items-center justify-center px-6 pb-16">
+  return (
+    <div className="min-h-screen flex bg-clay">
+      <AuthSidePanel
+        eyebrow={stepCopy.eyebrow}
+        heading={stepCopy.heading}
+        body={stepCopy.body}
+      />
+
+      <main className="flex-1 flex items-center justify-center px-6 py-16">
         <div className="w-full max-w-md">
+          <div className="lg:hidden mb-8">
+            <Link to="/" className="font-display text-xl tracking-tight text-ruby">
+              DamuLink
+            </Link>
+          </div>
+
           {/* Step indicator */}
-          <div className="flex items-center gap-2 mb-10">
+          <div className="flex items-center gap-2 mb-9">
             {STEPS.map((label, i) => (
               <div key={label} className="flex items-center gap-2 flex-1">
                 <div
@@ -94,13 +117,15 @@ export default function SignUp() {
 
           {step === 0 && (
             <form onSubmit={handleRegister}>
-              <h1 className="font-display text-2xl text-ink mb-2">CREATE YOUR ACCOUNT</h1>
-              <p className="font-body text-sm text-ink/60 mb-8">
-                Takes about two minutes. You'll verify your phone next.
+              <h1 className="font-display font-medium text-3xl text-ink mb-2">
+                Create your account
+              </h1>
+              <p className="font-body text-sm text-ink/55 mb-8">
+                You'll verify your phone number next.
               </p>
 
               {error && (
-                <p className="font-body text-sm text-ruby bg-ruby-50 border border-ruby/20 rounded-lg px-4 py-3 mb-5">
+                <p className="font-body text-sm text-ruby-warm bg-ruby-50 border border-ruby/15 rounded-xl px-4 py-3 mb-5">
                   {error}
                 </p>
               )}
@@ -157,14 +182,14 @@ export default function SignUp() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full mt-8 font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-white hover:bg-ruby-deep transition-colors disabled:opacity-50"
+                className="w-full mt-8 font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-cream hover:bg-ruby-deep transition-colors disabled:opacity-50 shadow-[0_10px_24px_-10px_rgba(87,3,0,0.5)]"
               >
                 {submitting ? "Creating account…" : "Continue"}
               </button>
 
-              <p className="font-body text-sm text-ink/60 text-center mt-6">
+              <p className="font-body text-sm text-ink/55 text-center mt-6">
                 Already have an account?{" "}
-                <Link to="/login" className="text-ruby font-medium">
+                <Link to="/login" className="text-ruby-warm font-semibold">
                   Log in
                 </Link>
               </p>
@@ -173,13 +198,15 @@ export default function SignUp() {
 
           {step === 1 && (
             <form onSubmit={handleVerify}>
-              <h1 className="font-display text-2xl text-ink mb-2">VERIFY YOUR PHONE</h1>
-              <p className="font-body text-sm text-ink/60 mb-8">
+              <h1 className="font-display font-medium text-3xl text-ink mb-2">
+                Verify your phone
+              </h1>
+              <p className="font-body text-sm text-ink/55 mb-8">
                 We sent a code to {form.phone || "your phone"}. Enter it below.
               </p>
 
               {error && (
-                <p className="font-body text-sm text-ruby bg-ruby-50 border border-ruby/20 rounded-lg px-4 py-3 mb-5">
+                <p className="font-body text-sm text-ruby-warm bg-ruby-50 border border-ruby/15 rounded-xl px-4 py-3 mb-5">
                   {error}
                 </p>
               )}
@@ -195,7 +222,7 @@ export default function SignUp() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full mt-8 font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-white hover:bg-ruby-deep transition-colors disabled:opacity-50"
+                className="w-full mt-8 font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-cream hover:bg-ruby-deep transition-colors disabled:opacity-50 shadow-[0_10px_24px_-10px_rgba(87,3,0,0.5)]"
               >
                 {submitting ? "Verifying…" : "Verify and continue"}
               </button>
@@ -203,7 +230,7 @@ export default function SignUp() {
               <button
                 type="button"
                 onClick={handleResend}
-                className="w-full mt-3 font-body text-sm text-ink/60 hover:text-ruby py-2"
+                className="w-full mt-3 font-body text-sm text-ink/55 hover:text-ruby-warm py-2"
               >
                 Resend code
               </button>
@@ -217,14 +244,16 @@ export default function SignUp() {
                   <path d="M5 13l4 4L19 7" stroke="#570300" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
-              <h1 className="font-display text-2xl text-ink mb-2">YOU'RE VERIFIED</h1>
-              <p className="font-body text-sm text-ink/60 mb-8">
+              <h1 className="font-display font-medium text-3xl text-ink mb-2">
+                You're verified
+              </h1>
+              <p className="font-body text-sm text-ink/55 mb-8">
                 Log in with the password you just set, then we'll get your blood type
                 and location so hospitals near you can find a match.
               </p>
               <Link
                 to="/login"
-                className="block w-full font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-white hover:bg-ruby-deep transition-colors"
+                className="block w-full font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-cream hover:bg-ruby-deep transition-colors"
               >
                 Log in to continue
               </Link>
@@ -249,12 +278,12 @@ function Field({ label, type = "text", value, onChange, error, required, placeho
         placeholder={placeholder}
         inputMode={inputMode}
         onChange={(e) => onChange(e.target.value)}
-        className={`mt-1.5 w-full px-4 py-3 rounded-xl border font-body text-sm text-ink bg-white
-          focus:outline-none focus:ring-2 focus:ring-ruby/30 focus:border-ruby
-          ${error ? "border-ruby" : "border-ink/15"}`}
+        className={`mt-1.5 w-full px-4 py-3.5 rounded-2xl border font-body text-sm text-ink bg-white placeholder:text-ink/35
+          focus:outline-none focus:ring-2 focus:ring-ruby-warm/35 transition-shadow
+          ${error ? "border-ruby" : "border-transparent"}`}
       />
       {error && (
-        <span className="font-body text-xs text-ruby mt-1 block">
+        <span className="font-body text-xs text-ruby-warm mt-1 block">
           {Array.isArray(error) ? error[0] : error}
         </span>
       )}

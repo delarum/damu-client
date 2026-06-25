@@ -76,30 +76,35 @@ export default function ProfileSetup() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <header className="px-6 md:px-12 py-6">
-        <Link to="/" className="font-display text-lg tracking-tight text-ruby">
+    <div className="min-h-screen bg-clay flex flex-col">
+      <header className="bg-ruby-night px-6 md:px-12 py-5">
+        <Link to="/" className="font-display text-lg tracking-tight text-cream">
           DamuLink
         </Link>
       </header>
 
-      <main className="flex-1 flex items-center justify-center px-6 pb-16">
+      <main className="flex-1 flex items-start md:items-center justify-center px-6 py-12">
         <form onSubmit={handleSubmit} className="w-full max-w-lg">
-          <h1 className="font-display text-2xl text-ink mb-2">YOUR DONOR PROFILE</h1>
-          <p className="font-body text-sm text-ink/60 mb-8">
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-ruby-warm/70 mb-3">
+            Last step
+          </p>
+          <h1 className="font-display font-medium text-3xl text-ink mb-2">
+            Your donor profile
+          </h1>
+          <p className="font-body text-sm text-ink/55 mb-8">
             This is what hospitals see when they search for a match. Your exact
             location and full contact details stay private until you say yes.
           </p>
 
           {error && (
-            <p className="font-body text-sm text-ruby bg-ruby-50 border border-ruby/20 rounded-lg px-4 py-3 mb-5">
+            <p className="font-body text-sm text-ruby-warm bg-ruby-50 border border-ruby/15 rounded-xl px-4 py-3 mb-6">
               {error}
             </p>
           )}
 
-          {/* Blood type grid */}
-          <div className="mb-6">
-            <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide block mb-2">
+          {/* Blood type — ruby, the core identity choice */}
+          <div className="bg-white rounded-3xl p-5 mb-6 shadow-[0_8px_24px_-12px_rgba(43,27,22,0.15)]">
+            <span className="font-body text-xs font-medium text-ink/55 uppercase tracking-wide block mb-3">
               Blood type
             </span>
             <div className="grid grid-cols-4 gap-2">
@@ -108,10 +113,10 @@ export default function ProfileSetup() {
                   key={bt}
                   type="button"
                   onClick={() => update("blood_type", bt)}
-                  className={`font-mono text-sm py-3 rounded-xl border transition-colors ${
+                  className={`font-mono text-sm py-3.5 rounded-2xl border transition-colors ${
                     form.blood_type === bt
-                      ? "bg-ruby text-white border-ruby"
-                      : "border-ink/15 text-ink hover:border-ruby/40"
+                      ? "bg-ruby text-cream border-ruby"
+                      : "border-ink/12 text-ink hover:border-ruby-warm/40"
                   }`}
                 >
                   {bt}
@@ -120,9 +125,9 @@ export default function ProfileSetup() {
             </div>
           </div>
 
-          {/* Donor type */}
-          <div className="mb-6">
-            <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide block mb-2">
+          {/* Donor type — sage, the "what kind of giving" choice */}
+          <div className="bg-sage-soft rounded-3xl p-5 mb-6">
+            <span className="font-body text-xs font-medium text-ink/55 uppercase tracking-wide block mb-3">
               What would you like to donate?
             </span>
             <div className="grid grid-cols-3 gap-2">
@@ -133,8 +138,8 @@ export default function ProfileSetup() {
                   onClick={() => update("donor_type", dt.value)}
                   className={`font-body text-sm py-2.5 rounded-xl border transition-colors ${
                     form.donor_type === dt.value
-                      ? "bg-ruby text-white border-ruby"
-                      : "border-ink/15 text-ink hover:border-ruby/40"
+                      ? "bg-sage text-white border-sage"
+                      : "border-sage/25 bg-white text-ink hover:border-sage/60"
                   }`}
                 >
                   {dt.label}
@@ -143,10 +148,10 @@ export default function ProfileSetup() {
             </div>
           </div>
 
-          {/* Organs, if relevant */}
+          {/* Organs, if relevant — clementine, a distinct third identity */}
           {form.donor_type !== "blood" && (
-            <div className="mb-6">
-              <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide block mb-2">
+            <div className="bg-clementine-soft rounded-3xl p-5 mb-6">
+              <span className="font-body text-xs font-medium text-ink/55 uppercase tracking-wide block mb-3">
                 Which organs would you pledge?
               </span>
               <div className="flex flex-wrap gap-2">
@@ -157,8 +162,8 @@ export default function ProfileSetup() {
                     onClick={() => toggleOrgan(organ)}
                     className={`font-body text-sm capitalize px-4 py-2 rounded-full border transition-colors ${
                       form.organs_pledged.includes(organ)
-                        ? "bg-mist border-mist text-ink"
-                        : "border-ink/15 text-ink hover:border-ruby/40"
+                        ? "bg-clementine border-clementine text-white"
+                        : "border-clementine/30 bg-white text-ink hover:border-clementine/60"
                     }`}
                   >
                     {organ}
@@ -168,35 +173,36 @@ export default function ProfileSetup() {
             </div>
           )}
 
-          {/* Location */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <label className="block">
-              <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide">
-                County
-              </span>
-              <input
-                required
-                value={form.county}
-                onChange={(e) => update("county", e.target.value)}
-                className="mt-1.5 w-full px-4 py-3 rounded-xl border border-ink/15 font-body text-sm text-ink bg-white focus:outline-none focus:ring-2 focus:ring-ruby/30 focus:border-ruby"
-              />
-            </label>
-            <label className="block">
-              <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide">
-                Town
-              </span>
-              <input
-                required
-                value={form.town}
-                onChange={(e) => update("town", e.target.value)}
-                className="mt-1.5 w-full px-4 py-3 rounded-xl border border-ink/15 font-body text-sm text-ink bg-white focus:outline-none focus:ring-2 focus:ring-ruby/30 focus:border-ruby"
-              />
-            </label>
+          {/* Location — dusk, the cool note, "where to find you" */}
+          <div className="bg-dusk-soft rounded-3xl p-5 mb-6">
+            <span className="font-body text-xs font-medium text-ink/55 uppercase tracking-wide block mb-3">
+              Where to find you
+            </span>
+            <div className="grid grid-cols-2 gap-4">
+              <label className="block">
+                <span className="font-body text-xs text-ink/50">County</span>
+                <input
+                  required
+                  value={form.county}
+                  onChange={(e) => update("county", e.target.value)}
+                  className="mt-1.5 w-full px-4 py-3.5 rounded-2xl border border-transparent bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-dusk/40 transition-shadow"
+                />
+              </label>
+              <label className="block">
+                <span className="font-body text-xs text-ink/50">Town</span>
+                <input
+                  required
+                  value={form.town}
+                  onChange={(e) => update("town", e.target.value)}
+                  className="mt-1.5 w-full px-4 py-3.5 rounded-2xl border border-transparent bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-dusk/40 transition-shadow"
+                />
+              </label>
+            </div>
           </div>
 
           {/* Contact preference */}
           <div className="mb-6">
-            <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide block mb-2">
+            <span className="font-body text-xs font-medium text-ink/55 uppercase tracking-wide block mb-2">
               Preferred contact method
             </span>
             <div className="grid grid-cols-3 gap-2">
@@ -207,8 +213,8 @@ export default function ProfileSetup() {
                   onClick={() => update("preferred_contact_method", cm.value)}
                   className={`font-body text-sm py-2.5 rounded-xl border transition-colors ${
                     form.preferred_contact_method === cm.value
-                      ? "bg-ruby text-white border-ruby"
-                      : "border-ink/15 text-ink hover:border-ruby/40"
+                      ? "bg-ruby text-cream border-ruby"
+                      : "border-ink/12 bg-white text-ink hover:border-ruby-warm/40"
                   }`}
                 >
                   {cm.label}
@@ -218,21 +224,21 @@ export default function ProfileSetup() {
           </div>
 
           <label className="block mb-8">
-            <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide">
+            <span className="font-body text-xs font-medium text-ink/55 uppercase tracking-wide">
               Insurance provider (optional)
             </span>
             <input
               value={form.insurance_provider}
               placeholder="e.g. SHA, Jubilee Health, AAR"
               onChange={(e) => update("insurance_provider", e.target.value)}
-              className="mt-1.5 w-full px-4 py-3 rounded-xl border border-ink/15 font-body text-sm text-ink bg-white focus:outline-none focus:ring-2 focus:ring-ruby/30 focus:border-ruby"
+              className="mt-1.5 w-full px-4 py-3.5 rounded-2xl border border-transparent bg-white font-body text-sm text-ink placeholder:text-ink/35 focus:outline-none focus:ring-2 focus:ring-ruby-warm/35 transition-shadow"
             />
           </label>
 
           <button
             type="submit"
             disabled={submitting || !form.blood_type}
-            className="w-full font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-white hover:bg-ruby-deep transition-colors disabled:opacity-50"
+            className="w-full font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-cream hover:bg-ruby-deep transition-colors disabled:opacity-50 shadow-[0_10px_24px_-10px_rgba(87,3,0,0.5)]"
           >
             {submitting ? "Saving…" : "Save profile and continue"}
           </button>
