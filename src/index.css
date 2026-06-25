@@ -89,3 +89,413 @@ body {
 .animate-pulseGlow {
   animation: pulseGlow 2.4s ease-out infinite;
 }
+
+.accessibility-menu {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 60;
+  font-family: var(--font-body);
+}
+
+.accessibility-trigger {
+  width: 3.25rem;
+  height: 3.25rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 251, 245, 0.2);
+  border-radius: 999px;
+  background: #570300;
+  color: #fffbf5;
+  box-shadow: 0 16px 36px -18px rgba(34, 3, 1, 0.8);
+  cursor: pointer;
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.accessibility-trigger:hover {
+  transform: translateY(-1px);
+  background: #3d0200;
+}
+
+.accessibility-trigger svg {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+.accessibility-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.75rem);
+  width: min(20rem, calc(100vw - 2rem));
+  padding: 0.85rem;
+  border: 1px solid rgba(43, 27, 22, 0.12);
+  border-radius: 1.25rem;
+  background: rgba(255, 251, 245, 0.97);
+  color: #2b1b16;
+  box-shadow: 0 20px 54px -28px rgba(34, 3, 1, 0.55);
+  backdrop-filter: blur(14px);
+}
+
+.accessibility-panel__header {
+  padding: 0.2rem 0.35rem 0.7rem;
+}
+
+.accessibility-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+  padding: 0.25rem;
+  margin-bottom: 0.75rem;
+  border-radius: 999px;
+  background: #fbeeed;
+}
+
+.accessibility-tab {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  color: rgba(43, 27, 22, 0.7);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.accessibility-tab--active {
+  background: #570300;
+  color: #fffbf5;
+}
+
+.accessibility-panel__header p {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #570300;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.accessibility-panel__header span {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.88rem;
+  color: rgba(43, 27, 22, 0.62);
+}
+
+.accessibility-options {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.accessibility-option {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: 0.75rem;
+  align-items: center;
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid transparent;
+  border-radius: 0.9rem;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.accessibility-option:hover,
+.accessibility-option--active {
+  border-color: rgba(87, 3, 0, 0.18);
+  background: #fbeeed;
+}
+
+.accessibility-option strong {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.accessibility-option small {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.74rem;
+  line-height: 1.35;
+  color: rgba(43, 27, 22, 0.58);
+}
+
+.accessibility-swatch {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  border: 2px solid #fffbf5;
+  box-shadow: 0 0 0 1px rgba(43, 27, 22, 0.14);
+}
+
+.accessibility-swatch--default {
+  background: linear-gradient(135deg, #570300 0 50%, #fffbf5 50% 100%);
+}
+
+.accessibility-swatch--dark {
+  background: linear-gradient(135deg, #110201 0 50%, #f7e493 50% 100%);
+}
+
+.accessibility-swatch--contrast {
+  background: linear-gradient(135deg, #000 0 45%, #fff200 45% 70%, #fff 70% 100%);
+}
+
+.accessibility-language-mark {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #570300;
+  color: #fffbf5;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+:root[data-access-theme="dark"] {
+  color-scheme: dark;
+  --access-page: #120403;
+  --access-surface: #1d0a08;
+  --access-surface-soft: #28110e;
+  --access-panel: #24100d;
+  --access-text: #fff7ec;
+  --access-muted: rgba(255, 247, 236, 0.72);
+  --access-faint: rgba(255, 247, 236, 0.48);
+  --access-brand: #f05b4f;
+  --access-brand-deep: #8f1d16;
+  --access-brand-soft: #351412;
+  --access-accent: #f7e493;
+  --access-success: #77c987;
+  --access-success-soft: #1d321f;
+  --access-warn: #f6a66f;
+  --access-warn-soft: #3a2215;
+  --access-info: #8fb8d8;
+  --access-info-soft: #172b3a;
+  --access-border: rgba(255, 247, 236, 0.18);
+  --access-on-dark: #fff7ec;
+}
+
+:root[data-access-theme="contrast"] {
+  color-scheme: dark;
+  --access-page: #000;
+  --access-surface: #050505;
+  --access-surface-soft: #101010;
+  --access-panel: #000;
+  --access-text: #fff;
+  --access-muted: #fff;
+  --access-faint: #e8e8e8;
+  --access-brand: #ff3b30;
+  --access-brand-deep: #b00000;
+  --access-brand-soft: #210000;
+  --access-accent: #fff200;
+  --access-success: #00ff66;
+  --access-success-soft: #001f0c;
+  --access-warn: #ffb000;
+  --access-warn-soft: #261800;
+  --access-info: #00d5ff;
+  --access-info-soft: #001a1f;
+  --access-border: #fff;
+  --access-on-dark: #fff;
+}
+
+:root[data-access-theme] body {
+  background: var(--access-page);
+  color: var(--access-text);
+}
+
+:root[data-access-theme] :focus-visible {
+  outline-color: var(--access-accent);
+  outline-width: 3px;
+}
+
+:root[data-access-theme] ::selection {
+  background: var(--access-accent);
+  color: #000;
+}
+
+:root[data-access-theme] .bg-clay,
+:root[data-access-theme] .bg-cream {
+  background-color: var(--access-page) !important;
+}
+
+:root[data-access-theme] .bg-ruby-night {
+  background-color: var(--access-surface) !important;
+}
+
+:root[data-access-theme] .bg-white,
+:root[data-access-theme] [class~="bg-white/50"] {
+  background-color: var(--access-panel) !important;
+}
+
+:root[data-access-theme] .bg-ruby,
+:root[data-access-theme] .bg-ruby-warm,
+:root[data-access-theme] .bg-ruby-deep {
+  background-color: var(--access-brand) !important;
+}
+
+:root[data-access-theme] .bg-ruby-50 {
+  background-color: var(--access-brand-soft) !important;
+}
+
+:root[data-access-theme] .bg-mist,
+:root[data-access-theme] .bg-mist-soft {
+  background-color: var(--access-accent) !important;
+}
+
+:root[data-access-theme] .bg-sage {
+  background-color: var(--access-success) !important;
+}
+
+:root[data-access-theme] .bg-sage-soft {
+  background-color: var(--access-success-soft) !important;
+}
+
+:root[data-access-theme] .bg-clementine {
+  background-color: var(--access-warn) !important;
+}
+
+:root[data-access-theme] .bg-clementine-soft {
+  background-color: var(--access-warn-soft) !important;
+}
+
+:root[data-access-theme] .bg-dusk {
+  background-color: var(--access-info) !important;
+}
+
+:root[data-access-theme] .bg-dusk-soft {
+  background-color: var(--access-info-soft) !important;
+}
+
+:root[data-access-theme] [class*="text-ink"],
+:root[data-access-theme] .text-ruby,
+:root[data-access-theme] .text-ruby-warm {
+  color: var(--access-text) !important;
+}
+
+:root[data-access-theme] [class*="text-cream"] {
+  color: var(--access-on-dark) !important;
+}
+
+:root[data-access-theme] .text-mist {
+  color: var(--access-accent) !important;
+}
+
+:root[data-access-theme] .text-clementine {
+  color: var(--access-warn) !important;
+}
+
+:root[data-access-theme] .text-white {
+  color: #000 !important;
+}
+
+:root[data-access-theme] [class*="border-ink"],
+:root[data-access-theme] [class*="border-ruby"],
+:root[data-access-theme] [class*="border-cream"],
+:root[data-access-theme] [class*="border-sage"],
+:root[data-access-theme] [class*="border-clementine"],
+:root[data-access-theme] [class*="border-dusk"],
+:root[data-access-theme] .border-transparent {
+  border-color: var(--access-border) !important;
+}
+
+:root[data-access-theme] input {
+  background: var(--access-panel) !important;
+  color: var(--access-text) !important;
+  border-color: var(--access-border) !important;
+}
+
+:root[data-access-theme] input::placeholder {
+  color: var(--access-faint) !important;
+}
+
+:root[data-access-theme] svg [stroke="#FFFBF5"] {
+  stroke: var(--access-on-dark);
+}
+
+:root[data-access-theme] svg [fill="#FFFBF5"] {
+  fill: var(--access-on-dark);
+}
+
+:root[data-access-theme] svg [stroke="#F7E493"],
+:root[data-access-theme] svg [fill="#F7E493"] {
+  stroke: var(--access-accent);
+  fill: var(--access-accent);
+}
+
+:root[data-access-theme] svg [fill="#220301"] {
+  fill: var(--access-surface);
+}
+
+:root[data-access-theme] svg [fill="#570300"],
+:root[data-access-theme] svg [stroke="#570300"] {
+  fill: var(--access-brand-deep);
+  stroke: var(--access-brand-deep);
+}
+
+:root[data-access-theme] .accessibility-trigger {
+  background: var(--access-accent);
+  color: #000;
+  border-color: var(--access-border);
+}
+
+:root[data-access-theme] .accessibility-panel {
+  background: var(--access-panel);
+  color: var(--access-text);
+  border-color: var(--access-border);
+}
+
+:root[data-access-theme] .accessibility-panel__header p {
+  color: var(--access-accent);
+}
+
+:root[data-access-theme] .accessibility-panel__header span,
+:root[data-access-theme] .accessibility-option small {
+  color: var(--access-muted);
+}
+
+:root[data-access-theme] .accessibility-option:hover,
+:root[data-access-theme] .accessibility-option--active {
+  background: var(--access-surface-soft);
+  border-color: var(--access-border);
+}
+
+:root[data-access-theme] .accessibility-tabs {
+  background: var(--access-surface-soft);
+}
+
+:root[data-access-theme] .accessibility-tab {
+  color: var(--access-muted);
+}
+
+:root[data-access-theme] .accessibility-tab--active,
+:root[data-access-theme] .accessibility-language-mark {
+  background: var(--access-accent);
+  color: #000;
+}
+
+:root[data-access-theme="contrast"] [class*="rounded-3xl"],
+:root[data-access-theme="contrast"] [class*="rounded-2xl"],
+:root[data-access-theme="contrast"] [class*="rounded-xl"],
+:root[data-access-theme="contrast"] .accessibility-panel,
+:root[data-access-theme="contrast"] .accessibility-option {
+  border-width: 2px !important;
+}
+
+:root[data-access-theme="contrast"] .shadow,
+:root[data-access-theme="contrast"] [class*="shadow-"] {
+  box-shadow: none !important;
+}
+
+@media (max-width: 640px) {
+  .accessibility-menu {
+    right: 0.75rem;
+    bottom: 0.75rem;
+  }
+
+  .accessibility-trigger {
+    width: 3rem;
+    height: 3rem;
+  }
+}

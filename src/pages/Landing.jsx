@@ -1,27 +1,30 @@
 import { Link } from "react-router-dom";
+import { useLanguage } from "../lib/LanguageContext";
 
 const BLOOD_TYPES = ["O+", "A+", "B+", "AB+", "O-", "A-", "B-", "AB-"];
 
 export default function Landing() {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-ruby-night flex flex-col overflow-hidden">
       {/* Nav */}
       <header className="flex items-center justify-between px-6 md:px-12 py-7 relative z-10">
         <span className="font-display text-xl tracking-tight text-cream">
-          DamuLink
+          {t("common.brand")}
         </span>
         <nav className="flex items-center gap-3">
           <Link
             to="/login"
             className="font-body text-sm font-medium text-cream/70 hover:text-cream transition-colors px-4 py-2"
           >
-            Log in
+            {t("common.logIn")}
           </Link>
           <Link
             to="/signup"
             className="font-body text-sm font-semibold px-5 py-2.5 rounded-full bg-cream text-ruby-night hover:bg-mist transition-colors"
           >
-            Become a donor
+            {t("common.becomeDonor")}
           </Link>
         </nav>
       </header>
@@ -32,13 +35,13 @@ export default function Landing() {
           {/* Left: headline */}
           <div className="relative z-10 py-10">
             <p className="font-mono text-xs uppercase tracking-[0.18em] text-mist/80 mb-5">
-              Kenya's donor network
+              {t("landing.eyebrow")}
             </p>
             <h1 className="font-display font-medium text-[2.75rem] md:text-6xl leading-[1.08] text-cream mb-6">
-              One drop
+              {t("landing.title.line1")}
               <br />
-              reaches{" "}
-              <span className="italic text-mist">far</span>
+              {t("landing.title.line2")}{" "}
+              <span className="italic text-mist">{t("landing.title.accent")}</span>
             </h1>
             <p className="font-body text-base md:text-lg text-cream/60 max-w-md mb-9 leading-relaxed">
               DamuLink connects verified blood and organ donors with hospitals
@@ -50,13 +53,13 @@ export default function Landing() {
                 to="/signup"
                 className="font-body text-sm font-semibold px-7 py-3.5 rounded-full bg-cream text-ruby-night hover:bg-mist transition-colors shadow-[0_10px_28px_-10px_rgba(0,0,0,0.5)]"
               >
-                Register as a donor
+                {t("common.registerDonor")}
               </Link>
               <Link
                 to="/login"
                 className="font-body text-sm font-semibold px-7 py-3.5 rounded-full border border-cream/25 text-cream hover:border-mist/60 hover:text-mist transition-colors"
               >
-                I have an account
+                {t("common.haveAccount")}
               </Link>
             </div>
           </div>
@@ -71,9 +74,9 @@ export default function Landing() {
       {/* Stat strip — quiet, on dark */}
       <section className="px-6 md:px-12 py-12 border-t border-cream/10 relative z-10">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <StatCard value="8" label="Blood types matched" />
-          <StatCard value="24/7" label="Urgent request alerts" />
-          <StatCard value="USSD" label="Works without internet" />
+          <StatCard value={t("landing.stat.types.value")} label={t("landing.stat.types.label")} />
+          <StatCard value={t("landing.stat.alerts.value")} label={t("landing.stat.alerts.label")} />
+          <StatCard value={t("landing.stat.ussd.value")} label={t("landing.stat.ussd.label")} />
         </div>
       </section>
     </div>
