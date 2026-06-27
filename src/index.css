@@ -133,6 +133,7 @@ body {
   background: rgba(255, 251, 245, 0.97);
   color: #2b1b16;
   box-shadow: 0 20px 54px -28px rgba(34, 3, 1, 0.55);
+  -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
 }
 

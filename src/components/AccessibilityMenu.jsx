@@ -3,23 +3,7 @@ import { useLanguage } from "../lib/LanguageContext";
 
 const THEME_KEY = "damulink-access-theme";
 
-const OPTIONS = [
-  {
-    value: "default",
-    label: "Default",
-    description: "Original warm DamuLink colors",
-  },
-  {
-    value: "dark",
-    label: "Dark",
-    description: "Lower glare with preserved ruby accents",
-  },
-  {
-    value: "contrast",
-    label: "High contrast",
-    description: "Sharper edges and stronger color separation",
-  },
-];
+const OPTIONS = ["default", "dark", "contrast"];
 
 export default function AccessibilityMenu() {
   const [open, setOpen] = useState(false);
@@ -105,19 +89,19 @@ export default function AccessibilityMenu() {
             <div className="accessibility-options" role="radiogroup" aria-label={t("access.colorMode")}>
               {OPTIONS.map((option) => (
                 <button
-                  key={option.value}
+                  key={option}
                   type="button"
                   className={`accessibility-option ${
-                    theme === option.value ? "accessibility-option--active" : ""
+                    theme === option ? "accessibility-option--active" : ""
                   }`}
                   role="radio"
-                  aria-checked={theme === option.value}
-                  onClick={() => setTheme(option.value)}
+                  aria-checked={theme === option}
+                  onClick={() => setTheme(option)}
                 >
-                  <span className={`accessibility-swatch accessibility-swatch--${option.value}`} />
+                  <span className={`accessibility-swatch accessibility-swatch--${option}`} />
                   <span>
-                    <strong>{t(`access.${option.value}.label`)}</strong>
-                    <small>{t(`access.${option.value}.description`)}</small>
+                    <strong>{t(`access.${option}.label`)}</strong>
+                    <small>{t(`access.${option}.description`)}</small>
                   </span>
                 </button>
               ))}

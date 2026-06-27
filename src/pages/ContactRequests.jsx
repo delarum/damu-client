@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { matchingApi } from "../lib/api";
+import { useLanguage } from "../lib/LanguageContext";
 
 export default function ContactRequests() {
+  const { t } = useLanguage();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -19,7 +21,7 @@ export default function ContactRequests() {
       const res = await matchingApi.myContactRequests();
       setRequests(res.results || []);
     } catch (err) {
-      setError(err.message || "Couldn't load your requests right now.");
+      setError(err.message || t("requests.loadError"));
     } finally {
       setLoading(false);
     }
@@ -30,7 +32,6 @@ export default function ContactRequests() {
     setError("");
     try {
       await matchingApi.respond(requestId, action);
-      // Optimistically update status locally rather than re-fetching everything
       setRequests((prev) =>
         prev.map((r) =>
           r.request_id === requestId
@@ -39,7 +40,7 @@ export default function ContactRequests() {
         )
       );
     } catch (err) {
-      setError(err.message || "That didn't go through. Please try again.");
+      setError(err.message || t("requests.actionError"));
     } finally {
       setActingOn(null);
     }
@@ -52,23 +53,22 @@ export default function ContactRequests() {
     <div className="min-h-screen bg-clay">
       <header className="flex items-center justify-between px-6 md:px-12 py-6 bg-ruby-night">
         <Link to="/dashboard" className="font-display text-lg tracking-tight text-cream">
-          DamuLink
+          {t("common.brand")}
         </Link>
         <Link
           to="/dashboard"
           className="font-body text-sm text-cream/60 hover:text-cream transition-colors"
         >
-          Back to dashboard
+          {t("common.backDashboard")}
         </Link>
       </header>
 
       <main className="px-6 md:px-12 py-10 max-w-3xl mx-auto">
         <h1 className="font-display font-medium text-3xl text-ink mb-1">
-          Hospital requests
+          {t("requests.title")}
         </h1>
         <p className="font-body text-sm text-ink/55 mb-10">
-          When a verified hospital wants to reach you, it shows up here first.
-          Nothing is shared until you say yes.
+          {t("requests.body")}
         </p>
 
         {error && (
@@ -78,15 +78,15 @@ export default function ContactRequests() {
         )}
 
         {loading ? (
-          <p className="font-body text-sm text-ink/50">Loading…</p>
+          <p className="font-body text-sm text-ink/50">{t("requests.loading")}</p>
         ) : requests.length === 0 ? (
-          <EmptyState />
+          <EmptyState t={t} />
         ) : (
           <>
             {pending.length > 0 && (
               <section className="mb-10">
                 <h2 className="font-body text-sm font-semibold text-ink mb-4">
-                  Needs your response
+                  {t("requests.needsResponse")}
                 </h2>
                 <div className="space-y-3">
                   {pending.map((req) => (
@@ -95,6 +95,7 @@ export default function ContactRequests() {
                       request={req}
                       onRespond={respond}
                       busy={actingOn === req.request_id}
+                      t={t}
                     />
                   ))}
                 </div>
@@ -104,11 +105,11 @@ export default function ContactRequests() {
             {resolved.length > 0 && (
               <section>
                 <h2 className="font-body text-sm font-semibold text-ink mb-4">
-                  Past requests
+                  {t("requests.past")}
                 </h2>
                 <div className="space-y-3">
                   {resolved.map((req) => (
-                    <RequestCard key={req.request_id} request={req} />
+                    <RequestCard key={req.request_id} request={req} t={t} />
                   ))}
                 </div>
               </section>
@@ -120,7 +121,7 @@ export default function ContactRequests() {
   );
 }
 
-function RequestCard({ request, onRespond, busy }) {
+function RequestCard({ request, onRespond, busy, t }) {
   const { hospital, reason, status, requested_at } = request;
   const isPending = status === "pending";
   const isAccepted = status === "accepted";
@@ -135,15 +136,11 @@ function RequestCard({ request, onRespond, busy }) {
     <div className={`rounded-3xl border p-5 ${statusStyles}`}>
       <div className="flex items-start justify-between gap-4 mb-1">
         <p className="font-body text-base font-semibold text-ink">{hospital}</p>
-        <StatusPill status={status} />
+        <StatusPill status={status} t={t} />
       </div>
-      {reason && (
-        <p className="font-body text-sm text-ink/65 mb-3">{reason}</p>
-      )}
+      {reason && <p className="font-body text-sm text-ink/65 mb-3">{reason}</p>}
       {requested_at && (
-        <p className="font-mono text-xs text-ink/45 mb-4">
-          {formatWhen(requested_at)}
-        </p>
+        <p className="font-mono text-xs text-ink/45 mb-4">{formatWhen(requested_at)}</p>
       )}
 
       {isPending && onRespond && (
@@ -153,14 +150,14 @@ function RequestCard({ request, onRespond, busy }) {
             disabled={busy}
             className="font-body text-sm font-semibold px-5 py-2.5 rounded-full bg-sage text-white hover:bg-sage/90 transition-colors disabled:opacity-50"
           >
-            {busy ? "…" : "Accept and share contact"}
+            {busy ? t("requests.busy") : t("requests.accept")}
           </button>
           <button
             onClick={() => onRespond(request.request_id, "decline")}
             disabled={busy}
             className="font-body text-sm font-medium px-5 py-2.5 rounded-full border border-ink/15 text-ink hover:border-ink/30 transition-colors disabled:opacity-50"
           >
-            Decline
+            {t("requests.decline")}
           </button>
         </div>
       )}
@@ -168,16 +165,18 @@ function RequestCard({ request, onRespond, busy }) {
   );
 }
 
-function StatusPill({ status }) {
+function StatusPill({ status, t }) {
   const config = {
-    pending: { label: "Awaiting your response", cls: "bg-clementine text-white" },
-    accepted: { label: "Accepted", cls: "bg-sage text-white" },
-    declined: { label: "Declined", cls: "bg-ink/10 text-ink/60" },
-    expired: { label: "Expired", cls: "bg-ink/10 text-ink/60" },
+    pending: { label: t("requests.status.pending"), cls: "bg-clementine text-white" },
+    accepted: { label: t("requests.status.accepted"), cls: "bg-sage text-white" },
+    declined: { label: t("requests.status.declined"), cls: "bg-ink/10 text-ink/60" },
+    expired: { label: t("requests.status.expired"), cls: "bg-ink/10 text-ink/60" },
   }[status] || { label: status, cls: "bg-ink/10 text-ink/60" };
 
   return (
-    <span className={`font-mono text-[11px] uppercase tracking-wide px-2.5 py-1 rounded-full whitespace-nowrap ${config.cls}`}>
+    <span
+      className={`font-mono text-[11px] uppercase tracking-wide px-2.5 py-1 rounded-full whitespace-nowrap ${config.cls}`}
+    >
       {config.label}
     </span>
   );
@@ -197,13 +196,12 @@ function formatWhen(isoString) {
   }
 }
 
-function EmptyState() {
+function EmptyState({ t }) {
   return (
     <div className="rounded-3xl border border-dashed border-ink/15 bg-white/50 px-6 py-10 text-center">
-      <p className="font-body text-sm font-medium text-ink">No requests yet</p>
+      <p className="font-body text-sm font-medium text-ink">{t("requests.emptyTitle")}</p>
       <p className="font-body text-sm text-ink/50 mt-1 max-w-sm mx-auto">
-        When a hospital near you needs your blood type, you'll see it here
-        before anything else happens.
+        {t("requests.emptyBody")}
       </p>
     </div>
   );

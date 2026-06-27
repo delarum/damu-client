@@ -31,7 +31,10 @@ export default function Landing() {
 
       {/* Hero */}
       <section className="flex-1 px-6 md:px-12 relative" style={{ minHeight: "560px" }}>
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center" style={{ minHeight: "560px" }}>
+        <div
+          className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center"
+          style={{ minHeight: "560px" }}
+        >
           {/* Left: headline */}
           <div className="relative z-10 py-10">
             <p className="font-mono text-xs uppercase tracking-[0.18em] text-mist/80 mb-5">
@@ -44,9 +47,7 @@ export default function Landing() {
               <span className="italic text-mist">{t("landing.title.accent")}</span>
             </h1>
             <p className="font-body text-base md:text-lg text-cream/60 max-w-md mb-9 leading-relaxed">
-              DamuLink connects verified blood and organ donors with hospitals
-              across the country — so when someone needs help, the right
-              person isn't far away.
+              {t("landing.body")}
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <Link
@@ -74,9 +75,18 @@ export default function Landing() {
       {/* Stat strip — quiet, on dark */}
       <section className="px-6 md:px-12 py-12 border-t border-cream/10 relative z-10">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <StatCard value={t("landing.stat.types.value")} label={t("landing.stat.types.label")} />
-          <StatCard value={t("landing.stat.alerts.value")} label={t("landing.stat.alerts.label")} />
-          <StatCard value={t("landing.stat.ussd.value")} label={t("landing.stat.ussd.label")} />
+          <StatCard
+            value={t("landing.stat.types.value")}
+            label={t("landing.stat.types.label")}
+          />
+          <StatCard
+            value={t("landing.stat.alerts.value")}
+            label={t("landing.stat.alerts.label")}
+          />
+          <StatCard
+            value={t("landing.stat.ussd.value")}
+            label={t("landing.stat.ussd.label")}
+          />
         </div>
       </section>
     </div>
@@ -182,9 +192,7 @@ function StatCard({ value, label }) {
   return (
     <div className="text-center">
       <p className="font-display text-3xl text-mist mb-1.5">{value}</p>
-      <p className="font-mono text-xs uppercase tracking-wide text-cream/45">
-        {label}
-      </p>
+      <p className="font-mono text-xs uppercase tracking-wide text-cream/45">{label}</p>
     </div>
   );
 }

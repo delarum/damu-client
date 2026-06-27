@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { authApi, ApiError } from "../lib/api";
-import AuthSidePanel from "../components/AuthSidePanel";
 import { useLanguage } from "../lib/LanguageContext";
-
-const STEPS = ["Account", "Verify", "Done"];
+import AuthSidePanel from "../components/AuthSidePanel";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -106,8 +104,8 @@ export default function SignUp() {
 
           {/* Step indicator */}
           <div className="flex items-center gap-2 mb-9">
-            {STEPS.map((label, i) => (
-              <div key={label} className="flex items-center gap-2 flex-1">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="flex items-center gap-2 flex-1">
                 <div
                   className={`h-1.5 flex-1 rounded-full transition-colors ${
                     i <= step ? "bg-ruby" : "bg-ink/10"

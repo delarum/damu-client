@@ -103,14 +103,12 @@ export default function Dashboard() {
           {firstName ? t("dashboard.welcomeNamed", { name: firstName }) : t("dashboard.welcome")}
         </h1>
         <p className="font-body text-sm text-ink/55 mb-10">
-  {t("dashboard.bloodTypeCopy", {
-    bloodType: donorProfile?.blood_type
-      ? t("dashboard.bloodTypeValue", {
-          bloodType: donorProfile.blood_type,
-        })
-      : "",
-  })}
-</p>
+          {t("dashboard.bloodTypeCopy", {
+            bloodType: donorProfile?.blood_type
+              ? t("dashboard.bloodTypeValue", { bloodType: donorProfile.blood_type })
+              : "",
+          })}
+        </p>
 
         {pendingRequestCount > 0 && (
           <Link
@@ -128,7 +126,7 @@ export default function Dashboard() {
               </p>
             </div>
             <span className="font-body text-sm font-semibold text-clementine whitespace-nowrap">
-              {t("dashboard.view")}��
+              {t("dashboard.view")}
             </span>
           </Link>
         )}
@@ -171,9 +169,7 @@ export default function Dashboard() {
               />
             </button>
             <span className="font-body text-xs text-ink/55 mt-3">
-              {availability
-                ? t("dashboard.available")
-                : t("dashboard.hidden")}
+              {availability ? t("dashboard.available") : t("dashboard.hidden")}
             </span>
           </div>
 
@@ -195,14 +191,11 @@ export default function Dashboard() {
         <section className="mb-10">
           <h2 className="font-body text-sm font-semibold text-ink mb-4">{t("dashboard.badgesTitle")}</h2>
           {badges.length === 0 ? (
-            <EmptyState
-              title={t("dashboard.noBadgesTitle")}
-              body={t("dashboard.noBadgesBody")}
-            />
+            <EmptyState title={t("dashboard.noBadgesTitle")} body={t("dashboard.noBadgesBody")} />
           ) : (
             <div className="flex flex-wrap gap-3">
               {badges.map((b) => (
-                <BadgeChip key={b.badge} label={b.badge} earnedAt={b.earned_at} />
+                <BadgeChip key={b.badge} label={b.badge} earnedAt={b.earned_at} t={t} />
               ))}
             </div>
           )}
@@ -212,17 +205,11 @@ export default function Dashboard() {
         <section>
           <h2 className="font-body text-sm font-semibold text-ink mb-4">{t("dashboard.historyTitle")}</h2>
           {history.length === 0 ? (
-            <EmptyState
-              title={t("dashboard.noHistoryTitle")}
-              body={t("dashboard.noHistoryBody")}
-            />
+            <EmptyState title={t("dashboard.noHistoryTitle")} body={t("dashboard.noHistoryBody")} />
           ) : (
             <div className="rounded-3xl bg-white divide-y divide-ink/8 overflow-hidden">
               {history.map((d) => (
-                <div
-                  key={d.donation_id}
-                  className="flex items-center justify-between px-5 py-4"
-                >
+                <div key={d.donation_id} className="flex items-center justify-between px-5 py-4">
                   <div>
                     <p className="font-body text-sm font-medium text-ink capitalize">
                       {d.type?.replace("_", " ")}
@@ -242,7 +229,7 @@ export default function Dashboard() {
   );
 }
 
-function BadgeChip({ label, earnedAt }) {
+function BadgeChip({ label, earnedAt, t }) {
   return (
     <div
       className="group relative rounded-2xl border border-clementine/25 bg-clementine-soft px-5 py-4 cursor-default
@@ -251,7 +238,7 @@ function BadgeChip({ label, earnedAt }) {
       <p className="font-body text-sm font-semibold text-ink">{label}</p>
       {earnedAt && (
         <p className="font-mono text-[11px] text-ink/50 mt-0.5">
-          Earned {earnedAt}
+          {t("dashboard.earned", { date: earnedAt })}
         </p>
       )}
     </div>

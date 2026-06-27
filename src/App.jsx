@@ -16,7 +16,6 @@ export default function App() {
     <LanguageProvider>
       <AuthProvider>
         <BrowserRouter>
-          <AccessibilityMenu />
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/signup" element={<SignUp />} />
@@ -46,6 +45,9 @@ export default function App() {
               }
             />
           </Routes>
+          {/* Mounted once, globally, so dark mode / contrast / language are
+              reachable from every screen rather than re-added per page. */}
+          <AccessibilityMenu />
         </BrowserRouter>
       </AuthProvider>
     </LanguageProvider>

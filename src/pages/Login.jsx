@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
-import AuthSidePanel from "../components/AuthSidePanel";
 import { useLanguage } from "../lib/LanguageContext";
+import AuthSidePanel from "../components/AuthSidePanel";
 
 export default function Login() {
   const navigate = useNavigate();

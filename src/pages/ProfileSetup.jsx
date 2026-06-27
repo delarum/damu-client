@@ -4,17 +4,9 @@ import { donorApi } from "../lib/api";
 import { useLanguage } from "../lib/LanguageContext";
 
 const BLOOD_TYPES = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
-const DONOR_TYPES = [
-  { value: "blood", label: "Blood only" },
-  { value: "organ", label: "Organ only" },
-  { value: "both", label: "Both" },
-];
-const ORGANS = ["kidney", "liver", "cornea", "heart", "bone marrow"];
-const CONTACT_METHODS = [
-  { value: "call", label: "Call" },
-  { value: "sms", label: "SMS" },
-  { value: "whatsapp", label: "WhatsApp" },
-];
+const DONOR_TYPE_VALUES = ["blood", "organ", "both"];
+const ORGAN_VALUES = ["kidney", "liver", "cornea", "heart", "bone marrow"];
+const CONTACT_METHOD_VALUES = ["call", "sms", "whatsapp"];
 
 export default function ProfileSetup() {
   const navigate = useNavigate();
@@ -132,18 +124,18 @@ export default function ProfileSetup() {
               {t("profile.donorQuestion")}
             </span>
             <div className="grid grid-cols-3 gap-2">
-              {DONOR_TYPES.map((dt) => (
+              {DONOR_TYPE_VALUES.map((dt) => (
                 <button
-                  key={dt.value}
+                  key={dt}
                   type="button"
-                  onClick={() => update("donor_type", dt.value)}
+                  onClick={() => update("donor_type", dt)}
                   className={`font-body text-sm py-2.5 rounded-xl border transition-colors ${
-                    form.donor_type === dt.value
+                    form.donor_type === dt
                       ? "bg-sage text-white border-sage"
                       : "border-sage/25 bg-white text-ink hover:border-sage/60"
                   }`}
                 >
-                  {t(`profile.donor.${dt.value}`)}
+                  {t(`profile.donor.${dt}`)}
                 </button>
               ))}
             </div>
@@ -156,7 +148,7 @@ export default function ProfileSetup() {
                 {t("profile.organsQuestion")}
               </span>
               <div className="flex flex-wrap gap-2">
-                {ORGANS.map((organ) => (
+                {ORGAN_VALUES.map((organ) => (
                   <button
                     key={organ}
                     type="button"
@@ -207,18 +199,18 @@ export default function ProfileSetup() {
               {t("profile.contactPreference")}
             </span>
             <div className="grid grid-cols-3 gap-2">
-              {CONTACT_METHODS.map((cm) => (
+              {CONTACT_METHOD_VALUES.map((cm) => (
                 <button
-                  key={cm.value}
+                  key={cm}
                   type="button"
-                  onClick={() => update("preferred_contact_method", cm.value)}
+                  onClick={() => update("preferred_contact_method", cm)}
                   className={`font-body text-sm py-2.5 rounded-xl border transition-colors ${
-                    form.preferred_contact_method === cm.value
+                    form.preferred_contact_method === cm
                       ? "bg-ruby text-cream border-ruby"
                       : "border-ink/12 bg-white text-ink hover:border-ruby-warm/40"
                   }`}
                 >
-                  {t(`profile.contact.${cm.value}`)}
+                  {t(`profile.contact.${cm}`)}
                 </button>
               ))}
             </div>
