@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../lib/LanguageContext";
 
@@ -13,13 +14,8 @@ export default function Landing() {
         <span className="font-display text-xl tracking-tight text-cream">
           {t("common.brand")}
         </span>
-        <nav className="flex items-center gap-3">
-          <Link
-            to="/login"
-            className="font-body text-sm font-medium text-cream/70 hover:text-cream transition-colors px-4 py-2"
-          >
-            {t("common.logIn")}
-          </Link>
+        <nav className="flex items-center gap-3 relative">
+          <LoginMenu t={t} />
           <Link
             to="/signup"
             className="font-body text-sm font-semibold px-5 py-2.5 rounded-full bg-cream text-ruby-night hover:bg-mist transition-colors"
@@ -49,25 +45,34 @@ export default function Landing() {
             <p className="font-body text-base md:text-lg text-cream/60 max-w-md mb-9 leading-relaxed">
               {t("landing.body")}
             </p>
-            <div className="flex flex-wrap items-center gap-4">
-              <Link
-                to="/signup"
-                className="font-body text-sm font-semibold px-7 py-3.5 rounded-full bg-cream text-ruby-night hover:bg-mist transition-colors shadow-[0_10px_28px_-10px_rgba(0,0,0,0.5)]"
-              >
-                {t("common.registerDonor")}
-              </Link>
-              <Link
-                to="/login"
-                className="font-body text-sm font-semibold px-7 py-3.5 rounded-full border border-cream/25 text-cream hover:border-mist/60 hover:text-mist transition-colors"
-              >
-                {t("common.haveAccount")}
-              </Link>
-            </div>
           </div>
 
           {/* Right: illustrated blood bag with radial blood-type wheel */}
           <div className="relative flex items-center justify-center md:justify-end">
             <BagWithWheel />
+          </div>
+        </div>
+      </section>
+
+      {/* The fork: donor or hospital, the one real decision this page asks for */}
+      <section className="px-6 md:px-12 py-14 relative z-10">
+        <div className="max-w-4xl mx-auto">
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-mist/70 text-center mb-8">
+            {t("landing.choice.title")}
+          </p>
+          <div className="grid md:grid-cols-2 gap-5">
+            <ChoiceCard
+              to="/signup"
+              tone="donor"
+              label={t("landing.choice.donorLabel")}
+              body={t("landing.choice.donorBody")}
+            />
+            <ChoiceCard
+              to="/hospital/login"
+              tone="hospital"
+              label={t("landing.choice.hospitalLabel")}
+              body={t("landing.choice.hospitalBody")}
+            />
           </div>
         </div>
       </section>
@@ -194,5 +199,95 @@ function StatCard({ value, label }) {
       <p className="font-display text-3xl text-mist mb-1.5">{value}</p>
       <p className="font-mono text-xs uppercase tracking-wide text-cream/45">{label}</p>
     </div>
+  );
+}
+
+function LoginMenu({ t }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="relative" onMouseLeave={() => setOpen(false)}>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        onMouseEnter={() => setOpen(true)}
+        className="font-body text-sm font-medium text-cream/70 hover:text-cream transition-colors px-4 py-2"
+        aria-expanded={open}
+      >
+        {t("common.logIn")}
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1 w-48 rounded-2xl bg-cream shadow-[0_16px_40px_-12px_rgba(0,0,0,0.4)] overflow-hidden py-1">
+          <Link
+            to="/login"
+            className="block px-4 py-2.5 font-body text-sm text-ink hover:bg-ruby-50 transition-colors"
+          >
+            {t("landing.choice.donorLogin")}
+          </Link>
+          <Link
+            to="/hospital/login"
+            className="block px-4 py-2.5 font-body text-sm text-ink hover:bg-dusk-soft transition-colors"
+          >
+            {t("landing.choice.hospitalLogin")}
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ChoiceCard({ to, tone, label, body }) {
+  const isHospital = tone === "hospital";
+
+  return (
+    <Link
+      to={to}
+      className={`group rounded-3xl p-7 border transition-colors ${
+        isHospital
+          ? "bg-dusk-soft border-dusk/30 hover:border-dusk/60"
+          : "bg-ruby-night border-mist/25 hover:border-mist/60"
+      }`}
+    >
+      <span
+        className={`inline-flex items-center justify-center w-10 h-10 rounded-full mb-4 ${
+          isHospital ? "bg-dusk text-cream" : "bg-mist text-ruby-night"
+        }`}
+      >
+        {isHospital ? <HospitalIcon /> : <DropIcon />}
+      </span>
+      <h3 className="font-display font-medium text-xl text-cream mb-2">{label}</h3>
+      <p className="font-body text-sm text-cream/55 leading-relaxed mb-4">{body}</p>
+      <span
+        className={`font-body text-sm font-semibold ${
+          isHospital ? "text-dusk" : "text-mist"
+        } group-hover:underline`}
+      >
+        →
+      </span>
+    </Link>
+  );
+}
+
+function DropIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M12 3c4 5 7 8.5 7 12a7 7 0 11-14 0c0-3.5 3-7 7-12z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+function HospitalIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M12 4v16M4 12h16"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }
