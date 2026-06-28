@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { authApi, setTokens, clearTokens, getAccessToken } from "./api";
+import { authApi, setTokens, clearTokens, getAccessToken, setSessionScope } from "./api";
+import { hospitalApi } from "./apiHospital";
 
 const HospitalAuthContext = createContext(null);
 
@@ -8,8 +9,17 @@ export function HospitalAuthProvider({ children }) {
   const [hospitalProfile, setHospitalProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Every hospital page is wrapped in this provider. Setting the scope here,
+  // before any request fires, means every api.* call made anywhere beneath
+  // this provider automatically reads/writes the hospital's own token slot
+  // — never the donor's, never the admin's.
+  useEffect(() => {
+    setSessionScope("hospital");
+  }, []);
+
   const loadSession = useCallback(async () => {
-    if (!getAccessToken()) {
+    setSessionScope("hospital");
+    if (!getAccessToken("hospital")) {
       setLoading(false);
       return;
     }
@@ -20,10 +30,11 @@ export function HospitalAuthProvider({ children }) {
         const profile = await hospitalApi.getProfile();
         setHospitalProfile(profile);
       } catch {
+        // hospital may not have completed their profile yet — that's fine
         setHospitalProfile(null);
       }
     } catch {
-      clearTokens();
+      clearTokens("hospital");
       setUser(null);
     } finally {
       setLoading(false);
@@ -35,8 +46,9 @@ export function HospitalAuthProvider({ children }) {
   }, [loadSession]);
 
   const login = async (credentials) => {
+    setSessionScope("hospital");
     const data = await authApi.login(credentials);
-    setTokens({ access: data.access, refresh: data.refresh });
+    setTokens({ access: data.access, refresh: data.refresh }, "hospital");
     setUser(data.user);
     await loadSession();
     return data;
@@ -47,13 +59,16 @@ export function HospitalAuthProvider({ children }) {
   };
 
   const logout = async () => {
+    setSessionScope("hospital");
     try {
-      const refresh = localStorage.getItem("damulink_refresh_token");
+      const refresh = getAccessToken("hospital")
+        ? localStorage.getItem("damulink_hospital_refresh_token")
+        : null;
       if (refresh) await authApi.logout(refresh);
     } catch {
-      // ignore
+      // ignore network errors on logout — clear local state regardless
     }
-    clearTokens();
+    clearTokens("hospital");
     setUser(null);
     setHospitalProfile(null);
   };
