@@ -5,25 +5,43 @@
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api/v1";
 
-const TOKEN_KEY = "damulink_access_token";
-const REFRESH_KEY = "damulink_refresh_token";
+/**
+ * Session scoping — donor, hospital, and admin logins are kept in
+ * completely separate localStorage slots so logging into one portal never
+ * silently overwrites or logs out a session in another. Each portal's
+ * AuthProvider calls setSessionScope() once, on mount, before making any
+ * authenticated request.
+ */
+const SCOPES = ["donor", "hospital", "admin"];
+let activeScope = "donor";
 
-export function getAccessToken() {
-  return localStorage.getItem(TOKEN_KEY);
+export function setSessionScope(scope) {
+  if (SCOPES.includes(scope)) activeScope = scope;
 }
 
-export function getRefreshToken() {
-  return localStorage.getItem(REFRESH_KEY);
+function tokenKey(scope) {
+  return `damulink_${scope}_access_token`;
+}
+function refreshKey(scope) {
+  return `damulink_${scope}_refresh_token`;
 }
 
-export function setTokens({ access, refresh }) {
-  if (access) localStorage.setItem(TOKEN_KEY, access);
-  if (refresh) localStorage.setItem(REFRESH_KEY, refresh);
+export function getAccessToken(scope = activeScope) {
+  return localStorage.getItem(tokenKey(scope));
 }
 
-export function clearTokens() {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(REFRESH_KEY);
+export function getRefreshToken(scope = activeScope) {
+  return localStorage.getItem(refreshKey(scope));
+}
+
+export function setTokens({ access, refresh }, scope = activeScope) {
+  if (access) localStorage.setItem(tokenKey(scope), access);
+  if (refresh) localStorage.setItem(refreshKey(scope), refresh);
+}
+
+export function clearTokens(scope = activeScope) {
+  localStorage.removeItem(tokenKey(scope));
+  localStorage.removeItem(refreshKey(scope));
 }
 
 class ApiError extends Error {
@@ -119,8 +137,7 @@ export const api = {
 // ---- Auth ----
 export const authApi = {
   registerDonor: (payload) => api.post("/auth/register/donor/", payload, { auth: false }),
-  registerHospital: (payload) =>
-    api.post("/auth/register/hospital/", payload, { auth: false }),
+  registerHospital: (payload) => api.post("/auth/register/hospital/", payload, { auth: false }),
   login: (payload) => api.post("/auth/login/", payload, { auth: false }),
   verifyOtp: (payload) => api.post("/auth/verify-otp/", payload, { auth: false }),
   resendOtp: (payload) => api.post("/auth/resend-otp/", payload, { auth: false }),
