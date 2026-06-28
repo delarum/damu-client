@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
-import { creditsApi, gamificationApi, donationApi, donorApi, matchingApi } from "../lib/api";
+import { creditsApi, gamificationApi, donorApi, matchingApi } from "../lib/api";
 import { useCountUp } from "../lib/useCountUp";
 import { useLanguage } from "../lib/LanguageContext";
 
@@ -17,8 +17,8 @@ export default function Dashboard() {
   }, [authLoading, user, donorProfile, navigate]);
 
   const [credits, setCredits] = useState(null);
-  const [badges, setBadges] = useState([]);
-  const [history, setHistory] = useState([]);
+  const [badgeCount, setBadgeCount] = useState(0);
+  const [latestBadge, setLatestBadge] = useState(null);
   const [pendingRequestCount, setPendingRequestCount] = useState(0);
   const [availability, setAvailability] = useState(donorProfile?.availability_status ?? true);
   const [loading, setLoading] = useState(true);
@@ -29,16 +29,18 @@ export default function Dashboard() {
     let active = true;
     async function load() {
       try {
-        const [creditsRes, badgesRes, historyRes, requestsRes] = await Promise.allSettled([
+        const [creditsRes, badgesRes, requestsRes] = await Promise.allSettled([
           creditsApi.balance(),
           gamificationApi.badges(),
-          donationApi.history(),
           matchingApi.myContactRequests(),
         ]);
         if (!active) return;
         if (creditsRes.status === "fulfilled") setCredits(creditsRes.value);
-        if (badgesRes.status === "fulfilled") setBadges(badgesRes.value.results || []);
-        if (historyRes.status === "fulfilled") setHistory(historyRes.value.results || []);
+        if (badgesRes.status === "fulfilled") {
+          const results = badgesRes.value.results || [];
+          setBadgeCount(results.length);
+          setLatestBadge(results[0]?.badge ?? null);
+        }
         if (requestsRes.status === "fulfilled") {
           const pending = (requestsRes.value.results || []).filter((r) => r.status === "pending");
           setPendingRequestCount(pending.length);
@@ -76,6 +78,13 @@ export default function Dashboard() {
   }
 
   const firstName = (user?.full_name || donorProfile?.full_name || "").split(" ")[0];
+
+  const accountLinks = [
+    { to: "/profile", label: t("nav.profile") },
+    { to: "/donations", label: t("nav.donations") },
+    { to: "/verification", label: t("nav.verification") },
+    { to: "/third-party/apply", label: t("nav.thirdParty") },
+  ];
 
   return (
     <div className="min-h-screen bg-clay">
@@ -131,9 +140,12 @@ export default function Dashboard() {
           </Link>
         )}
 
+        {/* Summary cards — each is now a link out to its own full page */}
         <div className="grid md:grid-cols-3 gap-5 mb-10">
-          {/* Credit balance — ruby, the core metric */}
-          <div className="md:col-span-1 rounded-3xl bg-ruby-night p-6 flex flex-col justify-between">
+          <Link
+            to="/credits"
+            className="md:col-span-1 rounded-3xl bg-ruby-night p-6 flex flex-col justify-between hover:bg-ruby-deep transition-colors"
+          >
             <span className="font-body text-xs font-medium text-cream/50 uppercase tracking-wide">
               {t("dashboard.credits")}
             </span>
@@ -143,9 +155,9 @@ export default function Dashboard() {
             <span className="font-body text-xs text-cream/45 mt-2">
               {t("dashboard.redeemable")}
             </span>
-          </div>
+          </Link>
 
-          {/* Availability toggle — sage when on, communicates "active/healthy" */}
+          {/* Availability toggle stays inline — it's a quick action, not a page */}
           <div
             className={`md:col-span-1 rounded-3xl p-6 flex flex-col justify-between transition-colors ${
               availability ? "bg-sage-soft" : "bg-white"
@@ -173,83 +185,37 @@ export default function Dashboard() {
             </span>
           </div>
 
-          {/* Badge count — clementine, celebratory/achievement tone */}
-          <div className="md:col-span-1 rounded-3xl bg-clementine-soft p-6 flex flex-col justify-between">
+          <Link
+            to="/badges"
+            className="md:col-span-1 rounded-3xl bg-clementine-soft p-6 flex flex-col justify-between hover:bg-clementine/20 transition-colors"
+          >
             <span className="font-body text-xs font-medium text-ink/55 uppercase tracking-wide">
               {t("dashboard.badgesEarned")}
             </span>
-            <span className="font-display text-4xl text-clementine mt-3">{badges.length}</span>
+            <span className="font-display text-4xl text-clementine mt-3">{badgeCount}</span>
             <span className="font-body text-xs text-ink/55 mt-2">
-              {badges[0]?.badge
-                ? t("dashboard.latestBadge", { badge: badges[0].badge })
-                : t("dashboard.firstBadge")}
+              {latestBadge ? t("dashboard.latestBadge", { badge: latestBadge }) : t("dashboard.firstBadge")}
             </span>
-          </div>
+          </Link>
         </div>
 
-        {/* Badges row */}
-        <section className="mb-10">
-          <h2 className="font-body text-sm font-semibold text-ink mb-4">{t("dashboard.badgesTitle")}</h2>
-          {badges.length === 0 ? (
-            <EmptyState title={t("dashboard.noBadgesTitle")} body={t("dashboard.noBadgesBody")} />
-          ) : (
-            <div className="flex flex-wrap gap-3">
-              {badges.map((b) => (
-                <BadgeChip key={b.badge} label={b.badge} earnedAt={b.earned_at} t={t} />
-              ))}
-            </div>
-          )}
-        </section>
-
-        {/* Donation history */}
+        {/* Account navigation — every remaining donor page, one click away */}
         <section>
-          <h2 className="font-body text-sm font-semibold text-ink mb-4">{t("dashboard.historyTitle")}</h2>
-          {history.length === 0 ? (
-            <EmptyState title={t("dashboard.noHistoryTitle")} body={t("dashboard.noHistoryBody")} />
-          ) : (
-            <div className="rounded-3xl bg-white divide-y divide-ink/8 overflow-hidden">
-              {history.map((d) => (
-                <div key={d.donation_id} className="flex items-center justify-between px-5 py-4">
-                  <div>
-                    <p className="font-body text-sm font-medium text-ink capitalize">
-                      {d.type?.replace("_", " ")}
-                    </p>
-                    <p className="font-mono text-xs text-ink/50 mt-0.5">
-                      {d.hospital} · {d.date}
-                    </p>
-                  </div>
-                  <span className="font-mono text-sm text-clementine">+{d.credits_awarded}</span>
-                </div>
-              ))}
-            </div>
-          )}
+          <h2 className="font-body text-sm font-semibold text-ink mb-4">{t("nav.account")}</h2>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {accountLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="flex items-center justify-between rounded-2xl bg-white border border-ink/8 px-5 py-4 hover:border-ruby-warm/30 transition-colors"
+              >
+                <span className="font-body text-sm font-medium text-ink">{link.label}</span>
+                <span className="text-ink/30">→</span>
+              </Link>
+            ))}
+          </div>
         </section>
       </main>
-    </div>
-  );
-}
-
-function BadgeChip({ label, earnedAt, t }) {
-  return (
-    <div
-      className="group relative rounded-2xl border border-clementine/25 bg-clementine-soft px-5 py-4 cursor-default
-        transition-transform hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-8px_rgba(217,119,66,0.3)]"
-    >
-      <p className="font-body text-sm font-semibold text-ink">{label}</p>
-      {earnedAt && (
-        <p className="font-mono text-[11px] text-ink/50 mt-0.5">
-          {t("dashboard.earned", { date: earnedAt })}
-        </p>
-      )}
-    </div>
-  );
-}
-
-function EmptyState({ title, body }) {
-  return (
-    <div className="rounded-3xl border border-dashed border-ink/15 bg-white/50 px-6 py-8 text-center">
-      <p className="font-body text-sm font-medium text-ink">{title}</p>
-      <p className="font-body text-sm text-ink/50 mt-1">{body}</p>
     </div>
   );
 }
