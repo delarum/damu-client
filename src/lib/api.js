@@ -119,6 +119,8 @@ export const api = {
 // ---- Auth ----
 export const authApi = {
   registerDonor: (payload) => api.post("/auth/register/donor/", payload, { auth: false }),
+  registerHospital: (payload) =>
+    api.post("/auth/register/hospital/", payload, { auth: false }),
   login: (payload) => api.post("/auth/login/", payload, { auth: false }),
   verifyOtp: (payload) => api.post("/auth/verify-otp/", payload, { auth: false }),
   resendOtp: (payload) => api.post("/auth/resend-otp/", payload, { auth: false }),
