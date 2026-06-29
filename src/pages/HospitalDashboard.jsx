@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useHospitalAuth } from "../lib/HospitalAuthContext";
 import { hospitalApi } from "../lib/apiHospital";
 import { useLanguage } from "../lib/LanguageContext";
+import DonorMap from "../components/DonorMap";
 
 export default function HospitalDashboard() {
   const { user, hospitalProfile, logout, loading: authLoading } = useHospitalAuth();
@@ -79,6 +80,10 @@ export default function HospitalDashboard() {
             {error}
           </p>
         )}
+
+        <section className="mb-10">
+          <DonorMap height="65vh" />
+        </section>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
           <DashCard title="Search donors" href="/hospital/search" label="Find matches ->" />

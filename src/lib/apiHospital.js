@@ -21,6 +21,9 @@ export const hospitalApi = {
     blood: (params) => api.get("/matching/search/blood/", { params }),
     organs: (params) => api.get("/matching/search/organs/", { params }),
   },
+  donors: {
+    map: (params) => api.get("/matching/donors/map/", { params }),
+  },
   contactRequests: {
     list: () => api.get("/matching/contact-requests/"),
   },
