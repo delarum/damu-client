@@ -44,7 +44,7 @@ export default function VideoIntro({ onComplete }) {
               ease: [0.76, 0, 0.24, 1],
             }}
             style={{ transformOrigin: "left center" }}
-            className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
+            className="fixed inset-0 z-100 bg-black flex items-center justify-center"
           >
             <div className="relative w-full h-screen overflow-hidden bg-black">
               <img
