@@ -2,66 +2,97 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import heroImg from "../assets/hero.png";
+import "./VideoIntro.css";
 
-const PEEL_DELAY = 3 * 1000; // exactly 3 seconds
+const INTRO_DURATION = 4000;
 
 export default function VideoIntro({ onComplete }) {
-  const [peeled, setPeeled] = useState(false);
+  const [startPeel, setStartPeel] = useState(false);
+  const [finished, setFinished] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setPeeled(true);
-    }, PEEL_DELAY);
+      setStartPeel(true);
+    }, INTRO_DURATION);
 
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    if (peeled) {
-      const timer = setTimeout(() => {
-        onComplete?.();
-      }, 1200);
-      return () => clearTimeout(timer);
-    }
-  }, [peeled, onComplete]);
+    if (!startPeel) return;
 
-  function skip() {
-    setPeeled(true);
+    const timer = setTimeout(() => {
+      setFinished(true);
+      onComplete?.();
+    }, 1800);
+
+    return () => clearTimeout(timer);
+  }, [startPeel, onComplete]);
+
+  function skipIntro() {
+    setStartPeel(true);
   }
 
   return (
     <AnimatePresence>
-      {!peeled && (
-        <div style={{ perspective: 1200 }}>
+      {!finished && (
+        <div className="intro-container">
+
+          {/* Landing page already exists underneath */}
+
+          {/* Ruby layer */}
+
           <motion.div
-            key="hero-overlay"
-            initial={{ rotateY: 0 }}
-            exit={{
-              rotateY: -90,
+            className="ruby-layer"
+            initial={{ opacity: 1 }}
+            animate={{
+              opacity: startPeel ? 0 : 1,
             }}
             transition={{
-              duration: 1.0,
-              ease: [0.76, 0, 0.24, 1],
+              delay: 1,
+              duration: 0.8,
+              ease: "easeInOut",
             }}
-            style={{ transformOrigin: "left center" }}
-            className="fixed inset-0 z-100 bg-black flex items-center justify-center"
-          >
-            <div className="relative w-full h-screen overflow-hidden bg-black">
-              <img
-                src={heroImg}
-                alt="DamuLink intro"
-                className="w-full h-full object-cover"
-              />
+          />
 
-              {/* Skip / Enter button */}
-              <button
-                onClick={skip}
-                className="absolute bottom-8 right-8 z-20 font-body text-xs font-semibold px-5 py-2.5 rounded-full bg-cream/90 text-ruby-night backdrop-blur hover:bg-cream transition-colors"
-              >
-                Enter DamuLink →
-              </button>
-            </div>
+          {/* Paper */}
+
+          <motion.div
+            className="paper-page"
+            initial={false}
+            animate={
+              startPeel
+                ? {
+                    rotateY: -115,
+                    rotateX: 8,
+                    x: "45%",
+                    y: "-6%",
+                    scale: 0.98,
+                  }
+                : {}
+            }
+            transition={{
+              duration: 1.7,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
+            <div className="paper-shadow" />
+
+            <img
+              src={heroImg}
+              className="hero-image"
+              alt="DamuLink Intro"
+            />
+
+            <button
+              className="skip-btn"
+              onClick={skipIntro}
+            >
+              Enter →
+            </button>
+
           </motion.div>
+
         </div>
       )}
     </AnimatePresence>
