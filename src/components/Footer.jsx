@@ -1,25 +1,16 @@
 import { useLanguage } from "../lib/LanguageContext";
 import { Link } from "react-router-dom";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Facebook,
-  Instagram,
-  Linkedin,
-  HeartPulse,
-} from "lucide-react";
 
 export default function Footer() {
   const { t } = useLanguage();
 
   return (
     <footer className="w-full bg-ruby-night border-t border-cream/10">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 py-14">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-14">
 
-        {/* Top Grid */}
+        {/* Main Grid */}
 
-        <div className="grid gap-12 lg:grid-cols-5 md:grid-cols-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
 
           {/* Brand */}
 
@@ -27,44 +18,22 @@ export default function Footer() {
 
             <Link
               to="/"
-              className="flex items-center gap-3 text-cream"
+              className="font-display text-3xl text-cream tracking-tight"
             >
-              <HeartPulse className="w-7 h-7 text-mist" />
-
-              <span className="font-display text-2xl">
-                {t("footer.brand")}
-              </span>
+              {t("footer.brand")}
             </Link>
 
-            <p className="mt-4 text-sm leading-7 text-cream/60 max-w-sm">
+            <p className="mt-4 text-cream/70 leading-7 max-w-md">
               {t("footer.tagline")}
             </p>
 
-            <div className="mt-8 space-y-3">
+            <div className="mt-8 space-y-3 text-sm text-cream/60">
 
-              <div className="flex items-center gap-3 text-cream/60">
+              <p>📍 {t("footer.address")}</p>
 
-                <MapPin size={18} />
+              <p>📞 +254 700 123 456</p>
 
-                <span>{t("footer.address")}</span>
-
-              </div>
-
-              <div className="flex items-center gap-3 text-cream/60">
-
-                <Phone size={18} />
-
-                <span>+254 700 123 456</span>
-
-              </div>
-
-              <div className="flex items-center gap-3 text-cream/60">
-
-                <Mail size={18} />
-
-                <span>support@damulink.org</span>
-
-              </div>
+              <p>📧 support@damulink.org</p>
 
             </div>
 
@@ -74,29 +43,29 @@ export default function Footer() {
 
           <div>
 
-            <h3 className="font-mono uppercase tracking-[0.18em] text-xs text-mist mb-5">
+            <h3 className="text-mist uppercase tracking-[0.18em] text-xs font-semibold mb-5">
               {t("footer.company")}
             </h3>
 
-            <nav className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3">
 
-              <Link to="/" className="text-cream/65 hover:text-cream transition">
+              <Link to="/" className="text-cream/70 hover:text-cream">
                 {t("footer.home")}
               </Link>
 
-              <Link to="/signup" className="text-cream/65 hover:text-cream transition">
+              <Link to="/signup" className="text-cream/70 hover:text-cream">
                 {t("footer.signUp")}
               </Link>
 
-              <Link to="/login" className="text-cream/65 hover:text-cream transition">
+              <Link to="/login" className="text-cream/70 hover:text-cream">
                 {t("footer.login")}
               </Link>
 
-              <Link to="/credits" className="text-cream/65 hover:text-cream transition">
+              <Link to="/credits" className="text-cream/70 hover:text-cream">
                 {t("footer.credits")}
               </Link>
 
-            </nav>
+            </div>
 
           </div>
 
@@ -104,29 +73,29 @@ export default function Footer() {
 
           <div>
 
-            <h3 className="font-mono uppercase tracking-[0.18em] text-xs text-mist mb-5">
+            <h3 className="text-mist uppercase tracking-[0.18em] text-xs font-semibold mb-5">
               {t("footer.donors")}
             </h3>
 
-            <nav className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3">
 
-              <Link to="/dashboard" className="text-cream/65 hover:text-cream transition">
+              <Link to="/dashboard" className="text-cream/70 hover:text-cream">
                 {t("footer.dashboard")}
               </Link>
 
-              <Link to="/requests" className="text-cream/65 hover:text-cream transition">
+              <Link to="/requests" className="text-cream/70 hover:text-cream">
                 {t("footer.contact")}
               </Link>
 
-              <Link to="/donations" className="text-cream/65 hover:text-cream transition">
+              <Link to="/donations" className="text-cream/70 hover:text-cream">
                 {t("footer.history")}
               </Link>
 
-              <Link to="/badges" className="text-cream/65 hover:text-cream transition">
+              <Link to="/badges" className="text-cream/70 hover:text-cream">
                 {t("footer.badges")}
               </Link>
 
-            </nav>
+            </div>
 
           </div>
 
@@ -134,34 +103,34 @@ export default function Footer() {
 
           <div>
 
-            <h3 className="font-mono uppercase tracking-[0.18em] text-xs text-mist mb-5">
+            <h3 className="text-mist uppercase tracking-[0.18em] text-xs font-semibold mb-5">
               {t("footer.hospitals")}
             </h3>
 
-            <nav className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3">
 
               <Link
                 to="/hospital/login"
-                className="text-cream/65 hover:text-cream transition"
+                className="text-cream/70 hover:text-cream"
               >
                 {t("footer.hospitalLogin")}
               </Link>
 
               <Link
                 to="/hospital/register"
-                className="text-cream/65 hover:text-cream transition"
+                className="text-cream/70 hover:text-cream"
               >
                 {t("footer.hospitalRegister")}
               </Link>
 
               <Link
                 to="/hospital/search"
-                className="text-cream/65 hover:text-cream transition"
+                className="text-cream/70 hover:text-cream"
               >
                 {t("footer.findHospital")}
               </Link>
 
-            </nav>
+            </div>
 
           </div>
 
@@ -169,35 +138,35 @@ export default function Footer() {
 
         {/* Divider */}
 
-        <div className="border-t border-cream/10 mt-14 pt-8">
+        <div className="border-t border-cream/10 mt-12 pt-8">
 
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
 
-            <p className="text-xs text-cream/40">
+            <p className="text-xs text-cream/40 text-center md:text-left">
               {t("footer.copyright")}
             </p>
 
-            <div className="flex items-center gap-4">
+            <div className="flex gap-6 text-sm">
 
               <a
                 href="#"
-                className="w-10 h-10 rounded-full bg-cream/5 hover:bg-ruby flex items-center justify-center transition"
+                className="text-cream/60 hover:text-cream transition-colors"
               >
-                <Facebook size={18} className="text-cream" />
+                Facebook
               </a>
 
               <a
                 href="#"
-                className="w-10 h-10 rounded-full bg-cream/5 hover:bg-ruby flex items-center justify-center transition"
+                className="text-cream/60 hover:text-cream transition-colors"
               >
-                <Instagram size={18} className="text-cream" />
+                Instagram
               </a>
 
               <a
                 href="#"
-                className="w-10 h-10 rounded-full bg-cream/5 hover:bg-ruby flex items-center justify-center transition"
+                className="text-cream/60 hover:text-cream transition-colors"
               >
-                <Linkedin size={18} className="text-cream" />
+                LinkedIn
               </a>
 
             </div>
