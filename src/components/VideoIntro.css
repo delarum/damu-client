@@ -1,0 +1,236 @@
+.intro-container {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    overflow: hidden;
+    perspective: 2200px;
+    background: transparent;
+}
+
+/* Ruby page underneath */
+
+.ruby-layer {
+    position: absolute;
+    inset: 0;
+    background: #570300;
+    z-index: 1;
+}
+
+/* Main paper */
+
+.paper-page {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+
+    transform-origin: top right;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    will-change: transform;
+
+    overflow: hidden;
+    background: white;
+
+    box-shadow:
+        0 0 80px rgba(0,0,0,.22),
+        0 40px 120px rgba(0,0,0,.45);
+}
+
+/* Hero */
+
+.hero-image{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    user-select:none;
+    pointer-events:none;
+}
+
+/* Moving shadow */
+
+.paper-shadow{
+    position:absolute;
+    top:0;
+    right:0;
+    width:220px;
+    height:100%;
+
+    background:
+    linear-gradient(
+        to left,
+        rgba(0,0,0,.40),
+        rgba(0,0,0,.15),
+        transparent
+    );
+
+    filter:blur(25px);
+
+    z-index:20;
+
+    pointer-events:none;
+}
+
+/* Gloss highlight */
+
+.paper-page::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:-15%;
+    right:-20%;
+
+    width:60%;
+    height:130%;
+
+    background:
+
+    linear-gradient(
+
+        120deg,
+
+        rgba(255,255,255,.85),
+
+        rgba(255,255,255,.15),
+
+        transparent
+
+    );
+
+    transform:rotate(8deg);
+
+    pointer-events:none;
+
+    z-index:8;
+}
+
+/* Curl edge */
+
+.paper-page::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    right:0;
+
+    width:180px;
+    height:100%;
+
+    background:
+
+    linear-gradient(
+
+        to left,
+
+        rgba(0,0,0,.30),
+
+        rgba(0,0,0,.12),
+
+        transparent
+
+    );
+
+    mix-blend-mode:multiply;
+
+    filter:blur(18px);
+
+    pointer-events:none;
+
+    z-index:12;
+}
+
+/* Skip */
+
+.skip-btn{
+
+    position:absolute;
+
+    bottom:40px;
+    right:40px;
+
+    z-index:50;
+
+    padding:15px 28px;
+
+    border:none;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.92);
+
+    color:#570300;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.skip-btn:hover{
+
+    transform:translateY(-2px);
+
+    background:white;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.18);
+
+}
+
+/* Soft vignette */
+
+.intro-container::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    z-index:2;
+
+    background:
+
+    radial-gradient(
+
+        circle,
+
+        transparent 55%,
+
+        rgba(0,0,0,.08)
+
+    );
+
+    pointer-events:none;
+
+}
+
+/* Mobile */
+
+@media(max-width:900px){
+
+.skip-btn{
+
+bottom:25px;
+
+right:25px;
+
+padding:13px 22px;
+
+font-size:14px;
+
+}
+
+.paper-shadow{
+
+width:120px;
+
+}
+
+}
