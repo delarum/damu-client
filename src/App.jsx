@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import HospitalProtectedRoute from "./components/HospitalProtectedRoute";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import AccessibilityMenu from "./components/AccessibilityMenu";
+import PageShell from "./components/PageShell";
 
 import VideoIntro from "./components/VideoIntro";
 import Landing from "./pages/Landing";
@@ -48,46 +49,45 @@ export default function App() {
         <BrowserRouter>
           <Routes>
             <Route
-  path="/"
-  element={
-    <>
-      <Landing />
+              path="/"
+              element={
+                <PageShell>
+                  <Landing />
+                  <AnimatePresence mode="wait">
+                    {!introDone && (
+                      <VideoIntro
+                        onComplete={() => setIntroDone(true)}
+                      />
+                    )}
+                  </AnimatePresence>
+                </PageShell>
+              }
+            />
+            <Route path="/signup" element={<PageShell><SignUp /></PageShell>} />
+            <Route path="/login" element={<PageShell><Login /></PageShell>} />
 
-      <AnimatePresence mode="wait">
-        {!introDone && (
-          <VideoIntro
-            onComplete={() => setIntroDone(true)}
-          />
-        )}
-      </AnimatePresence>
-    </>
-  }
-/>
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/profile-setup" element={<PageShell><ProtectedRoute><ProfileSetup /></ProtectedRoute></PageShell>} />
+            <Route path="/profile" element={<PageShell><ProtectedRoute><Profile /></ProtectedRoute></PageShell>} />
+            <Route path="/dashboard" element={<PageShell><ProtectedRoute><Dashboard /></ProtectedRoute></PageShell>} />
+            <Route path="/requests" element={<PageShell><ProtectedRoute><ContactRequests /></ProtectedRoute></PageShell>} />
+            <Route path="/donations" element={<PageShell><ProtectedRoute><DonationHistory /></ProtectedRoute></PageShell>} />
+            <Route path="/credits" element={<PageShell><ProtectedRoute><Credits /></ProtectedRoute></PageShell>} />
+            <Route path="/badges" element={<PageShell><ProtectedRoute><Badges /></ProtectedRoute></PageShell>} />
+            <Route path="/verification" element={<PageShell><ProtectedRoute><Verification /></ProtectedRoute></PageShell>} />
+            <Route path="/third-party/apply" element={<PageShell><ProtectedRoute><ThirdPartyApply /></ProtectedRoute></PageShell>} />
 
-            <Route path="/profile-setup" element={<ProtectedRoute><ProfileSetup /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/requests" element={<ProtectedRoute><ContactRequests /></ProtectedRoute>} />
-            <Route path="/donations" element={<ProtectedRoute><DonationHistory /></ProtectedRoute>} />
-            <Route path="/credits" element={<ProtectedRoute><Credits /></ProtectedRoute>} />
-            <Route path="/badges" element={<ProtectedRoute><Badges /></ProtectedRoute>} />
-            <Route path="/verification" element={<ProtectedRoute><Verification /></ProtectedRoute>} />
-            <Route path="/third-party/apply" element={<ProtectedRoute><ThirdPartyApply /></ProtectedRoute>} />
+            <Route path="/hospital/login" element={<PageShell><HospitalAuthProvider><HospitalLogin /></HospitalAuthProvider></PageShell>} />
+            <Route path="/hospital/register" element={<PageShell><HospitalAuthProvider><HospitalRegister /></HospitalAuthProvider></PageShell>} />
+            <Route path="/hospital/dashboard" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalDashboard /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
+            <Route path="/hospital/search" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalSearch /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
+            <Route path="/hospital/profile" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalProfile /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
+            <Route path="/hospital/staff" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalStaff /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
+            <Route path="/hospital/subscription" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalSubscription /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
 
-            <Route path="/hospital/login" element={<HospitalAuthProvider><HospitalLogin /></HospitalAuthProvider>} />
-            <Route path="/hospital/register" element={<HospitalAuthProvider><HospitalRegister /></HospitalAuthProvider>} />
-            <Route path="/hospital/dashboard" element={<HospitalAuthProvider><HospitalProtectedRoute><HospitalDashboard /></HospitalProtectedRoute></HospitalAuthProvider>} />
-            <Route path="/hospital/search" element={<HospitalAuthProvider><HospitalProtectedRoute><HospitalSearch /></HospitalProtectedRoute></HospitalAuthProvider>} />
-            <Route path="/hospital/profile" element={<HospitalAuthProvider><HospitalProtectedRoute><HospitalProfile /></HospitalProtectedRoute></HospitalAuthProvider>} />
-            <Route path="/hospital/staff" element={<HospitalAuthProvider><HospitalProtectedRoute><HospitalStaff /></HospitalProtectedRoute></HospitalAuthProvider>} />
-            <Route path="/hospital/subscription" element={<HospitalAuthProvider><HospitalProtectedRoute><HospitalSubscription /></HospitalProtectedRoute></HospitalAuthProvider>} />
-
-            <Route path="/admin/login" element={<AdminAuthProvider><AdminLogin /></AdminAuthProvider>} />
-            <Route path="/admin/dashboard" element={<AdminAuthProvider><AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute></AdminAuthProvider>} />
-            <Route path="/admin/hospitals" element={<AdminAuthProvider><AdminProtectedRoute><AdminHospitals /></AdminProtectedRoute></AdminAuthProvider>} />
-            <Route path="/admin/audit-logs" element={<AdminAuthProvider><AdminProtectedRoute><AdminAuditLogs /></AdminProtectedRoute></AdminAuthProvider>} />
+            <Route path="/admin/login" element={<PageShell><AdminAuthProvider><AdminLogin /></AdminAuthProvider></PageShell>} />
+            <Route path="/admin/dashboard" element={<PageShell><AdminAuthProvider><AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute></AdminAuthProvider></PageShell>} />
+            <Route path="/admin/hospitals" element={<PageShell><AdminAuthProvider><AdminProtectedRoute><AdminHospitals /></AdminProtectedRoute></AdminAuthProvider></PageShell>} />
+            <Route path="/admin/audit-logs" element={<PageShell><AdminAuthProvider><AdminProtectedRoute><AdminAuditLogs /></AdminProtectedRoute></AdminAuthProvider></PageShell>} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>

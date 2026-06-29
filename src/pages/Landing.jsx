@@ -8,7 +8,7 @@ export default function Landing() {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-ruby-night flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-ruby-night flex flex-col">
       {/* Nav */}
       <header className="flex items-center justify-between px-6 md:px-12 py-7 relative z-10">
         <span className="font-display text-xl tracking-tight text-cream">
