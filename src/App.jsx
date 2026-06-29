@@ -32,6 +32,7 @@ import HospitalSearch from "./pages/HospitalSearch";
 import HospitalProfile from "./pages/HospitalProfile";
 import HospitalStaff from "./pages/HospitalStaff";
 import HospitalSubscription from "./pages/HospitalSubscription";
+import HospitalAbout from "./pages/HospitalAbout";
 
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -39,6 +40,7 @@ import AdminHospitals from "./pages/AdminHospitals";
 import AdminAuditLogs from "./pages/AdminAuditLogs";
 
 import NotFound from "./pages/NotFound";
+import About from "./pages/About";
 
 export default function App() {
   const [introDone, setIntroDone] = useState(false);
@@ -75,6 +77,7 @@ export default function App() {
             <Route path="/badges" element={<PageShell><ProtectedRoute><Badges /></ProtectedRoute></PageShell>} />
             <Route path="/verification" element={<PageShell><ProtectedRoute><Verification /></ProtectedRoute></PageShell>} />
             <Route path="/third-party/apply" element={<PageShell><ProtectedRoute><ThirdPartyApply /></ProtectedRoute></PageShell>} />
+            <Route path="/about" element={<PageShell><ProtectedRoute><About/></ProtectedRoute></PageShell>} />
 
             <Route path="/hospital/login" element={<PageShell><HospitalAuthProvider><HospitalLogin /></HospitalAuthProvider></PageShell>} />
             <Route path="/hospital/register" element={<PageShell><HospitalAuthProvider><HospitalRegister /></HospitalAuthProvider></PageShell>} />
@@ -83,6 +86,7 @@ export default function App() {
             <Route path="/hospital/profile" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalProfile /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
             <Route path="/hospital/staff" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalStaff /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
             <Route path="/hospital/subscription" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalSubscription /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
+            <Route path="/hospital/about" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalAbout /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
 
             <Route path="/admin/login" element={<PageShell><AdminAuthProvider><AdminLogin /></AdminAuthProvider></PageShell>} />
             <Route path="/admin/dashboard" element={<PageShell><AdminAuthProvider><AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute></AdminAuthProvider></PageShell>} />
