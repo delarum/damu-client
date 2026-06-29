@@ -49,11 +49,12 @@ export default function App() {
             <Route
               path="/"
               element={
-                introDone ? (
+                <div className="relative">
                   <Landing />
-                ) : (
-                  <VideoIntro onComplete={() => setIntroDone(true)} />
-                )
+                  {!introDone && (
+                    <VideoIntro onComplete={() => setIntroDone(true)} />
+                  )}
+                </div>
               }
             />
             <Route path="/signup" element={<SignUp />} />
