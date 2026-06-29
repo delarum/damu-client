@@ -93,12 +93,20 @@ export default function Dashboard() {
         <Link to="/" className="font-display text-lg tracking-tight text-cream">
           {t("common.brand")}
         </Link>
-        <button
-          onClick={handleLogout}
-          className="font-body text-sm text-cream/60 hover:text-cream transition-colors"
-        >
-          {t("common.logout")}
-        </button>
+        <div className="flex items-center gap-5">
+          <Link
+            to="/about"
+            className="font-body text-sm text-cream/60 hover:text-cream transition-colors"
+          >
+            {t("nav.about")}
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="font-body text-sm text-cream/60 hover:text-cream transition-colors"
+          >
+            {t("common.logout")}
+          </button>
+        </div>
       </header>
 
       <main className="px-6 md:px-12 py-10 max-w-5xl mx-auto">
