@@ -4,6 +4,8 @@ import { LanguageProvider } from "./lib/LanguageContext";
 import { HospitalAuthProvider } from "./lib/HospitalAuthContext";
 import { AdminAuthProvider } from "./lib/AdminAuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import HospitalProtectedRoute from "./components/HospitalProtectedRoute";
+import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import AccessibilityMenu from "./components/AccessibilityMenu";
 
 import Landing from "./pages/Landing";
@@ -56,16 +58,16 @@ export default function App() {
 
             <Route path="/hospital/login" element={<HospitalAuthProvider><HospitalLogin /></HospitalAuthProvider>} />
             <Route path="/hospital/register" element={<HospitalAuthProvider><HospitalRegister /></HospitalAuthProvider>} />
-            <Route path="/hospital/dashboard" element={<HospitalAuthProvider><ProtectedRoute><HospitalDashboard /></ProtectedRoute></HospitalAuthProvider>} />
-            <Route path="/hospital/search" element={<HospitalAuthProvider><ProtectedRoute><HospitalSearch /></ProtectedRoute></HospitalAuthProvider>} />
-            <Route path="/hospital/profile" element={<HospitalAuthProvider><ProtectedRoute><HospitalProfile /></ProtectedRoute></HospitalAuthProvider>} />
-            <Route path="/hospital/staff" element={<HospitalAuthProvider><ProtectedRoute><HospitalStaff /></ProtectedRoute></HospitalAuthProvider>} />
-            <Route path="/hospital/subscription" element={<HospitalAuthProvider><ProtectedRoute><HospitalSubscription /></ProtectedRoute></HospitalAuthProvider>} />
+            <Route path="/hospital/dashboard" element={<HospitalAuthProvider><HospitalProtectedRoute><HospitalDashboard /></HospitalProtectedRoute></HospitalAuthProvider>} />
+            <Route path="/hospital/search" element={<HospitalAuthProvider><HospitalProtectedRoute><HospitalSearch /></HospitalProtectedRoute></HospitalAuthProvider>} />
+            <Route path="/hospital/profile" element={<HospitalAuthProvider><HospitalProtectedRoute><HospitalProfile /></HospitalProtectedRoute></HospitalAuthProvider>} />
+            <Route path="/hospital/staff" element={<HospitalAuthProvider><HospitalProtectedRoute><HospitalStaff /></HospitalProtectedRoute></HospitalAuthProvider>} />
+            <Route path="/hospital/subscription" element={<HospitalAuthProvider><HospitalProtectedRoute><HospitalSubscription /></HospitalProtectedRoute></HospitalAuthProvider>} />
 
             <Route path="/admin/login" element={<AdminAuthProvider><AdminLogin /></AdminAuthProvider>} />
-            <Route path="/admin/dashboard" element={<AdminAuthProvider><ProtectedRoute><AdminDashboard /></ProtectedRoute></AdminAuthProvider>} />
-            <Route path="/admin/hospitals" element={<AdminAuthProvider><ProtectedRoute><AdminHospitals /></ProtectedRoute></AdminAuthProvider>} />
-            <Route path="/admin/audit-logs" element={<AdminAuthProvider><ProtectedRoute><AdminAuditLogs /></ProtectedRoute></AdminAuthProvider>} />
+            <Route path="/admin/dashboard" element={<AdminAuthProvider><AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute></AdminAuthProvider>} />
+            <Route path="/admin/hospitals" element={<AdminAuthProvider><AdminProtectedRoute><AdminHospitals /></AdminProtectedRoute></AdminAuthProvider>} />
+            <Route path="/admin/audit-logs" element={<AdminAuthProvider><AdminProtectedRoute><AdminAuditLogs /></AdminProtectedRoute></AdminAuthProvider>} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
