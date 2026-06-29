@@ -4,6 +4,7 @@ import { AuthProvider } from "./lib/AuthContext";
 import { LanguageProvider } from "./lib/LanguageContext";
 import { HospitalAuthProvider } from "./lib/HospitalAuthContext";
 import { AdminAuthProvider } from "./lib/AdminAuthContext";
+import { AnimatePresence } from "framer-motion";
 import ProtectedRoute from "./components/ProtectedRoute";
 import HospitalProtectedRoute from "./components/HospitalProtectedRoute";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
@@ -47,16 +48,21 @@ export default function App() {
         <BrowserRouter>
           <Routes>
             <Route
-              path="/"
-              element={
-                <div className="relative">
-                  <Landing />
-                  {!introDone && (
-                    <VideoIntro onComplete={() => setIntroDone(true)} />
-                  )}
-                </div>
-              }
-            />
+  path="/"
+  element={
+    <>
+      <Landing />
+
+      <AnimatePresence mode="wait">
+        {!introDone && (
+          <VideoIntro
+            onComplete={() => setIntroDone(true)}
+          />
+        )}
+      </AnimatePresence>
+    </>
+  }
+/>
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
 

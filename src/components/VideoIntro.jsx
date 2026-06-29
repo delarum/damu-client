@@ -4,19 +4,24 @@ import { motion, AnimatePresence } from "framer-motion";
 import heroImg from "../assets/hero.png";
 import "./VideoIntro.css";
 
-const INTRO_DURATION = 4000;
+const WAIT_TIME = 800;
+const PEEL_TIME = 4000;
 
 export default function VideoIntro({ onComplete }) {
   const [startPeel, setStartPeel] = useState(false);
   const [finished, setFinished] = useState(false);
 
   useEffect(() => {
+
     const timer = setTimeout(() => {
-      setStartPeel(true);
-    }, INTRO_DURATION);
+
+        setStartPeel(true);
+
+    }, WAIT_TIME);
 
     return () => clearTimeout(timer);
-  }, []);
+
+}, []);
 
   useEffect(() => {
     if (!startPeel) return;
@@ -61,18 +66,26 @@ export default function VideoIntro({ onComplete }) {
             className="paper-page"
             initial={false}
             animate={
-              startPeel
-                ? {
-                    rotateY: -115,
-                    rotateX: 8,
-                    x: "45%",
-                    y: "-6%",
-                    scale: 0.98,
-                  }
-                : {}
-            }
+    startPeel
+        ? {
+
+            rotateY:-118,
+
+            rotateX:12,
+
+            rotateZ:-3,
+
+            x:"52%",
+
+            y:"-10%",
+
+            scale:.96
+
+        }
+        : {}
+}
             transition={{
-              duration: 1.7,
+              duration: PEEL_TIME / 1000,
               ease: [0.22, 1, 0.36, 1],
             }}
           >
