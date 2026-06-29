@@ -80,17 +80,27 @@ const translations = {
     "landing.stat.ussd.label": "Works without internet",
 
     "footer.brand": "DamuLink",
-    "footer.tagline": "Every drop counts.",
-    "footer.copyright": "© 2025 DamuLink. All rights reserved.",
-    "footer.company": "Company",
-    "footer.home": "Home",
-    "footer.signUp": "Sign up",
-    "footer.donors": "Donors",
-    "footer.dashboard": "Dashboard",
-    "footer.contact": "Contact requests",
-    "footer.hospitals": "Hospitals",
-    "footer.hospitalLogin": "Hospital login",
-    "footer.hospitalRegister": "Register hospital",
+"footer.tagline": "Every drop counts.",
+"footer.copyright": "© 2025 DamuLink. All rights reserved.",
+
+"footer.company": "Company",
+"footer.home": "Home",
+"footer.signUp": "Sign up",
+"footer.login": "Login",
+"footer.credits": "Credits",
+
+"footer.donors": "Donors",
+"footer.dashboard": "Dashboard",
+"footer.contact": "Contact Requests",
+"footer.history": "Donation History",
+"footer.badges": "Badges",
+
+"footer.hospitals": "Hospitals",
+"footer.hospitalLogin": "Hospital Login",
+"footer.hospitalRegister": "Register Hospital",
+"footer.findHospital": "Find Hospitals",
+
+"footer.address": "Nairobi, Kenya",
 
     "auth.login.eyebrow": "Welcome back",
     "auth.login.sideHeading": "Your blood type is needed somewhere, right now.",
