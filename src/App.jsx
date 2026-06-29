@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./lib/AuthContext";
 import { LanguageProvider } from "./lib/LanguageContext";
@@ -8,6 +9,7 @@ import HospitalProtectedRoute from "./components/HospitalProtectedRoute";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import AccessibilityMenu from "./components/AccessibilityMenu";
 
+import VideoIntro from "./components/VideoIntro";
 import Landing from "./pages/Landing";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
@@ -37,12 +39,23 @@ import AdminAuditLogs from "./pages/AdminAuditLogs";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
+  const [introDone, setIntroDone] = useState(false);
+
   return (
     <LanguageProvider>
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Landing />} />
+            <Route
+              path="/"
+              element={
+                introDone ? (
+                  <Landing />
+                ) : (
+                  <VideoIntro onComplete={() => setIntroDone(true)} />
+                )
+              }
+            />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
 
