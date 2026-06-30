@@ -5,6 +5,7 @@ import { creditsApi, gamificationApi, donorApi, matchingApi } from "../lib/api";
 import { useCountUp } from "../lib/useCountUp";
 import { useNewBadges } from "../lib/useNewBadges";
 import { useLanguage } from "../lib/LanguageContext";
+import DonorAvatarPanel from "./DonorAvatarPanel";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -160,6 +161,12 @@ export default function Dashboard() {
           </Link>
         )}
 
+
+ <DonorAvatarPanel donorProfile={donorProfile} firstName={firstName} />
+{/* Summary cards — staggered entrance, each a link out to its own full page */}
+ <div className="grid md:grid-cols-3 gap-5 mb-10"></div>
+
+
         {/* Summary cards — staggered entrance, each a link out to its own full page */}
         <div className="grid md:grid-cols-3 gap-5 mb-10">
           <Link
@@ -180,31 +187,109 @@ export default function Dashboard() {
 
           {/* Availability toggle — settles with a tiny overshoot, card pulses briefly on change */}
           <div
-            className={`md:col-span-1 rounded-3xl p-6 flex flex-col justify-between transition-colors animate-riseIn ${
-              availability ? "bg-sage-soft" : "bg-white"
+            className={`md:col-span-1 rounded-3xl p-6 flex flex-col justify-between transition-all animate-riseIn ${
+              availability 
+                ? "bg-sage-soft border-2 border-sage/40 shadow-lg shadow-sage/20" 
+                : "bg-white border-2 border-clementine/40 shadow-lg shadow-clementine/20"
             } ${justToggled ? "animate-pulseGlow" : ""}`}
             style={{ animationDelay: "180ms" }}
           >
-            <span className="font-body text-xs font-medium text-ink/50 uppercase tracking-wide">
-              {t("dashboard.availability")}
-            </span>
+            <div className="flex items-center justify-between mb-3">
+              <span className="font-body text-xs font-medium text-ink/50 uppercase tracking-wide">
+                {t("dashboard.availability")}
+              </span>
+              <div className={`relative w-12 h-12 rounded-full flex items-center justify-center ${
+                availability 
+                  ? "bg-gradient-to-br from-sage to-sage/80 shadow-lg shadow-sage/50" 
+                  : "bg-gradient-to-br from-clementine to-clementine/80 shadow-lg shadow-clementine/50"
+              }`}>
+                <div className={`absolute inset-0 rounded-full animate-ping ${
+                  availability ? "bg-sage/30" : "bg-clementine/30"
+                }`} style={{ animationDuration: "2s" }} />
+                <span className="relative text-white text-xl font-bold">
+                  {availability ? "✓" : "✕"}
+                </span>
+              </div>
+            </div>
+            
             <button
               onClick={toggleAvailability}
               disabled={savingAvailability}
-              className={`mt-3 self-start flex items-center gap-3 px-1 py-1 rounded-full transition-colors ${
+              className={`mt-2 self-start flex items-center gap-3 px-1 py-1 rounded-full transition-all ${
                 availability ? "bg-sage" : "bg-ink/15"
-              }`}
+              } ${justToggled ? "animate-toggleSettle" : ""}`}
               aria-pressed={availability}
             >
               <span
                 className={`block w-6 h-6 rounded-full bg-white shadow transition-transform ${
                   availability ? "translate-x-7" : "translate-x-0"
-                } ${justToggled ? "animate-toggleSettle" : ""}`}
+                }`}
               />
             </button>
-            <span className="font-body text-xs text-ink/55 mt-3">
-              {availability ? t("dashboard.available") : t("dashboard.hidden")}
-            </span>
+            
+            <div className="mt-3">
+              <span className={`font-body text-sm font-semibold ${
+                availability ? "text-sage" : "text-clementine"
+              }`}>
+                {availability ? t("dashboard.available") : t("dashboard.hidden")}
+              </span>
+              
+              {!availability && (
+                <div className="mt-2 space-y-2">
+                  {donorProfile?.cooldown_until && (
+                    <div className="p-3 rounded-xl bg-clementine-soft/50 border border-clementine/20">
+                      <p className="font-body text-xs text-ink/70 leading-relaxed">
+                        <span className="font-semibold">Donation Cooldown</span>
+                      </p>
+                      <p className="font-body text-xs text-ink/60 mt-1">
+                        You're in the mandatory waiting period after donation. Next available:
+                      </p>
+                      <p className="font-mono text-xs font-semibold text-clementine mt-1">
+                        {new Date(donorProfile.cooldown_until).toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit"
+                        })}
+                      </p>
+                    </div>
+                  )}
+                  
+                  {donorProfile?.last_donation_date && (
+                    <div className="flex items-center gap-2 text-ink/60">
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                      <p className="font-mono text-xs">
+                        Last donation: {new Date(donorProfile.last_donation_date).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric"
+                        })}
+                      </p>
+                    </div>
+                  )}
+                  
+                  {!donorProfile?.cooldown_until && !donorProfile?.last_donation_date && (
+                    <div className="p-3 rounded-xl bg-clementine-soft/50 border border-clementine/20">
+                      <p className="font-body text-xs text-ink/70 leading-relaxed">
+                        You've chosen to be hidden from new requests.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              {availability && (
+                <div className="mt-2 flex items-center gap-2 text-sage/70">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <p className="font-body text-xs">Hospitals can find and contact you</p>
+                </div>
+              )}
+            </div>
           </div>
 
           <Link
