@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 import { creditsApi, gamificationApi, donorApi, matchingApi } from "../lib/api";
 import { useCountUp } from "../lib/useCountUp";
+import { useNewBadges } from "../lib/useNewBadges";
 import { useLanguage } from "../lib/LanguageContext";
 
 export default function Dashboard() {
@@ -17,10 +18,10 @@ export default function Dashboard() {
   }, [authLoading, user, donorProfile, navigate]);
 
   const [credits, setCredits] = useState(null);
-  const [badgeCount, setBadgeCount] = useState(0);
-  const [latestBadge, setLatestBadge] = useState(null);
+  const [badges, setBadges] = useState([]);
   const [pendingRequestCount, setPendingRequestCount] = useState(0);
   const [availability, setAvailability] = useState(donorProfile?.availability_status ?? true);
+  const [justToggled, setJustToggled] = useState(false);
   const [loading, setLoading] = useState(true);
   const [savingAvailability, setSavingAvailability] = useState(false);
   const [error, setError] = useState("");
@@ -36,11 +37,7 @@ export default function Dashboard() {
         ]);
         if (!active) return;
         if (creditsRes.status === "fulfilled") setCredits(creditsRes.value);
-        if (badgesRes.status === "fulfilled") {
-          const results = badgesRes.value.results || [];
-          setBadgeCount(results.length);
-          setLatestBadge(results[0]?.badge ?? null);
-        }
+        if (badgesRes.status === "fulfilled") setBadges(badgesRes.value.results || []);
         if (requestsRes.status === "fulfilled") {
           const pending = (requestsRes.value.results || []).filter((r) => r.status === "pending");
           setPendingRequestCount(pending.length);
@@ -58,10 +55,14 @@ export default function Dashboard() {
   }, []);
 
   const creditValue = useCountUp(credits?.credits ?? 0);
+  const newBadgeNames = useNewBadges(badges);
+  const badgeCount = badges.length;
+  const latestBadge = badges[0]?.badge ?? null;
 
   async function toggleAvailability() {
     const next = !availability;
     setAvailability(next);
+    setJustToggled(true);
     setSavingAvailability(true);
     try {
       await donorApi.setAvailability({ availability_status: next });
@@ -70,6 +71,7 @@ export default function Dashboard() {
     } finally {
       setSavingAvailability(false);
     }
+    setTimeout(() => setJustToggled(false), 350);
   }
 
   async function handleLogout() {
@@ -78,6 +80,15 @@ export default function Dashboard() {
   }
 
   const firstName = (user?.full_name || donorProfile?.full_name || "").split(" ")[0];
+
+  // Copy reacts to real state: veteran donors get acknowledged, a pending
+  // request raises the stakes of the message, first-timers get the default.
+  const bloodTypeKey =
+    pendingRequestCount > 0
+      ? "dashboard.bloodTypeCopyPending"
+      : badgeCount > 0
+      ? "dashboard.bloodTypeCopyVeteran"
+      : "dashboard.bloodTypeCopy";
 
   const accountLinks = [
     { to: "/profile", label: t("nav.profile") },
@@ -116,11 +127,11 @@ export default function Dashboard() {
           </p>
         )}
 
-        <h1 className="font-display font-medium text-3xl text-ink mb-1">
+        <h1 className="font-display font-medium text-3xl text-ink mb-1 animate-riseIn">
           {firstName ? t("dashboard.welcomeNamed", { name: firstName }) : t("dashboard.welcome")}
         </h1>
-        <p className="font-body text-sm text-ink/55 mb-10">
-          {t("dashboard.bloodTypeCopy", {
+        <p className="font-body text-sm text-ink/55 mb-10 animate-riseIn" style={{ animationDelay: "60ms" }}>
+          {t(bloodTypeKey, {
             bloodType: donorProfile?.blood_type
               ? t("dashboard.bloodTypeValue", { bloodType: donorProfile.blood_type })
               : "",
@@ -130,7 +141,8 @@ export default function Dashboard() {
         {pendingRequestCount > 0 && (
           <Link
             to="/requests"
-            className="flex items-center justify-between gap-4 rounded-2xl bg-clementine-soft border border-clementine/25 px-5 py-4 mb-8 hover:border-clementine/50 transition-colors"
+            className="flex items-center justify-between gap-4 rounded-2xl bg-clementine-soft border border-clementine/25 px-5 py-4 mb-8 hover:border-clementine/50 transition-colors animate-riseIn animate-attentionPulse"
+            style={{ animationDelay: "100ms" }}
           >
             <div>
               <p className="font-body text-sm font-semibold text-ink">
@@ -148,11 +160,12 @@ export default function Dashboard() {
           </Link>
         )}
 
-        {/* Summary cards — each is now a link out to its own full page */}
+        {/* Summary cards — staggered entrance, each a link out to its own full page */}
         <div className="grid md:grid-cols-3 gap-5 mb-10">
           <Link
             to="/credits"
-            className="md:col-span-1 rounded-3xl bg-ruby-night p-6 flex flex-col justify-between hover:bg-ruby-deep transition-colors"
+            className="md:col-span-1 rounded-3xl bg-ruby-night p-6 flex flex-col justify-between hover:bg-ruby-deep transition-colors animate-riseIn"
+            style={{ animationDelay: "140ms" }}
           >
             <span className="font-body text-xs font-medium text-cream/50 uppercase tracking-wide">
               {t("dashboard.credits")}
@@ -165,11 +178,12 @@ export default function Dashboard() {
             </span>
           </Link>
 
-          {/* Availability toggle stays inline — it's a quick action, not a page */}
+          {/* Availability toggle — settles with a tiny overshoot, card pulses briefly on change */}
           <div
-            className={`md:col-span-1 rounded-3xl p-6 flex flex-col justify-between transition-colors ${
+            className={`md:col-span-1 rounded-3xl p-6 flex flex-col justify-between transition-colors animate-riseIn ${
               availability ? "bg-sage-soft" : "bg-white"
-            }`}
+            } ${justToggled ? "animate-pulseGlow" : ""}`}
+            style={{ animationDelay: "180ms" }}
           >
             <span className="font-body text-xs font-medium text-ink/50 uppercase tracking-wide">
               {t("dashboard.availability")}
@@ -185,7 +199,7 @@ export default function Dashboard() {
               <span
                 className={`block w-6 h-6 rounded-full bg-white shadow transition-transform ${
                   availability ? "translate-x-7" : "translate-x-0"
-                }`}
+                } ${justToggled ? "animate-toggleSettle" : ""}`}
               />
             </button>
             <span className="font-body text-xs text-ink/55 mt-3">
@@ -195,8 +209,14 @@ export default function Dashboard() {
 
           <Link
             to="/badges"
-            className="md:col-span-1 rounded-3xl bg-clementine-soft p-6 flex flex-col justify-between hover:bg-clementine/20 transition-colors"
+            className="md:col-span-1 rounded-3xl bg-clementine-soft p-6 flex flex-col justify-between hover:bg-clementine/20 transition-colors animate-riseIn relative"
+            style={{ animationDelay: "220ms" }}
           >
+            {newBadgeNames.length > 0 && (
+              <span className="absolute top-4 right-4 font-mono text-[10px] uppercase tracking-wide bg-clementine text-white px-2 py-0.5 rounded-full animate-newBadge">
+                {t("badges.new")}
+              </span>
+            )}
             <span className="font-body text-xs font-medium text-ink/55 uppercase tracking-wide">
               {t("dashboard.badgesEarned")}
             </span>
@@ -208,14 +228,14 @@ export default function Dashboard() {
         </div>
 
         {/* Account navigation — every remaining donor page, one click away */}
-        <section>
+        <section className="animate-riseIn" style={{ animationDelay: "260ms" }}>
           <h2 className="font-body text-sm font-semibold text-ink mb-4">{t("nav.account")}</h2>
           <div className="grid sm:grid-cols-2 gap-3">
             {accountLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
-                className="flex items-center justify-between rounded-2xl bg-white border border-ink/8 px-5 py-4 hover:border-ruby-warm/30 transition-colors"
+                className="flex items-center justify-between rounded-2xl bg-white border border-ink/8 px-5 py-4 hover:border-ruby-warm/30 hover:-translate-y-0.5 transition-all"
               >
                 <span className="font-body text-sm font-medium text-ink">{link.label}</span>
                 <span className="text-ink/30">→</span>
