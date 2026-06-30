@@ -192,25 +192,25 @@ export default function DonorAvatarPanel({ donorProfile, firstName }) {
 
   return (
     <section
-      className="rounded-3xl bg-ruby-night overflow-hidden mb-10 animate-riseIn"
+      className="rounded-3xl bg-ruby-night overflow-hidden mb-10 animate-riseIn shadow-2xl"
       style={{ animationDelay: "20ms" }}
     >
       <div className="grid md:grid-cols-5">
         {/* ------- Stats column ------- */}
         <div className="md:col-span-2 p-6 md:p-8 flex flex-col gap-5">
           <div>
-            <span className="font-body text-xs font-medium text-cream/45 uppercase tracking-wide">
-              {t("avatar.eyebrow")}
+            <span className="font-body text-[11px] font-semibold text-mist/70 uppercase tracking-widest">
+              {t("Avatar Panel")}
             </span>
-            <h2 className="font-display text-2xl text-cream mt-1">
-              {firstName ? t("avatar.titleNamed", { name: firstName }) : t("avatar.title")}
+            <h2 className="font-display text-3xl text-cream mt-2 leading-tight">
+              {firstName ? t("Hello", { name: firstName }) : t("avatar.title")}
             </h2>
           </div>
 
           <dl className="grid grid-cols-2 gap-3">
-            <StatTile label={t("avatar.bloodType")} value={donorProfile?.blood_type || "—"} accent />
+            <StatTile label={t("bloodType")} value={donorProfile?.blood_type || "—"} accent />
             <StatTile
-              label={t("avatar.donorType")}
+              label={t("gender")}
               value={
                 donorProfile?.donor_type
                   ? t(`profile.donor.${donorProfile.donor_type}`)
@@ -218,39 +218,39 @@ export default function DonorAvatarPanel({ donorProfile, firstName }) {
               }
             />
             <StatTile
-              label={t("avatar.height")}
+              label={t("height")}
               value={donorProfile?.height_cm ? `${donorProfile.height_cm} cm` : t("avatar.notSet")}
             />
             <StatTile
-              label={t("avatar.weight")}
+              label={t("weight")}
               value={donorProfile?.weight_kg ? `${donorProfile.weight_kg} kg` : t("avatar.notSet")}
             />
           </dl>
 
           {donatesOrgans && (
-            <div className="pt-1">
-              <span className="font-body text-xs font-medium text-cream/45 uppercase tracking-wide">
-                {t("avatar.pledgedOrgans")}
+            <div className="pt-2">
+              <span className="font-body text-[11px] font-semibold text-mist/70 uppercase tracking-widest">
+                {t("pledgedOrgans")}
               </span>
-              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="flex flex-wrap gap-2 mt-3">
                 {organsPledged.length > 0 ? (
                   organsPledged.map((organKey) => (
                     <span
                       key={organKey}
-                      className="font-body text-xs font-medium text-cream bg-cream/10 border border-cream/15 rounded-full px-3 py-1"
+                      className="font-body text-xs font-semibold text-cream bg-gradient-to-br from-mist/20 to-mist/10 border border-mist/25 rounded-full px-3.5 py-1.5 shadow-sm"
                     >
                       {ORGAN_INFO[organKey]?.label || organKey}
                     </span>
                   ))
                 ) : (
-                  <span className="font-body text-xs text-cream/40">{t("avatar.noOrgans")}</span>
+                  <span className="font-body text-xs text-cream/50 italic">{t("avatar.noOrgans")}</span>
                 )}
               </div>
             </div>
           )}
 
-          <p className="font-body text-xs text-cream/40 mt-auto pt-4">
-            {donatesOrgans ? t("avatar.hint") : t("avatar.hintBloodOnly")}
+          <p className="font-body text-xs text-cream/50 mt-auto pt-4 leading-relaxed">
+            {donatesOrgans ? t("checkout your avatar ") : t("avatar.hintBloodOnly")}
           </p>
         </div>
 
@@ -301,8 +301,8 @@ export default function DonorAvatarPanel({ donorProfile, firstName }) {
               <p className="font-display text-lg text-ruby leading-tight">{activeInfo.label}</p>
               <p className="font-body text-xs text-ink/65 mt-1.5 leading-relaxed">{activeInfo.summary}</p>
               <dl className="mt-3 space-y-1.5">
-                <CardRow label={t("avatar.card.massDonated")} value={activeInfo.massDonated} />
-                <CardRow label={t("avatar.card.recovery")} value={activeInfo.recovery} />
+                <CardRow label={t("quantity")} value={activeInfo.massDonated} />
+                <CardRow label={t("recovery")} value={activeInfo.recovery} />
               </dl>
               <a
                 href={activeInfo.sourceUrl}
@@ -310,7 +310,7 @@ export default function DonorAvatarPanel({ donorProfile, firstName }) {
                 rel="noopener noreferrer"
                 className="pointer-events-auto font-body text-xs font-semibold text-clementine hover:text-clementine/80 transition-colors mt-3 inline-flex items-center gap-1"
               >
-                {t("avatar.card.knowMore")} <span aria-hidden="true">→</span>
+                {t("knowMore")} <span aria-hidden="true">→</span>
               </a>
             </div>
           )}
@@ -322,9 +322,9 @@ export default function DonorAvatarPanel({ donorProfile, firstName }) {
 
 function StatTile({ label, value, accent }) {
   return (
-    <div className={`rounded-2xl px-4 py-3 ${accent ? "bg-mist/15 border border-mist/20" : "bg-cream/5 border border-cream/10"}`}>
-      <dt className="font-body text-[10px] font-medium text-cream/45 uppercase tracking-wide">{label}</dt>
-      <dd className={`font-display text-xl mt-0.5 ${accent ? "text-mist" : "text-cream"}`}>{value}</dd>
+    <div className={`rounded-2xl px-4 py-3.5 ${accent ? "bg-mist/15 border border-mist/25" : "bg-cream/5 border border-cream/10"}`}>
+      <dt className="font-body text-[10px] font-semibold text-cream/55 uppercase tracking-wider">{label}</dt>
+      <dd className={`font-display text-xl mt-1.5 ${accent ? "text-mist font-semibold" : "text-cream font-medium"}`}>{value}</dd>
     </div>
   );
 }
