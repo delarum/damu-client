@@ -11,6 +11,7 @@ export default function HospitalProfile() {
   const [profile, setProfile] = useState(hospitalProfile);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [showLocationHelp, setShowLocationHelp] = useState(false);
 
   useEffect(() => {
     setProfile(hospitalProfile);
@@ -36,8 +37,15 @@ export default function HospitalProfile() {
     setSaving(true);
     setMessage("");
     try {
-      await hospitalApi.updateProfile({ facility_name: profile.facility_name });
-      setMessage("Profile updated.");
+      const updateData = {
+        facility_name: profile.facility_name,
+        address: profile.address,
+        county: profile.county,
+        lat: profile.lat ? parseFloat(profile.lat) : null,
+        lng: profile.lng ? parseFloat(profile.lng) : null,
+      };
+      await hospitalApi.updateProfile(updateData);
+      setMessage("Profile updated successfully!");
       await refreshProfile();
     } catch {
       setMessage("Update failed. Try again.");
@@ -98,14 +106,100 @@ export default function HospitalProfile() {
 
           <label className="block">
             <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide">
+              County
+            </span>
+            <input
+              value={profile?.county || ""}
+              onChange={(e) => setProfile((p) => ({ ...p, county: e.target.value }))}
+              className="mt-1.5 w-full px-4 py-3.5 rounded-2xl border border-transparent bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-ruby-warm/35 transition-shadow"
+              placeholder="e.g. Nairobi"
+            />
+          </label>
+
+          <label className="block">
+            <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide">
               Address
             </span>
             <input
               value={profile?.address || ""}
               onChange={(e) => setProfile((p) => ({ ...p, address: e.target.value }))}
               className="mt-1.5 w-full px-4 py-3.5 rounded-2xl border border-transparent bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-ruby-warm/35 transition-shadow"
+              placeholder="e.g. Moi Avenue, Nairobi"
             />
           </label>
+
+          {/* Location Coordinates */}
+          <div className="rounded-2xl bg-mist/5 border border-mist/15 p-5">
+            <div className="flex items-center justify-between mb-3">
+              <div>
+                <span className="font-body text-xs font-semibold text-ink/70 uppercase tracking-wide">
+                  📍 Location Coordinates
+                </span>
+                <p className="font-body text-xs text-ink/55 mt-1">
+                  Required for donor search functionality
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowLocationHelp(!showLocationHelp)}
+                className="font-body text-xs text-ruby-warm hover:text-ruby transition-colors"
+              >
+                {showLocationHelp ? "Hide" : "How to get coordinates?"}
+              </button>
+            </div>
+
+            {showLocationHelp && (
+              <div className="mb-4 p-3 rounded-xl bg-white border border-ink/10">
+                <p className="font-body text-xs text-ink/70 mb-2">
+                  To get your hospital's coordinates:
+                </p>
+                <ol className="font-body text-xs text-ink/60 list-decimal list-inside space-y-1">
+                  <li>Go to Google Maps</li>
+                  <li>Search for your hospital address</li>
+                  <li>Right-click on the location</li>
+                  <li>Copy the latitude and longitude values</li>
+                  <li>Paste them below</li>
+                </ol>
+              </div>
+            )}
+
+            <div className="grid grid-cols-2 gap-3">
+              <label className="block">
+                <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide">
+                  Latitude *
+                </span>
+                <input
+                  type="number"
+                  step="any"
+                  required
+                  value={profile?.lat || ""}
+                  onChange={(e) => setProfile((p) => ({ ...p, lat: e.target.value }))}
+                  className="mt-1.5 w-full px-4 py-3 rounded-2xl border border-transparent bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-ruby-warm/35 transition-shadow"
+                  placeholder="e.g. -1.2921"
+                />
+              </label>
+              <label className="block">
+                <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide">
+                  Longitude *
+                </span>
+                <input
+                  type="number"
+                  step="any"
+                  required
+                  value={profile?.lng || ""}
+                  onChange={(e) => setProfile((p) => ({ ...p, lng: e.target.value }))}
+                  className="mt-1.5 w-full px-4 py-3 rounded-2xl border border-transparent bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-ruby-warm/35 transition-shadow"
+                  placeholder="e.g. 36.8219"
+                />
+              </label>
+            </div>
+
+            {(!profile?.lat || !profile?.lng) && (
+              <p className="font-body text-xs text-clementine mt-3">
+                ⚠️ Location coordinates are required to search for donors.
+              </p>
+            )}
+          </div>
 
           <button
             type="submit"

@@ -78,7 +78,7 @@ export default function Credits() {
         ) : (
           <>
             {/* Balance Card */}
-            <div className="rounded-3xl bg-gradient-to-br from-ruby-night to-ruby-deep p-8 mb-8 shadow-xl">
+            <div className="rounded-3xl bg-linear-to-br from-ruby-night to-ruby-deep p-8 mb-8 shadow-xl">
               <p className="font-body text-xs font-medium text-cream/60 uppercase tracking-wide mb-2">
                 Available Credits
               </p>
@@ -87,7 +87,7 @@ export default function Credits() {
               <button
                 onClick={handleRedeem}
                 disabled={redeeming || !balance?.credits}
-                className="font-body text-sm font-bold px-6 py-3 rounded-full bg-gradient-to-r from-mist to-clementine-soft text-ruby-night hover:shadow-lg hover:shadow-mist/50 hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="font-body text-sm font-bold px-6 py-3 rounded-full bg-linear-to-r from-mist to-clementine-soft text-ruby-night hover:shadow-lg hover:shadow-mist/50 hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {redeeming ? "Redeeming..." : "Redeem All Credits"}
               </button>
@@ -116,10 +116,10 @@ export default function Credits() {
               ) : (
                 <div className="space-y-3">
                   {redeemedItems.map((item) => (
-                    <div key={item.id} className="rounded-3xl border-2 border-sage/30 bg-gradient-to-br from-sage-soft/20 to-white p-5 hover:shadow-lg hover:border-sage/50 hover:-translate-y-0.5 transition-all duration-300">
+                    <div key={item.id} className="rounded-3xl border-2 border-sage/30 bg-linear-to-br from-sage-soft/20 to-white p-5 hover:shadow-lg hover:border-sage/50 hover:-translate-y-0.5 transition-all duration-300">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex items-start gap-3 flex-1">
-                          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sage/20 to-sage-soft/30 flex items-center justify-center flex-shrink-0">
+                          <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-sage/20 to-sage-soft/30 flex items-center justify-center shrink-0">
                             <span className="text-xl">🏥</span>
                           </div>
                           <div className="flex-1">
@@ -222,7 +222,7 @@ function DonationCard({ item, t }) {
     <div className="rounded-3xl border-2 border-mist/30 bg-white p-5 md:p-6 hover:shadow-xl hover:shadow-mist/20 hover:border-mist/60 hover:-translate-y-0.5 transition-all duration-300">
       <div className="flex items-start justify-between gap-4 mb-4">
         <div className="flex items-start gap-3 flex-1">
-          <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${iconBg} flex items-center justify-center flex-shrink-0`}>
+          <div className={`w-14 h-14 rounded-2xl bg-linear-to-br ${iconBg} flex items-center justify-center shrink-0`}>
             <span className="text-2xl">{icon}</span>
           </div>
           <div className="flex-1">
@@ -247,7 +247,7 @@ function DonationCard({ item, t }) {
             </div>
           </div>
         </div>
-        <div className="text-right flex-shrink-0">
+        <div className="text-right shrink-0">
           <p className="font-mono text-xs text-ink/40 uppercase tracking-wide mb-1">Credits Earned</p>
           <p className="font-display text-2xl font-bold text-sage">
             +{item.amount}

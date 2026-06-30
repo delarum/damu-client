@@ -204,11 +204,11 @@ export default function DonorMap({ height = "75vh" }) {
 
       <div className="flex flex-wrap gap-4 mt-4">
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-[#5C7A5E]"></span>
+          <span className="w-3 h-3 rounded-full bg-sage"></span>
           <span className="font-body text-xs text-ink/70">Available</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-[#7A1410]"></span>
+          <span className="w-3 h-3 rounded-full bg-ruby-warm"></span>
           <span className="font-body text-xs text-ink/70">Unavailable</span>
         </div>
       </div>

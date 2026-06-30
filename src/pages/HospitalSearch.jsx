@@ -26,6 +26,9 @@ export default function HospitalSearch() {
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const [searchCount, setSearchCount] = useState(0);
+  const [selectedDonor, setSelectedDonor] = useState(null);
+  const [donorDetails, setDonorDetails] = useState(null);
+  const [loadingDetails, setLoadingDetails] = useState(false);
 
   useEffect(() => {
     if (!user) window.location.href = "/hospital/login";
@@ -66,6 +69,26 @@ export default function HospitalSearch() {
     } finally {
       setLoading(false);
     }
+  }
+
+  async function handleViewDonorDetails(donorId) {
+    setSelectedDonor(donorId);
+    setLoadingDetails(true);
+    setDonorDetails(null);
+    try {
+      const data = await hospitalApi.getDonorDetails(donorId);
+      setDonorDetails(data);
+    } catch (error) {
+      console.error("Failed to load donor details:", error);
+      alert("Failed to load donor details. Please try again.");
+    } finally {
+      setLoadingDetails(false);
+    }
+  }
+
+  function handleCloseModal() {
+    setSelectedDonor(null);
+    setDonorDetails(null);
   }
 
   return (
@@ -114,7 +137,7 @@ export default function HospitalSearch() {
         <form onSubmit={handleSearch} className="space-y-4 mb-10">
           {searchType === "blood" ? (
             <div className="flex flex-wrap items-end gap-4">
-              <div className="flex-1 min-w-[200px]">
+              <div className="flex-1 min-w-50">
                 <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide block mb-2">
                   Blood Type
                 </span>
@@ -157,7 +180,7 @@ export default function HospitalSearch() {
             </div>
           ) : (
             <div className="flex flex-wrap items-end gap-4">
-              <div className="flex-1 min-w-[200px]">
+              <div className="flex-1 min-w-50">
                 <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide block mb-2">
                   Organ Type
                 </span>
@@ -226,17 +249,22 @@ export default function HospitalSearch() {
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex items-start gap-3 flex-1">
-                          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 ${
+                          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
                             d.donor_type === "organ" || d.donor_type === "both"
-                              ? "bg-gradient-to-br from-sage/20 to-sage-soft/30"
-                              : "bg-gradient-to-br from-mist/20 to-clementine-soft/20"
+                              ? "bg-linear-to-br from-sage/20 to-sage-soft/30"
+                              : "bg-linear-to-br from-mist/20 to-clementine-soft/20"
                           }`}>
                             <span className="text-lg">
                               {d.donor_type === "organ" || d.donor_type === "both" ? "💚" : "🩸"}
                             </span>
                           </div>
                           <div className="flex-1">
-                            <p className="font-display text-lg font-semibold text-ink">{d.name}</p>
+                            <button
+                              onClick={() => handleViewDonorDetails(d.donor_id || d.id)}
+                              className="font-display text-lg font-semibold text-ruby-warm hover:text-ruby transition-colors text-left underline decoration-2 underline-offset-2 hover:decoration-ruby"
+                            >
+                              {d.name}
+                            </button>
                             
                             {/* Blood Type Badge */}
                             {d.blood_type && (
@@ -313,6 +341,14 @@ export default function HospitalSearch() {
                               </span>
                             </div>
                           </div>
+                          
+                          {/* View Details Button */}
+                          <button
+                            onClick={() => handleViewDonorDetails(d.donor_id || d.id)}
+                            className="mt-3 px-4 py-2 rounded-xl bg-ruby/10 text-ruby text-xs font-semibold hover:bg-ruby/20 transition-colors"
+                          >
+                            View Full Details →
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -321,6 +357,159 @@ export default function HospitalSearch() {
               </div>
             )}
           </section>
+        )}
+        
+        {/* Donor Details Modal */}
+        {selectedDonor && (
+          <div className="fixed inset-0 bg-ink/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={handleCloseModal}>
+            <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl" onClick={(e) => e.stopPropagation()}>
+              {loadingDetails ? (
+                <div className="p-10 text-center">
+                  <p className="font-body text-sm text-ink/60">Loading donor details...</p>
+                </div>
+              ) : donorDetails ? (
+                <div className="p-6 md:p-8">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="font-display text-2xl font-semibold text-ink">Donor Details</h3>
+                    <button onClick={handleCloseModal} className="text-ink/40 hover:text-ink transition-colors">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                  
+                  <div className="space-y-6">
+                    {/* Basic Info */}
+                    <div className="rounded-2xl bg-mist/5 p-5">
+                      <h4 className="font-body text-xs font-semibold text-ink/60 uppercase tracking-wide mb-3">Basic Information</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="font-body text-xs text-ink/50">Name</p>
+                          <p className="font-display text-base font-semibold text-ink">{donorDetails.name}</p>
+                        </div>
+                        <div>
+                          <p className="font-body text-xs text-ink/50">Phone</p>
+                          <p className="font-display text-base font-semibold text-ink">{donorDetails.phone}</p>
+                        </div>
+                        <div>
+                          <p className="font-body text-xs text-ink/50">Blood Type</p>
+                          <p className="font-display text-base font-semibold text-ruby-warm">{donorDetails.blood_type}</p>
+                        </div>
+                        <div>
+                          <p className="font-body text-xs text-ink/50">Donor Type</p>
+                          <p className="font-display text-base font-semibold text-ink">{donorDetails.donor_type}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Medical Info */}
+                    <div className="rounded-2xl bg-sage-soft/30 p-5">
+                      <h4 className="font-body text-xs font-semibold text-ink/60 uppercase tracking-wide mb-3">Medical Information</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="font-body text-xs text-ink/50">Gender</p>
+                          <p className="font-display text-base font-semibold text-ink capitalize">{donorDetails.gender || "Not specified"}</p>
+                        </div>
+                        <div>
+                          <p className="font-body text-xs text-ink/50">Height</p>
+                          <p className="font-display text-base font-semibold text-ink">{donorDetails.height_cm ? `${donorDetails.height_cm} cm` : "Not specified"}</p>
+                        </div>
+                        <div>
+                          <p className="font-body text-xs text-ink/50">Weight</p>
+                          <p className="font-display text-base font-semibold text-ink">{donorDetails.weight_kg ? `${donorDetails.weight_kg} kg` : "Not specified"}</p>
+                        </div>
+                        <div>
+                          <p className="font-body text-xs text-ink/50">Last Donation</p>
+                          <p className="font-display text-base font-semibold text-ink">{donorDetails.last_donation_date || "N/A"}</p>
+                        </div>
+                      </div>
+                      
+                      {donorDetails.organs_pledged && donorDetails.organs_pledged.length > 0 && (
+                        <div className="mt-4">
+                          <p className="font-body text-xs text-ink/50 mb-2">Organs Pledged</p>
+                          <div className="flex flex-wrap gap-2">
+                            {donorDetails.organs_pledged.map((organ) => (
+                              <span key={organ} className="px-3 py-1 rounded-full bg-sage text-white text-xs font-semibold">
+                                {organ}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Location */}
+                    <div className="rounded-2xl bg-clementine-soft/30 p-5">
+                      <h4 className="font-body text-xs font-semibold text-ink/60 uppercase tracking-wide mb-3">Location</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="font-body text-xs text-ink/50">County</p>
+                          <p className="font-display text-base font-semibold text-ink">{donorDetails.county || "Not specified"}</p>
+                        </div>
+                        <div>
+                          <p className="font-body text-xs text-ink/50">Town</p>
+                          <p className="font-display text-base font-semibold text-ink">{donorDetails.town || "Not specified"}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Availability & Contact */}
+                    <div className="rounded-2xl bg-ruby-soft/30 p-5">
+                      <h4 className="font-body text-xs font-semibold text-ink/60 uppercase tracking-wide mb-3">Availability & Contact</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="font-body text-xs text-ink/50">Status</p>
+                          <p className={`font-display text-base font-semibold ${donorDetails.is_available ? 'text-sage' : 'text-clementine'}`}>
+                            {donorDetails.is_available ? '✓ Available' : '✕ Unavailable'}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="font-body text-xs text-ink/50">Contact Method</p>
+                          <p className="font-display text-base font-semibold text-ink capitalize">{donorDetails.preferred_contact_method || "N/A"}</p>
+                        </div>
+                        <div>
+                          <p className="font-body text-xs text-ink/50">Verification</p>
+                          <p className={`font-display text-base font-semibold capitalize ${donorDetails.verification_status === 'verified' ? 'text-sage' : 'text-clementine'}`}>
+                            {donorDetails.verification_status || "Pending"}
+                          </p>
+                        </div>
+                        {donorDetails.cooldown_until && (
+                          <div>
+                            <p className="font-body text-xs text-ink/50">Cooldown Until</p>
+                            <p className="font-display text-base font-semibold text-ink">
+                              {new Date(donorDetails.cooldown_until).toLocaleDateString()}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 flex gap-3">
+                    <button
+                      onClick={() => alert("Contact request feature coming soon!")}
+                      className="flex-1 px-6 py-3 rounded-full bg-ruby text-cream font-body text-sm font-semibold hover:bg-ruby-deep transition-colors"
+                    >
+                      Request Contact
+                    </button>
+                    <button
+                      onClick={handleCloseModal}
+                      className="px-6 py-3 rounded-full bg-ink/10 text-ink font-body text-sm font-semibold hover:bg-ink/20 transition-colors"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-10 text-center">
+                  <p className="font-body text-sm text-ruby-warm">Failed to load donor details</p>
+                  <button onClick={handleCloseModal} className="mt-4 px-6 py-2 rounded-full bg-ruby text-cream text-sm font-semibold">
+                    Close
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         )}
       </main>
     </div>

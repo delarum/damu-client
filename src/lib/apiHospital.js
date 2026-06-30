@@ -23,6 +23,7 @@ export const hospitalApi = {
   },
   donors: {
     map: (params) => api.get("/matching/donors/map/", { params }),
+    details: (donorId) => api.get(`/donors/profile/${donorId}/hospital-view/`),
   },
   contactRequests: {
     list: () => api.get("/matching/contact-requests/"),

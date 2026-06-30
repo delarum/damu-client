@@ -92,7 +92,7 @@ export default function Badges() {
                         key={badgeName}
                         className={`relative rounded-3xl border-2 p-5 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 ${
                           isNew 
-                            ? "border-clementine/40 bg-gradient-to-br from-clementine-soft/40 to-white shadow-lg shadow-clementine/20" 
+                            ? "border-clementine/40 bg-linear-to-br from-clementine-soft/40 to-white shadow-lg shadow-clementine/20" 
                             : "border-clementine/25 bg-clementine-soft/30"
                         } ${isNew ? "animate-newBadge" : ""}`}
                       >
@@ -102,7 +102,7 @@ export default function Badges() {
                           </span>
                         )}
                         <div className="flex items-start gap-3">
-                          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-clementine/20 to-clementine-soft/30 flex items-center justify-center flex-shrink-0 text-2xl">
+                          <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-clementine/20 to-clementine-soft/30 flex items-center justify-center shrink-0 text-2xl">
                             {badgeIcon}
                           </div>
                           <div className="flex-1">

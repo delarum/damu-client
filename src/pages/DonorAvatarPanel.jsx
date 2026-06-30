@@ -237,7 +237,7 @@ export default function DonorAvatarPanel({ donorProfile, firstName }) {
                   organsPledged.map((organKey) => (
                     <span
                       key={organKey}
-                      className="font-body text-xs font-semibold text-cream bg-gradient-to-br from-mist/20 to-mist/10 border border-mist/25 rounded-full px-3.5 py-1.5 shadow-sm"
+                      className="font-body text-xs font-semibold text-cream bg-linear-to-br from-mist/20 to-mist/10 border border-mist/25 rounded-full px-3.5 py-1.5 shadow-sm"
                     >
                       {ORGAN_INFO[organKey]?.label || organKey}
                     </span>

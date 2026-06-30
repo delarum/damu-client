@@ -200,8 +200,8 @@ export default function Dashboard() {
               </span>
               <div className={`relative w-12 h-12 rounded-full flex items-center justify-center ${
                 availability 
-                  ? "bg-gradient-to-br from-sage to-sage/80 shadow-lg shadow-sage/50" 
-                  : "bg-gradient-to-br from-clementine to-clementine/80 shadow-lg shadow-clementine/50"
+                  ? "bg-linear-to-br from-sage to-sage/80 shadow-lg shadow-sage/50" 
+                  : "bg-linear-to-br from-clementine to-clementine/80 shadow-lg shadow-clementine/50"
               }`}>
                 <div className={`absolute inset-0 rounded-full animate-ping ${
                   availability ? "bg-sage/30" : "bg-clementine/30"
