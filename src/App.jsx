@@ -29,6 +29,7 @@ import HospitalLogin from "./pages/HospitalLogin";
 import HospitalRegister from "./pages/HospitalRegister";
 import HospitalDashboard from "./pages/HospitalDashboard";
 import HospitalSearch from "./pages/HospitalSearch";
+import HospitalRequests from "./pages/HospitalRequests";
 import HospitalProfile from "./pages/HospitalProfile";
 import HospitalStaff from "./pages/HospitalStaff";
 import HospitalSubscription from "./pages/HospitalSubscription";
@@ -83,6 +84,7 @@ export default function App() {
             <Route path="/hospital/register" element={<PageShell><HospitalAuthProvider><HospitalRegister /></HospitalAuthProvider></PageShell>} />
             <Route path="/hospital/dashboard" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalDashboard /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
             <Route path="/hospital/search" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalSearch /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
+            <Route path="/hospital/requests" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalRequests /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
             <Route path="/hospital/profile" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalProfile /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
             <Route path="/hospital/staff" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalStaff /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
             <Route path="/hospital/subscription" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalSubscription /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />

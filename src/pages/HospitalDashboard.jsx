@@ -55,33 +55,47 @@ export default function HospitalDashboard() {
 
   return (
     <div className="min-h-screen bg-clay">
-      <header className="flex items-center justify-between px-6 md:px-12 py-6 bg-ruby-night">
-        <Link to="/" className="font-display text-lg tracking-tight text-cream">
-          {t("common.brand")}
-        </Link>
-        <div className="flex items-center gap-5">
-          <Link
-            to="/hospital/about"
-            className="font-body text-sm text-cream/60 hover:text-cream transition-colors"
-          >
-            {t("nav.about")}
+      {/* Accent header */}
+      <header className="relative bg-ruby-night overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: `radial-gradient(circle at 30% 20%, #FFFBF5 0%, transparent 50%),
+                             radial-gradient(circle at 80% 80%, #FFFBF5 0%, transparent 40%)`,
+          }}
+        />
+        <div className="relative flex items-center justify-between px-6 md:px-14 py-6">
+          <Link to="/" className="font-display text-xl tracking-tight text-cream">
+            {t("common.brand")}
           </Link>
-          <button
-            onClick={handleLogout}
-            className="font-body text-sm text-cream/60 hover:text-cream transition-colors"
-          >
-            Log out
-          </button>
+          <nav className="flex items-center gap-1">
+            <Link
+              to="/hospital/about"
+              className="font-body text-sm text-cream/55 hover:text-cream px-3 py-2 rounded-full hover:bg-cream/5 transition-colors"
+            >
+              {t("nav.about")}
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="font-body text-sm text-cream/55 hover:text-cream px-3 py-2 rounded-full hover:bg-cream/5 transition-colors"
+            >
+              {t("common.logout")}
+            </button>
+          </nav>
         </div>
       </header>
 
-      <main className="px-6 md:px-12 py-10 max-w-5xl mx-auto">
-        <h1 className="font-display font-medium text-3xl text-ink mb-1">
-          {profile?.facility_name || "Hospital Dashboard"}
-        </h1>
-        <p className="font-body text-sm text-ink/55 mb-10">
-          Manage donors, staff, and subscriptions from one place.
-        </p>
+      <main className="px-6 md:px-14 pt-10 pb-20 max-w-5xl mx-auto">
+        <div className="mb-10">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-1 h-7 bg-mist rounded-full" />
+            <h1 className="font-display font-medium text-[2.1rem] leading-tight text-ink">
+              {profile?.facility_name || t("hospital.dashboard.title")}
+            </h1>
+          </div>
+          <p className="font-body text-sm text-ink/55 max-w-lg leading-relaxed pl-5">
+            {t("hospital.dashboard.body")}
+          </p>
+        </div>
 
         {error && (
           <p className="font-body text-sm text-ruby-warm bg-ruby-50 border border-ruby/15 rounded-xl px-4 py-3 mb-6">
