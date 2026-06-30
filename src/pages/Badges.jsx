@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 import { gamificationApi } from "../lib/api";
 import { useLanguage } from "../lib/LanguageContext";
+import { useNewBadges } from "../lib/useNewBadges";
 
 export default function Badges() {
   const { user } = useAuth();
@@ -28,6 +29,8 @@ export default function Badges() {
       setLoading(false);
     }
   }
+
+  const newBadgeNames = useNewBadges(badges);
 
   if (!user) return null;
 
@@ -61,19 +64,29 @@ export default function Badges() {
                 </div>
               ) : (
                 <div className="flex flex-wrap gap-3">
-                  {badges.map((b) => (
-                    <div
-                      key={b.badge}
-                      className="rounded-2xl border border-clementine/25 bg-clementine-soft px-5 py-4"
-                    >
-                      <p className="font-body text-sm font-semibold text-ink">{b.badge}</p>
-                      {b.earned_at && (
-                        <p className="font-mono text-[11px] text-ink/50 mt-0.5">
-                          Earned {new Date(b.earned_at).toLocaleDateString()}
-                        </p>
-                      )}
-                    </div>
-                  ))}
+                  {badges.map((b) => {
+                    const isNew = newBadgeNames.includes(b.badge);
+                    return (
+                      <div
+                        key={b.badge}
+                        className={`relative rounded-2xl border border-clementine/25 bg-clementine-soft px-5 py-4 ${
+                          isNew ? "animate-newBadge" : ""
+                        }`}
+                      >
+                        {isNew && (
+                          <span className="absolute -top-2 -right-2 font-mono text-[10px] uppercase tracking-wide bg-clementine text-white px-2 py-0.5 rounded-full">
+                            {t("badges.new")}
+                          </span>
+                        )}
+                        <p className="font-body text-sm font-semibold text-ink">{b.badge}</p>
+                        {b.earned_at && (
+                          <p className="font-mono text-[11px] text-ink/50 mt-0.5">
+                            Earned {new Date(b.earned_at).toLocaleDateString()}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </section>
