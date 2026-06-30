@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../lib/LanguageContext";
 
@@ -15,7 +14,6 @@ export default function Landing() {
           {t("common.brand")}
         </span>
         <nav className="flex items-center gap-3 relative">
-          <LoginMenu t={t} />
           <Link
             to="/signup"
             className="font-body text-sm font-semibold px-5 py-2.5 rounded-full bg-cream text-ruby-night hover:bg-mist transition-colors"
@@ -198,40 +196,6 @@ function StatCard({ value, label }) {
     <div className="text-center">
       <p className="font-display text-3xl text-mist mb-1.5">{value}</p>
       <p className="font-mono text-xs uppercase tracking-wide text-cream/45">{label}</p>
-    </div>
-  );
-}
-
-function LoginMenu({ t }) {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <div className="relative" onMouseLeave={() => setOpen(false)}>
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        onMouseEnter={() => setOpen(true)}
-        className="font-body text-sm font-medium text-cream/70 hover:text-cream transition-colors px-4 py-2"
-        aria-expanded={open}
-      >
-        {t("common.logIn")}
-      </button>
-      {open && (
-        <div className="absolute right-0 top-full mt-1 w-48 rounded-2xl bg-cream shadow-[0_16px_40px_-12px_rgba(0,0,0,0.4)] overflow-hidden py-1">
-          <Link
-            to="/login"
-            className="block px-4 py-2.5 font-body text-sm text-ink hover:bg-ruby-50 transition-colors"
-          >
-            {t("landing.choice.donorLogin")}
-          </Link>
-          <Link
-            to="/hospital/login"
-            className="block px-4 py-2.5 font-body text-sm text-ink hover:bg-dusk-soft transition-colors"
-          >
-            {t("landing.choice.hospitalLogin")}
-          </Link>
-        </div>
-      )}
     </div>
   );
 }
