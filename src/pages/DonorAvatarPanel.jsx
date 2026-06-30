@@ -257,9 +257,9 @@ export default function DonorAvatarPanel({ donorProfile, firstName }) {
         {/* ------- Avatar column ------- */}
         <div
           ref={wrapRef}
-          className="md:col-span-3 relative bg-ruby-deep min-h-[360px] flex items-center justify-center px-4 py-8"
+          className="md:col-span-3 relative bg-ruby-deep min-h-90 flex items-center justify-center px-4 py-8"
         >
-          <svg viewBox="0 0 240 520" className="w-full max-w-[260px] h-auto" aria-hidden={false} role="img">
+          <svg viewBox="0 0 240 520" className="w-full max-w-65 h-auto" aria-hidden={false} role="img">
             <title>{t("avatar.svgTitle")}</title>
             {gender === "female" ? <FemaleFigure /> : <MaleFigure />}
 
