@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import heroImg from "../assets/hero.png";
 import "./VideoIntro.css";
 
-const WAIT_TIME = 800;
+const WAIT_TIME = 1000;
 const PEEL_TIME = 4000;
 
 export default function VideoIntro({ onComplete }) {
@@ -85,7 +85,7 @@ export default function VideoIntro({ onComplete }) {
         : {}
 }
             transition={{
-              duration: PEEL_TIME / 1000,
+              duration: PEEL_TIME / 3000,
               ease: [0.22, 1, 0.36, 1],
             }}
           >
