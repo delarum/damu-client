@@ -34,17 +34,25 @@ export default function HospitalSearch() {
     if (!user) window.location.href = "/hospital/login";
   }, [user]);
 
+  const hasActiveSubscription = hospitalProfile?.is_active_subscriber;
+  const searchesRemaining = hospitalProfile?.searches_remaining || 0;
+  const canSearch = hasActiveSubscription && searchesRemaining > 0;
+
   async function handleSearch(e) {
     e.preventDefault();
+    
+    // Validate that required field is selected
+    if (searchType === "blood" && !bloodType) {
+      return;
+    }
+    if (searchType === "organ" && !organType) {
+      return;
+    }
     
     setLoading(true);
     setSearched(true);
     try {
       if (searchType === "blood") {
-        if (!bloodType) {
-          setResults([]);
-          return;
-        }
         const data = await hospitalApi.search.blood({
           blood_type: bloodType,
           radius: Number(radius),
@@ -52,10 +60,6 @@ export default function HospitalSearch() {
         setResults(data.results || []);
         setSearchCount(data.count || 0);
       } else {
-        if (!organType) {
-          setResults([]);
-          return;
-        }
         const data = await hospitalApi.search.organs({
           organ: organType,
           radius: Number(radius),

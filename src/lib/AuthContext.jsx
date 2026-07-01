@@ -16,11 +16,17 @@ export function AuthProvider({ children }) {
     try {
       const me = await authApi.me();
       setUser(me);
-      try {
-        const profile = await donorApi.getProfile();
-        setDonorProfile(profile);
-      } catch {
-        // donor may not have completed their profile yet — that's fine
+      // Only try to load donor profile if user is a donor
+      if (me.role === "donor") {
+        try {
+          const profile = await donorApi.getProfile();
+          setDonorProfile(profile);
+        } catch {
+          // donor may not have completed their profile yet — that's fine
+          setDonorProfile(null);
+        }
+      } else {
+        // Non-donor users (hospital/admin) don't have donor profiles
         setDonorProfile(null);
       }
     } catch {

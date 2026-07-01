@@ -50,7 +50,11 @@ export default function SignUp() {
     setError("");
     setSubmitting(true);
     try {
-      await authApi.verifyOtp({ phone: form.phone, otp });
+      await authApi.verifyOtp({
+        phone: form.phone,
+        code: otp,
+        purpose: "registration",
+      });
       setStep(2);
     } catch (err) {
       setError(err.message || t("auth.signup.verifyError"));
@@ -62,7 +66,7 @@ export default function SignUp() {
   async function handleResend() {
     setError("");
     try {
-      await authApi.resendOtp({ phone: form.phone });
+      await authApi.resendOtp({ phone: form.phone, purpose: "registration" });
     } catch (err) {
       setError(err.message || t("auth.signup.resendError"));
     }
@@ -97,7 +101,10 @@ export default function SignUp() {
       <main className="flex-1 flex items-center justify-center px-6 py-16">
         <div className="w-full max-w-md">
           <div className="lg:hidden mb-8">
-            <Link to="/" className="font-display text-xl tracking-tight text-ruby">
+            <Link
+              to="/"
+              className="font-display text-xl tracking-tight text-ruby"
+            >
               {t("common.brand")}
             </Link>
           </div>
@@ -184,7 +191,9 @@ export default function SignUp() {
                 disabled={submitting}
                 className="w-full mt-8 font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-cream hover:bg-ruby-deep transition-colors disabled:opacity-50 shadow-[0_10px_24px_-10px_rgba(87,3,0,0.5)]"
               >
-                {submitting ? t("common.creatingAccount") : t("common.continue")}
+                {submitting
+                  ? t("common.creatingAccount")
+                  : t("common.continue")}
               </button>
 
               <p className="font-body text-sm text-ink/55 text-center mt-6">
@@ -202,7 +211,9 @@ export default function SignUp() {
                 {t("auth.signup.verifyTitle")}
               </h1>
               <p className="font-body text-sm text-ink/55 mb-8">
-                {t("auth.signup.verifyBody", { phone: form.phone || t("auth.signup.verifyFallback") })}
+                {t("auth.signup.verifyBody", {
+                  phone: form.phone || t("auth.signup.verifyFallback"),
+                })}
               </p>
 
               {error && (
@@ -214,9 +225,10 @@ export default function SignUp() {
               <Field
                 label={t("field.verificationCode")}
                 value={otp}
-                onChange={setOtp}
+                onChange={(v) => setOtp(v.replace(/\D/g, "").slice(0, 6))} // ← digits only, max 6
                 required
                 inputMode="numeric"
+                maxLength={6} // ← add this
               />
 
               <button
@@ -224,7 +236,9 @@ export default function SignUp() {
                 disabled={submitting}
                 className="w-full mt-8 font-body text-sm font-semibold px-6 py-3.5 rounded-full bg-ruby text-cream hover:bg-ruby-deep transition-colors disabled:opacity-50 shadow-[0_10px_24px_-10px_rgba(87,3,0,0.5)]"
               >
-                {submitting ? t("common.verifying") : t("auth.signup.verifyAction")}
+                {submitting
+                  ? t("common.verifying")
+                  : t("auth.signup.verifyAction")}
               </button>
 
               <button
@@ -241,7 +255,13 @@ export default function SignUp() {
             <div className="text-center">
               <div className="w-14 h-14 rounded-full bg-mist flex items-center justify-center mx-auto mb-6">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                  <path d="M5 13l4 4L19 7" stroke="#570300" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path
+                    d="M5 13l4 4L19 7"
+                    stroke="#570300"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </div>
               <h1 className="font-display font-medium text-3xl text-ink mb-2">
@@ -264,7 +284,16 @@ export default function SignUp() {
   );
 }
 
-function Field({ label, type = "text", value, onChange, error, required, placeholder, inputMode }) {
+function Field({
+  label,
+  type = "text",
+  value,
+  onChange,
+  error,
+  required,
+  placeholder,
+  inputMode,
+}) {
   return (
     <label className="block">
       <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide">
@@ -275,6 +304,7 @@ function Field({ label, type = "text", value, onChange, error, required, placeho
         value={value}
         required={required}
         placeholder={placeholder}
+        maxLength={maxLength}
         inputMode={inputMode}
         onChange={(e) => onChange(e.target.value)}
         className={`mt-1.5 w-full px-4 py-3.5 rounded-2xl border font-body text-sm text-ink bg-white placeholder:text-ink/35
