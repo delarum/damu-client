@@ -304,7 +304,7 @@ function Field({
         value={value}
         required={required}
         placeholder={placeholder}
-        maxLength={maxLength}
+        maxLength={type === "text" ? 6 : undefined}
         inputMode={inputMode}
         onChange={(e) => onChange(e.target.value)}
         className={`mt-1.5 w-full px-4 py-3.5 rounded-2xl border font-body text-sm text-ink bg-white placeholder:text-ink/35
