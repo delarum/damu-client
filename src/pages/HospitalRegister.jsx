@@ -103,11 +103,10 @@ export default function HospitalRegister() {
                 required
               />
               <Field
-                label="Phone"
+                label="Phone (optional)"
                 type="tel"
                 value={form.phone}
                 onChange={(v) => update("phone", v)}
-                required
               />
             </div>
             <Field

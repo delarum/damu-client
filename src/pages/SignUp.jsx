@@ -14,8 +14,8 @@ export default function SignUp() {
 
   const [form, setForm] = useState({
     full_name: "",
-    phone: "",
     email: "",
+    phone: "",
     password: "",
     national_id: "",
     date_of_birth: "",
@@ -51,7 +51,7 @@ export default function SignUp() {
     setSubmitting(true);
     try {
       await authApi.verifyOtp({
-        phone: form.phone,
+        email: form.email,
         code: otp,
         purpose: "registration",
       });
@@ -66,7 +66,7 @@ export default function SignUp() {
   async function handleResend() {
     setError("");
     try {
-      await authApi.resendOtp({ phone: form.phone, purpose: "registration" });
+      await authApi.resendOtp({ email: form.email, purpose: "registration" });
     } catch (err) {
       setError(err.message || t("auth.signup.resendError"));
     }
@@ -146,20 +146,21 @@ export default function SignUp() {
                   required
                 />
                 <Field
-                  label={t("field.phone")}
+                  label={t("field.email")}
+                  type="email"
+                  placeholder="you@example.com"
+                  value={form.email}
+                  onChange={(v) => update("email", v)}
+                  error={fieldErrors.email}
+                  required
+                />
+                <Field
+                  label={t("field.phoneOptional")}
                   type="tel"
                   placeholder="+254712345678"
                   value={form.phone}
                   onChange={(v) => update("phone", v)}
                   error={fieldErrors.phone}
-                  required
-                />
-                <Field
-                  label={t("field.emailOptional")}
-                  type="email"
-                  value={form.email}
-                  onChange={(v) => update("email", v)}
-                  error={fieldErrors.email}
                 />
                 <Field
                   label={t("field.nationalId")}
@@ -212,7 +213,7 @@ export default function SignUp() {
               </h1>
               <p className="font-body text-sm text-ink/55 mb-8">
                 {t("auth.signup.verifyBody", {
-                  phone: form.phone || t("auth.signup.verifyFallback"),
+                  email: form.email || t("auth.signup.verifyFallback"),
                 })}
               </p>
 

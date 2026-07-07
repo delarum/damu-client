@@ -8,7 +8,7 @@ export default function HospitalLogin() {
   const navigate = useNavigate();
   const { login } = useHospitalAuth();
   const { t } = useLanguage();
-  const [form, setForm] = useState({ phone: "", password: "" });
+  const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -62,14 +62,14 @@ export default function HospitalLogin() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <label className="block">
               <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide">
-                Phone Number
+                Email
               </span>
               <input
-                type="tel"
+                type="email"
                 required
-                placeholder="+254712345678"
-                value={form.phone}
-                onChange={(e) => update("phone", e.target.value)}
+                placeholder="you@example.com"
+                value={form.email}
+                onChange={(e) => update("email", e.target.value)}
                 className="mt-1.5 w-full px-4 py-3.5 rounded-2xl border border-transparent bg-white font-body text-sm text-ink placeholder:text-ink/35 focus:outline-none focus:ring-2 focus:ring-ruby-warm/35 focus:border-ruby-warm/40 transition-shadow"
               />
             </label>

@@ -20,6 +20,12 @@ export default function Landing() {
           >
             {t("common.becomeDonor")}
           </Link>
+          <Link
+            to="/admin/login"
+            className="font-body text-sm font-semibold px-5 py-2.5 rounded-full border border-cream/30 text-cream hover:bg-cream/10 transition-colors"
+          >
+            Admin Access
+          </Link>
         </nav>
       </header>
 

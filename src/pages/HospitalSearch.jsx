@@ -16,9 +16,9 @@ const ORGAN_TYPES = [
 ];
 
 export default function HospitalSearch() {
-  const { user } = useHospitalAuth();
+  const { user, hospitalProfile } = useHospitalAuth();
   const { t } = useLanguage();
-  const [searchType, setSearchType] = useState("blood"); // "blood" or "organ"
+  const [searchType, setSearchType] = useState("blood");
   const [bloodType, setBloodType] = useState("");
   const [organType, setOrganType] = useState("");
   const [radius, setRadius] = useState("10");
@@ -41,7 +41,6 @@ export default function HospitalSearch() {
   async function handleSearch(e) {
     e.preventDefault();
     
-    // Validate that required field is selected
     if (searchType === "blood" && !bloodType) {
       return;
     }
@@ -112,258 +111,300 @@ export default function HospitalSearch() {
           Find verified blood and organ donors across the country.
         </p>
 
-        {/* Search Type Tabs */}
-        <div className="flex gap-2 mb-6">
-          <button
-            type="button"
-            onClick={() => setSearchType("blood")}
-            className={`px-6 py-2.5 rounded-full font-body text-sm font-semibold transition-all ${
-              searchType === "blood"
-                ? "bg-ruby text-cream shadow-lg"
-                : "bg-white text-ink/70 border border-ink/15 hover:border-ruby/30"
-            }`}
-          >
-            🩸 Blood Donors
-          </button>
-          <button
-            type="button"
-            onClick={() => setSearchType("organ")}
-            className={`px-6 py-2.5 rounded-full font-body text-sm font-semibold transition-all ${
-              searchType === "organ"
-                ? "bg-sage text-white shadow-lg"
-                : "bg-white text-ink/70 border border-ink/15 hover:border-sage/30"
-            }`}
-          >
-            🫀 Organ Donors
-          </button>
-        </div>
-
-        <form onSubmit={handleSearch} className="space-y-4 mb-10">
-          {searchType === "blood" ? (
-            <div className="flex flex-wrap items-end gap-4">
-              <div className="flex-1 min-w-50">
-                <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide block mb-2">
-                  Blood Type
-                </span>
-                <select
-                  value={bloodType}
-                  onChange={(e) => setBloodType(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl border border-transparent bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-ruby-warm/35"
-                >
-                  <option value="">Select type</option>
-                  {BLOOD_TYPES.map((bt) => (
-                    <option key={bt} value={bt}>{bt}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="w-40">
-                <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide block mb-2">
-                  Radius (km)
-                </span>
-                <select
-                  value={radius}
-                  onChange={(e) => setRadius(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl border border-transparent bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-ruby-warm/35"
-                >
-                  <option value="5">5 km</option>
-                  <option value="10">10 km</option>
-                  <option value="25">25 km</option>
-                  <option value="50">50 km</option>
-                  <option value="1000">National</option>
-                </select>
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading || !bloodType}
-                className="font-body text-sm font-semibold px-6 py-3 rounded-full bg-ruby text-cream hover:bg-ruby-deep transition-colors disabled:opacity-50"
-              >
-                {loading ? "Searching..." : "Search"}
-              </button>
+        {!hasActiveSubscription && (
+          <div className="rounded-3xl border-2 border-clementine/30 bg-linear-to-br from-clementine-soft/40 to-white p-8 mb-8 text-center">
+            <div className="w-16 h-16 rounded-full bg-clementine/20 flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-clementine" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
             </div>
-          ) : (
-            <div className="flex flex-wrap items-end gap-4">
-              <div className="flex-1 min-w-50">
-                <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide block mb-2">
-                  Organ Type
-                </span>
-                <select
-                  value={organType}
-                  onChange={(e) => setOrganType(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl border border-transparent bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-sage/30"
-                >
-                  <option value="">Select organ</option>
-                  {ORGAN_TYPES.map((organ) => (
-                    <option key={organ.value} value={organ.value}>{organ.label}</option>
-                  ))}
-                </select>
+            <h3 className="font-display text-xl font-semibold text-ink mb-2">Subscription Required</h3>
+            <p className="font-body text-sm text-ink/65 mb-6 max-w-md mx-auto">
+              You need an active subscription to search for donors. Please subscribe to a plan to access this feature.
+            </p>
+            <Link
+              to="/hospital/subscription"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-clementine text-white font-body text-sm font-semibold hover:bg-clementine/90 transition-colors shadow-lg shadow-clementine/30"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+              </svg>
+              View Subscription Plans
+            </Link>
+          </div>
+        )}
+
+        {hasActiveSubscription && searchesRemaining === 0 && (
+          <div className="rounded-3xl border-2 border-clementine/30 bg-clementine-soft/30 p-6 mb-8">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-full bg-clementine/20 flex items-center justify-center shrink-0">
+                <svg className="w-6 h-6 text-clementine" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
               </div>
-
-              <div className="w-40">
-                <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide block mb-2">
-                  Radius (km)
-                </span>
-                <select
-                  value={radius}
-                  onChange={(e) => setRadius(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl border border-transparent bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-sage/30"
-                >
-                  <option value="5">5 km</option>
-                  <option value="10">10 km</option>
-                  <option value="25">25 km</option>
-                  <option value="50">50 km</option>
-                  <option value="1000">National</option>
-                </select>
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading || !organType}
-                className="font-body text-sm font-semibold px-6 py-3 rounded-full bg-sage text-white hover:bg-sage/90 transition-colors disabled:opacity-50"
-              >
-                {loading ? "Searching..." : "Search"}
-              </button>
-            </div>
-          )}
-        </form>
-
-        {searched && !loading && (
-          <section>
-            <h2 className="font-body text-sm font-semibold text-ink mb-4">
-              {searchCount} donor{searchCount !== 1 ? "s" : ""} found
-            </h2>
-            {results.length === 0 ? (
-              <div className="rounded-3xl border border-dashed border-ink/15 bg-white/50 px-6 py-10 text-center">
-                <p className="font-body text-sm font-medium text-ink">No donors match this search.</p>
-                <p className="font-body text-sm text-ink/50 mt-1">
-                  Try a wider radius or different {searchType === "blood" ? "blood type" : "organ type"}.
+              <div className="flex-1">
+                <h3 className="font-display text-lg font-semibold text-ink mb-1">Monthly Quota Exceeded</h3>
+                <p className="font-body text-sm text-ink/65 mb-4">
+                  You've used all your searches for this month. Upgrade your plan or wait for your quota to reset.
                 </p>
+                <Link
+                  to="/hospital/subscription"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-clementine text-white font-body text-sm font-semibold hover:bg-clementine/90 transition-colors"
+                >
+                  Upgrade Plan
+                </Link>
               </div>
-            ) : (
-              <div className="space-y-4">
-                {results.map((d) => {
-                  const donorOrgans = d.organs_pledged || [];
-                  const hasOrgans = donorOrgans.length > 0;
-                  
-                  return (
-                    <div 
-                      key={d.donor_id || d.id} 
-                      className="rounded-3xl border-2 border-mist/30 bg-white p-5 md:p-6 hover:shadow-xl hover:shadow-mist/20 hover:border-mist/60 hover:-translate-y-0.5 transition-all duration-300"
+            </div>
+          </div>
+        )}
+
+        {canSearch && (
+          <div>
+            <div className="flex gap-2 mb-6">
+              <button
+                type="button"
+                onClick={() => setSearchType("blood")}
+                className={`px-6 py-2.5 rounded-full font-body text-sm font-semibold transition-all ${
+                  searchType === "blood"
+                    ? "bg-ruby text-cream shadow-lg"
+                    : "bg-white text-ink/70 border border-ink/15 hover:border-ruby/30"
+                }`}
+              >
+                🩸 Blood Donors
+              </button>
+              <button
+                type="button"
+                onClick={() => setSearchType("organ")}
+                className={`px-6 py-2.5 rounded-full font-body text-sm font-semibold transition-all ${
+                  searchType === "organ"
+                    ? "bg-sage text-white shadow-lg"
+                    : "bg-white text-ink/70 border border-ink/15 hover:border-sage/30"
+                }`}
+              >
+                🫀 Organ Donors
+              </button>
+            </div>
+
+            <form onSubmit={handleSearch} className="space-y-4 mb-10">
+              {searchType === "blood" ? (
+                <div className="flex flex-wrap items-end gap-4">
+                  <div className="flex-1 min-w-50">
+                    <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide block mb-2">
+                      Blood Type
+                    </span>
+                    <select
+                      value={bloodType}
+                      onChange={(e) => setBloodType(e.target.value)}
+                      className="w-full px-4 py-3 rounded-2xl border border-transparent bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-ruby-warm/35"
                     >
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex items-start gap-3 flex-1">
-                          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
-                            d.donor_type === "organ" || d.donor_type === "both"
-                              ? "bg-linear-to-br from-sage/20 to-sage-soft/30"
-                              : "bg-linear-to-br from-mist/20 to-clementine-soft/20"
-                          }`}>
-                            <span className="text-lg">
-                              {d.donor_type === "organ" || d.donor_type === "both" ? "💚" : "🩸"}
-                            </span>
-                          </div>
-                          <div className="flex-1">
-                            <button
-                              onClick={() => handleViewDonorDetails(d.donor_id || d.id)}
-                              className="font-display text-lg font-semibold text-ruby-warm hover:text-ruby transition-colors text-left underline decoration-2 underline-offset-2 hover:decoration-ruby"
-                            >
-                              {d.name}
-                            </button>
-                            
-                            {/* Blood Type Badge */}
-                            {d.blood_type && (
-                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mt-1.5">
-                                <span className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-ruby-warm bg-ruby-50 px-2.5 py-1 rounded-lg border border-ruby/10">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-ruby-warm"></span>
-                                  {d.blood_type}
+                      <option value="">Select type</option>
+                      {BLOOD_TYPES.map((bt) => (
+                        <option key={bt} value={bt}>{bt}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="w-40">
+                    <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide block mb-2">
+                      Radius (km)
+                    </span>
+                    <select
+                      value={radius}
+                      onChange={(e) => setRadius(e.target.value)}
+                      className="w-full px-4 py-3 rounded-2xl border border-transparent bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-ruby-warm/35"
+                    >
+                      <option value="5">5 km</option>
+                      <option value="10">10 km</option>
+                      <option value="25">25 km</option>
+                      <option value="50">50 km</option>
+                      <option value="1000">National</option>
+                    </select>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading || !bloodType}
+                    className="font-body text-sm font-semibold px-6 py-3 rounded-full bg-ruby text-cream hover:bg-ruby-deep transition-colors disabled:opacity-50"
+                  >
+                    {loading ? "Searching..." : "Search"}
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-wrap items-end gap-4">
+                  <div className="flex-1 min-w-50">
+                    <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide block mb-2">
+                      Organ Type
+                    </span>
+                    <select
+                      value={organType}
+                      onChange={(e) => setOrganType(e.target.value)}
+                      className="w-full px-4 py-3 rounded-2xl border border-transparent bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-sage/30"
+                    >
+                      <option value="">Select organ</option>
+                      {ORGAN_TYPES.map((organ) => (
+                        <option key={organ.value} value={organ.value}>{organ.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="w-40">
+                    <span className="font-body text-xs font-medium text-ink/60 uppercase tracking-wide block mb-2">
+                      Radius (km)
+                    </span>
+                    <select
+                      value={radius}
+                      onChange={(e) => setRadius(e.target.value)}
+                      className="w-full px-4 py-3 rounded-2xl border border-transparent bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-sage/30"
+                    >
+                      <option value="5">5 km</option>
+                      <option value="10">10 km</option>
+                      <option value="25">25 km</option>
+                      <option value="50">50 km</option>
+                      <option value="1000">National</option>
+                    </select>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading || !organType}
+                    className="font-body text-sm font-semibold px-6 py-3 rounded-full bg-sage text-white hover:bg-sage/90 transition-colors disabled:opacity-50"
+                  >
+                    {loading ? "Searching..." : "Search"}
+                  </button>
+                </div>
+              )}
+            </form>
+
+            {searched && !loading && (
+              <section>
+                <h2 className="font-body text-sm font-semibold text-ink mb-4">
+                  {searchCount} donor{searchCount !== 1 ? "s" : ""} found
+                </h2>
+                {results.length === 0 ? (
+                  <div className="rounded-3xl border border-dashed border-ink/15 bg-white/50 px-6 py-10 text-center">
+                    <p className="font-body text-sm font-medium text-ink">No donors match this search.</p>
+                    <p className="font-body text-sm text-ink/50 mt-1">
+                      Try a wider radius or different {searchType === "blood" ? "blood type" : "organ type"}.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {results.map((d) => {
+                      const donorOrgans = d.organs_pledged || [];
+                      const hasOrgans = donorOrgans.length > 0;
+                      
+                      return (
+                        <div 
+                          key={d.donor_id || d.id} 
+                          className="rounded-3xl border-2 border-mist/30 bg-white p-5 md:p-6 hover:shadow-xl hover:shadow-mist/20 hover:border-mist/60 hover:-translate-y-0.5 transition-all duration-300"
+                        >
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex items-start gap-3 flex-1">
+                              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
+                                d.donor_type === "organ" || d.donor_type === "both"
+                                  ? "bg-linear-to-br from-sage/20 to-sage-soft/30"
+                                  : "bg-linear-to-br from-mist/20 to-clementine-soft/20"
+                              }`}>
+                                <span className="text-lg">
+                                  {d.donor_type === "organ" || d.donor_type === "both" ? "💚" : "🩸"}
                                 </span>
+                              </div>
+                              <div className="flex-1">
+                                <button
+                                  onClick={() => handleViewDonorDetails(d.donor_id || d.id)}
+                                  className="font-display text-lg font-semibold text-ruby-warm hover:text-ruby transition-colors text-left underline decoration-2 underline-offset-2 hover:decoration-ruby"
+                                >
+                                  {d.name}
+                                </button>
                                 
-                                {/* Distance */}
-                                {d.distance_km !== undefined && (
-                                  <span className="inline-flex items-center gap-1 font-body text-xs text-ink/50 bg-ink/5 px-2.5 py-1 rounded-lg">
-                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                    {d.distance_km} km
-                                  </span>
+                                {d.blood_type && (
+                                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mt-1.5">
+                                    <span className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-ruby-warm bg-ruby-50 px-2.5 py-1 rounded-lg border border-ruby/10">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-ruby-warm"></span>
+                                      {d.blood_type}
+                                    </span>
+                                    
+                                    {d.distance_km !== undefined && (
+                                      <span className="inline-flex items-center gap-1 font-body text-xs text-ink/50 bg-ink/5 px-2.5 py-1 rounded-lg">
+                                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        {d.distance_km} km
+                                      </span>
+                                    )}
+
+                                    {d.gender && (
+                                      <span className="font-mono text-xs text-ink/50">
+                                        {d.gender === "male" ? "♂ Male" : d.gender === "female" ? "♀ Female" : "⚧ Other"}
+                                      </span>
+                                    )}
+                                  </div>
                                 )}
 
-                                {/* Gender */}
-                                {d.gender && (
-                                  <span className="font-mono text-xs text-ink/50">
-                                    {d.gender === "male" ? "♂ Male" : d.gender === "female" ? "♀ Female" : "⚧ Other"}
-                                  </span>
+                                {searchType === "organ" && d.organ && (
+                                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mt-1.5">
+                                    <span className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-sage bg-sage-soft px-2.5 py-1 rounded-lg border border-sage/20">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-sage"></span>
+                                      {d.organ}
+                                    </span>
+                                  </div>
                                 )}
-                              </div>
-                            )}
-
-                            {/* Organ Type Badge (for organ search) */}
-                            {searchType === "organ" && d.organ && (
-                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mt-1.5">
-                                <span className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-sage bg-sage-soft px-2.5 py-1 rounded-lg border border-sage/20">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-sage"></span>
-                                  {d.organ}
-                                </span>
-                              </div>
-                            )}
-                            
-                            {/* Physical measurements */}
-                            {(d.height_cm || d.weight_kg) && (
-                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2">
-                                {d.height_cm && (
-                                  <span className="font-mono text-[11px] text-ink/45">
-                                    📏 {d.height_cm} cm
-                                  </span>
+                                
+                                {(d.height_cm || d.weight_kg) && (
+                                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2">
+                                    {d.height_cm && (
+                                      <span className="font-mono text-[11px] text-ink/45">
+                                        📏 {d.height_cm} cm
+                                      </span>
+                                    )}
+                                    {d.weight_kg && (
+                                      <span className="font-mono text-[11px] text-ink/45">
+                                        ⚖️ {d.weight_kg} kg
+                                      </span>
+                                    )}
+                                  </div>
                                 )}
-                                {d.weight_kg && (
-                                  <span className="font-mono text-[11px] text-ink/45">
-                                    ⚖️ {d.weight_kg} kg
-                                  </span>
+                                
+                                {hasOrgans && (
+                                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mt-2">
+                                    <span className="font-body text-[11px] text-ink/50 uppercase tracking-wide">Organs:</span>
+                                    {donorOrgans.map((organ) => (
+                                      <span key={organ} className="font-mono text-[11px] font-semibold text-sage bg-sage-soft px-2 py-0.5 rounded-md border border-sage/20">
+                                        {organ}
+                                      </span>
+                                    ))}
+                                  </div>
                                 )}
-                              </div>
-                            )}
-                            
-                            {/* Organs pledged */}
-                            {hasOrgans && (
-                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mt-2">
-                                <span className="font-body text-[11px] text-ink/50 uppercase tracking-wide">Organs:</span>
-                                {donorOrgans.map((organ) => (
-                                  <span key={organ} className="font-mono text-[11px] font-semibold text-sage bg-sage-soft px-2 py-0.5 rounded-md border border-sage/20">
-                                    {organ}
+                                
+                                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-ink/45">
+                                  <span className="font-mono text-[11px]">
+                                    Last donation: {d.last_donation_date || "N/A"}
                                   </span>
-                                ))}
+                                  <span className="font-mono text-[11px]">
+                                    Contact: {d.contact_preference || d.preferred_contact_method || "N/A"}
+                                  </span>
+                                </div>
                               </div>
-                            )}
-                            
-                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-ink/45">
-                              <span className="font-mono text-[11px]">
-                                Last donation: {d.last_donation_date || "N/A"}
-                              </span>
-                              <span className="font-mono text-[11px]">
-                                Contact: {d.contact_preference || d.preferred_contact_method || "N/A"}
-                              </span>
+                              
+                              <button
+                                onClick={() => handleViewDonorDetails(d.donor_id || d.id)}
+                                className="mt-3 px-4 py-2 rounded-xl bg-ruby/10 text-ruby text-xs font-semibold hover:bg-ruby/20 transition-colors"
+                              >
+                                View Full Details →
+                              </button>
                             </div>
                           </div>
-                          
-                          {/* View Details Button */}
-                          <button
-                            onClick={() => handleViewDonorDetails(d.donor_id || d.id)}
-                            className="mt-3 px-4 py-2 rounded-xl bg-ruby/10 text-ruby text-xs font-semibold hover:bg-ruby/20 transition-colors"
-                          >
-                            View Full Details →
-                          </button>
                         </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
             )}
-          </section>
+          </div>
         )}
-        
-        {/* Donor Details Modal */}
+
         {selectedDonor && (
           <div className="fixed inset-0 bg-ink/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={handleCloseModal}>
             <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl" onClick={(e) => e.stopPropagation()}>
@@ -383,7 +424,6 @@ export default function HospitalSearch() {
                   </div>
                   
                   <div className="space-y-6">
-                    {/* Basic Info */}
                     <div className="rounded-2xl bg-mist/5 p-5">
                       <h4 className="font-body text-xs font-semibold text-ink/60 uppercase tracking-wide mb-3">Basic Information</h4>
                       <div className="grid grid-cols-2 gap-4">
@@ -406,7 +446,6 @@ export default function HospitalSearch() {
                       </div>
                     </div>
 
-                    {/* Medical Info */}
                     <div className="rounded-2xl bg-sage-soft/30 p-5">
                       <h4 className="font-body text-xs font-semibold text-ink/60 uppercase tracking-wide mb-3">Medical Information</h4>
                       <div className="grid grid-cols-2 gap-4">
@@ -442,7 +481,6 @@ export default function HospitalSearch() {
                       )}
                     </div>
 
-                    {/* Location */}
                     <div className="rounded-2xl bg-clementine-soft/30 p-5">
                       <h4 className="font-body text-xs font-semibold text-ink/60 uppercase tracking-wide mb-3">Location</h4>
                       <div className="grid grid-cols-2 gap-4">
@@ -457,7 +495,6 @@ export default function HospitalSearch() {
                       </div>
                     </div>
 
-                    {/* Availability & Contact */}
                     <div className="rounded-2xl bg-ruby-soft/30 p-5">
                       <h4 className="font-body text-xs font-semibold text-ink/60 uppercase tracking-wide mb-3">Availability & Contact</h4>
                       <div className="grid grid-cols-2 gap-4">
