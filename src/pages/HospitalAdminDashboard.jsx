@@ -3,13 +3,12 @@ import { Link } from "react-router-dom";
 import { useHospitalAuth } from "../lib/HospitalAuthContext";
 import { hospitalApi } from "../lib/apiHospital";
 import { useLanguage } from "../lib/LanguageContext";
-import DonorMap from "../components/DonorMap";
 
-export default function HospitalDashboard() {
+export default function HospitalAdminDashboard() {
   const { user, hospitalProfile, logout, loading: authLoading } = useHospitalAuth();
   const { t } = useLanguage();
-  const [profile, setProfile] = useState(null);
-  const [subscription, setSubscription] = useState(null);
+  const [stats, setStats] = useState(null);
+  const [staff, setStaff] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -18,13 +17,13 @@ export default function HospitalDashboard() {
     let active = true;
     async function load() {
       try {
-        const [p, s] = await Promise.allSettled([
-          hospitalApi.getProfile(),
-          hospitalApi.subscription.current(),
+        const [s, st] = await Promise.allSettled([
+          hospitalApi.dashboardStats(),
+          hospitalApi.staff.list(),
         ]);
         if (!active) return;
-        if (p.status === "fulfilled") setProfile(p.value);
-        if (s.status === "fulfilled") setSubscription(s.value);
+        if (s.status === "fulfilled") setStats(s.value);
+        if (st.status === "fulfilled") setStaff(st.value.results || []);
       } catch {
         if (active) setError("Couldn't load dashboard data.");
       } finally {
@@ -55,7 +54,6 @@ export default function HospitalDashboard() {
 
   return (
     <div className="min-h-screen bg-clay">
-      {/* Accent header */}
       <header className="relative bg-ruby-night overflow-hidden">
         <div className="absolute inset-0 opacity-[0.04]"
           style={{
@@ -64,9 +62,12 @@ export default function HospitalDashboard() {
           }}
         />
         <div className="relative flex items-center justify-between px-6 md:px-14 py-6">
-          <Link to="/" className="font-display text-xl tracking-tight text-cream">
-            {t("common.brand")}
-          </Link>
+          <div>
+            <Link to="/" className="font-display text-xl tracking-tight text-cream">
+              {t("common.brand")}
+            </Link>
+            <p className="font-body text-xs text-cream/60 mt-1">Hospital Admin Portal</p>
+          </div>
           <nav className="flex items-center gap-1">
             <Link
               to="/hospital/about"
@@ -89,11 +90,11 @@ export default function HospitalDashboard() {
           <div className="flex items-center gap-3 mb-2">
             <div className="w-1 h-7 bg-mist rounded-full" />
             <h1 className="font-display font-medium text-[2.1rem] leading-tight text-ink">
-              {profile?.facility_name || t("hospital.dashboard.title")}
+              {hospitalProfile?.facility_name || "Hospital Admin"}
             </h1>
           </div>
           <p className="font-body text-sm text-ink/55 max-w-lg leading-relaxed pl-5">
-            {t("hospital.dashboard.body")}
+            Manage your facility, staff, and donor requests.
           </p>
         </div>
 
@@ -103,9 +104,14 @@ export default function HospitalDashboard() {
           </p>
         )}
 
-        <section className="mb-10">
-          <DonorMap height="65vh" />
-        </section>
+        {stats && (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+            <StatCard label="Total Requests" value={stats.total_requests ?? "—"} />
+            <StatCard label="Pending" value={stats.pending_requests ?? "—"} />
+            <StatCard label="Staff Members" value={stats.staff_count ?? "—"} />
+            <StatCard label="Active Subscriptions" value={stats.active_subscription ? "Yes" : "No"} />
+          </div>
+        )}
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
           <DashCard title="Search donors" href="/hospital/search" label="Find matches ->" />
@@ -113,29 +119,35 @@ export default function HospitalDashboard() {
           <DashCard title="Staff management" href="/hospital/staff" label="Manage team ->" />
           <DashCard title="Subscription" href="/hospital/subscription" label="View plan ->" />
           <DashCard title="Facility profile" href="/hospital/profile" label="Edit details ->" />
-          <DashCard title="Admin dashboard" href="/hospital/admin" label="Manage facility ->" />
         </div>
 
-        <section>
-          <h2 className="font-body text-sm font-semibold text-ink mb-4">Subscription status</h2>
-          <div className="rounded-3xl bg-white p-6 border border-ink/8">
-            {subscription ? (
-              <div>
-                <p className="font-body text-sm font-medium text-ink capitalize">
-                  {subscription.tier || "—"} · {subscription.status || "—"}
-                </p>
-                {subscription.expires_at && (
-                  <p className="font-mono text-xs text-ink/50 mt-1">
-                    Expires {subscription.expires_at}
-                  </p>
-                )}
-              </div>
-            ) : (
-              <p className="font-body text-sm text-ink/50">No active subscription.</p>
-            )}
-          </div>
-        </section>
+        {staff.length > 0 && (
+          <section>
+            <h2 className="font-body text-sm font-semibold text-ink mb-4">Staff members</h2>
+            <div className="rounded-3xl bg-white divide-y divide-ink/8 border border-ink/8">
+              {staff.map((member) => (
+                <div key={member.id} className="px-6 py-4 flex items-center justify-between">
+                  <div>
+                    <p className="font-body text-sm font-medium text-ink">{member.email}</p>
+                    <p className="font-body text-xs text-ink/55 mt-1 capitalize">
+                      {member.role || "staff"} · {member.is_active ? "Active" : "Inactive"}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
+    </div>
+  );
+}
+
+function StatCard({ label, value }) {
+  return (
+    <div className="rounded-3xl bg-white p-6 border border-ink/8">
+      <p className="font-body text-xs font-medium text-ink/55 uppercase tracking-wide">{label}</p>
+      <p className="font-display text-3xl text-ruby mt-3">{value}</p>
     </div>
   );
 }

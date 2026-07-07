@@ -39,6 +39,8 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminHospitals from "./pages/AdminHospitals";
 import AdminAuditLogs from "./pages/AdminAuditLogs";
+import AdminUsers from "./pages/AdminUsers";
+import HospitalAdminDashboard from "./pages/HospitalAdminDashboard";
 
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
@@ -83,6 +85,7 @@ export default function App() {
             <Route path="/hospital/login" element={<PageShell><HospitalAuthProvider><HospitalLogin /></HospitalAuthProvider></PageShell>} />
             <Route path="/hospital/register" element={<PageShell><HospitalAuthProvider><HospitalRegister /></HospitalAuthProvider></PageShell>} />
             <Route path="/hospital/dashboard" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalDashboard /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
+            <Route path="/hospital/admin" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalAdminDashboard /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
             <Route path="/hospital/search" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalSearch /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
             <Route path="/hospital/requests" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalRequests /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
             <Route path="/hospital/profile" element={<PageShell><HospitalAuthProvider><HospitalProtectedRoute><HospitalProfile /></HospitalProtectedRoute></HospitalAuthProvider></PageShell>} />
@@ -93,6 +96,7 @@ export default function App() {
             <Route path="/admin/login" element={<PageShell><AdminAuthProvider><AdminLogin /></AdminAuthProvider></PageShell>} />
             <Route path="/admin/dashboard" element={<PageShell><AdminAuthProvider><AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute></AdminAuthProvider></PageShell>} />
             <Route path="/admin/hospitals" element={<PageShell><AdminAuthProvider><AdminProtectedRoute><AdminHospitals /></AdminProtectedRoute></AdminAuthProvider></PageShell>} />
+            <Route path="/admin/users" element={<PageShell><AdminAuthProvider><AdminProtectedRoute><AdminUsers /></AdminProtectedRoute></AdminAuthProvider></PageShell>} />
             <Route path="/admin/audit-logs" element={<PageShell><AdminAuthProvider><AdminProtectedRoute><AdminAuditLogs /></AdminProtectedRoute></AdminAuthProvider></PageShell>} />
 
             <Route path="*" element={<NotFound />} />

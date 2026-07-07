@@ -7,6 +7,7 @@ export const hospitalApi = {
   deleteProfile: () => api.delete("/hospitals/profile/delete/"),
   uploadLicense: (formData) =>
     api.post("/hospitals/upload-license/", formData, { isForm: true }),
+  dashboardStats: () => api.get("/hospitals/admin/dashboard/"),
   staff: {
     list: () => api.get("/hospitals/staff/"),
     add: (payload) => api.post("/hospitals/staff/add/", payload),
@@ -62,8 +63,9 @@ export const adminApi = {
   auditLogs: () => api.get("/admin/audit-logs/"),
   metrics: () => api.get("/admin/metrics/"),
   users: {
-    list: () => api.get("/admin/users/"),
+    list: (params) => api.get("/admin/users/", { params }),
     update: (id, payload) => api.patch(`/admin/users/${id}/`, payload),
     remove: (id) => api.delete(`/admin/users/${id}/`),
+    resetPassword: (id, payload) => api.post(`/admin/users/${id}/reset-password/`, payload),
   },
 };

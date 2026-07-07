@@ -25,8 +25,16 @@ function MaleFigure() {
       </defs>
 
       {/* legs */}
-      <path d="M95 360 L90 500 L112 500 L118 372 Z" fill="#2B1B16" opacity="0.88" />
-      <path d="M145 360 L150 500 L128 500 L122 372 Z" fill="#220301" opacity="0.88" />
+      <path
+        d="M95 360 L90 500 L112 500 L118 372 Z"
+        fill="#2B1B16"
+        opacity="0.88"
+      />
+      <path
+        d="M145 360 L150 500 L128 500 L122 372 Z"
+        fill="#220301"
+        opacity="0.88"
+      />
 
       {/* torso (shirt) */}
       <path
@@ -35,7 +43,12 @@ function MaleFigure() {
         fill="url(#shirtM)"
       />
       {/* shirt shading line (chest split) */}
-      <path d="M120 168 L120 350" stroke="#3D0200" strokeWidth="2" opacity="0.5" />
+      <path
+        d="M120 168 L120 350"
+        stroke="#3D0200"
+        strokeWidth="2"
+        opacity="0.5"
+      />
 
       {/* neck */}
       <rect x="108" y="138" width="24" height="26" rx="6" fill="url(#skinM)" />
@@ -43,17 +56,38 @@ function MaleFigure() {
       {/* head */}
       <ellipse cx="120" cy="112" rx="30" ry="34" fill="url(#skinM)" />
       {/* hair */}
-      <path d="M92 102 C90 78 104 64 120 64 C136 64 150 78 148 102
-               C148 90 136 80 120 80 C104 80 92 90 92 102 Z" fill="#1A0E0A" />
+      <path
+        d="M92 102 C90 78 104 64 120 64 C136 64 150 78 148 102
+               C148 90 136 80 120 80 C104 80 92 90 92 102 Z"
+        fill="#1A0E0A"
+      />
       {/* jaw shade */}
-      <path d="M96 122 C104 134 136 134 144 122" stroke="#7A4B30" strokeWidth="1.5" fill="none" opacity="0.5" />
+      <path
+        d="M96 122 C104 134 136 134 144 122"
+        stroke="#7A4B30"
+        strokeWidth="1.5"
+        fill="none"
+        opacity="0.5"
+      />
 
       {/* arms */}
-      <path d="M70 200 C50 210 38 250 40 300 L58 298 C58 260 66 224 80 206 Z" fill="url(#skinM)" />
-      <path d="M170 200 C190 210 202 250 200 300 L182 298 C182 260 174 224 160 206 Z" fill="url(#skinM)" />
+      <path
+        d="M70 200 C50 210 38 250 40 300 L58 298 C58 260 66 224 80 206 Z"
+        fill="url(#skinM)"
+      />
+      <path
+        d="M170 200 C190 210 202 250 200 300 L182 298 C182 260 174 224 160 206 Z"
+        fill="url(#skinM)"
+      />
       {/* sleeves */}
-      <path d="M70 200 C58 206 48 222 44 244 L66 240 C68 224 74 210 82 202 Z" fill="url(#shirtM)" />
-      <path d="M170 200 C182 206 192 222 196 244 L174 240 C172 224 166 210 158 202 Z" fill="url(#shirtM)" />
+      <path
+        d="M70 200 C58 206 48 222 44 244 L66 240 C68 224 74 210 82 202 Z"
+        fill="url(#shirtM)"
+      />
+      <path
+        d="M170 200 C182 206 192 222 196 244 L174 240 C172 224 166 210 158 202 Z"
+        fill="url(#shirtM)"
+      />
       {/* hands */}
       <ellipse cx="46" cy="308" rx="9" ry="11" fill="url(#skinM)" />
       <ellipse cx="194" cy="308" rx="9" ry="11" fill="url(#skinM)" />
@@ -88,8 +122,16 @@ function FemaleFigure() {
       </defs>
 
       {/* legs */}
-      <path d="M98 360 L94 500 L114 500 L116 372 Z" fill="#2B1B16" opacity="0.88" />
-      <path d="M142 360 L146 500 L126 500 L124 372 Z" fill="#220301" opacity="0.88" />
+      <path
+        d="M98 360 L94 500 L114 500 L116 372 Z"
+        fill="#2B1B16"
+        opacity="0.88"
+      />
+      <path
+        d="M142 360 L146 500 L126 500 L124 372 Z"
+        fill="#220301"
+        opacity="0.88"
+      />
 
       {/* torso (hourglass) */}
       <path
@@ -98,7 +140,12 @@ function FemaleFigure() {
            C158 174 144 158 120 156 C96 158 82 174 76 196 Z"
         fill="url(#shirtF)"
       />
-      <path d="M120 168 L120 350" stroke="#3D0200" strokeWidth="2" opacity="0.5" />
+      <path
+        d="M120 168 L120 350"
+        stroke="#3D0200"
+        strokeWidth="2"
+        opacity="0.5"
+      />
 
       {/* neck */}
       <rect x="109" y="138" width="22" height="24" rx="6" fill="url(#skinF)" />
@@ -106,17 +153,38 @@ function FemaleFigure() {
       {/* head */}
       <ellipse cx="120" cy="111" rx="28" ry="33" fill="url(#skinF)" />
       {/* hair */}
-      <path d="M88 116 C84 80 100 60 120 60 C140 60 156 80 152 116
+      <path
+        d="M88 116 C84 80 100 60 120 60 C140 60 156 80 152 116
                C150 96 146 78 138 70 C146 86 144 104 140 100
                C138 86 130 76 120 76 C110 76 102 86 100 100
-               C96 104 92 96 90 116 Z" fill="#1A0E0A" />
-      <path d="M98 122 C106 132 134 132 142 122" stroke="#8A5736" strokeWidth="1.5" fill="none" opacity="0.5" />
+               C96 104 92 96 90 116 Z"
+        fill="#1A0E0A"
+      />
+      <path
+        d="M98 122 C106 132 134 132 142 122"
+        stroke="#8A5736"
+        strokeWidth="1.5"
+        fill="none"
+        opacity="0.5"
+      />
 
       {/* arms */}
-      <path d="M76 198 C58 208 46 246 48 296 L64 294 C64 258 72 224 84 204 Z" fill="url(#skinF)" />
-      <path d="M164 198 C182 208 194 246 192 296 L176 294 C176 258 168 224 156 204 Z" fill="url(#skinF)" />
-      <path d="M76 198 C64 204 54 220 50 240 L68 236 C70 220 76 208 84 200 Z" fill="url(#shirtF)" />
-      <path d="M164 198 C176 204 186 220 190 240 L172 236 C170 220 164 208 156 200 Z" fill="url(#shirtF)" />
+      <path
+        d="M76 198 C58 208 46 246 48 296 L64 294 C64 258 72 224 84 204 Z"
+        fill="url(#skinF)"
+      />
+      <path
+        d="M164 198 C182 208 194 246 192 296 L176 294 C176 258 168 224 156 204 Z"
+        fill="url(#skinF)"
+      />
+      <path
+        d="M76 198 C64 204 54 220 50 240 L68 236 C70 220 76 208 84 200 Z"
+        fill="url(#shirtF)"
+      />
+      <path
+        d="M164 198 C176 204 186 220 190 240 L172 236 C170 220 164 208 156 200 Z"
+        fill="url(#shirtF)"
+      />
       <ellipse cx="54" cy="304" rx="8" ry="10" fill="url(#skinF)" />
       <ellipse cx="186" cy="304" rx="8" ry="10" fill="url(#skinF)" />
 
@@ -135,7 +203,15 @@ function FemaleFigure() {
  * ORGAN MARKER + HOVER CARD
  * ------------------------------------------------------------------- */
 
-function OrganMarker({ organKey, anchor, active, onEnter, onLeave, t }) {
+function OrganMarker({
+  organKey,
+  anchor,
+  active,
+  onEnter,
+  onLeave,
+  onClick,
+  t,
+}) {
   const info = ORGAN_INFO[organKey];
   if (!info) return null;
   return (
@@ -144,20 +220,29 @@ function OrganMarker({ organKey, anchor, active, onEnter, onLeave, t }) {
       onMouseEnter={() => onEnter(organKey)}
       onMouseLeave={onLeave}
       onFocus={() => onEnter(organKey)}
+      onClick={() => onClick(organKey)}
       onBlur={onLeave}
       tabIndex={0}
       role="button"
       aria-label={`${info.label} — ${t("avatar.viewDetails")}`}
       style={{ cursor: "pointer", outline: "none" }}
     >
-      <circle r="11" fill="#F7E493" opacity={active ? "0.95" : "0.0"} className={active ? "" : ""} />
       <circle
-        r="7"
-        fill={active ? "#F7E493" : "#FFFBF5"}
+        r="11"
+        fill="#F7E493"
+        opacity={active ? "0.95" : "0.0"}
+        className={active ? "" : ""}
+      />
+      <circle
+        r={active ? 10 : 8}
+        fill="#FFF7E5"
         stroke="#570300"
         strokeWidth="2"
-        className={active ? "" : "animate-pulseGlow"}
       />
+
+      <circle r={18} fill="#F7E49322" className="organHalo" />
+
+      <circle r="4" fill="#570300" />
       <circle r="2.4" fill="#570300" />
     </g>
   );
@@ -169,24 +254,50 @@ function OrganMarker({ organKey, anchor, active, onEnter, onLeave, t }) {
 
 export default function DonorAvatarPanel({ donorProfile, firstName }) {
   const { t } = useLanguage();
-  const [activeOrgan, setActiveOrgan] = useState(null);
+  const [hoveredOrgan, setHoveredOrgan] = useState(null);
+  const [pinnedOrgan, setPinnedOrgan] = useState(null);
+
+  const activeOrgan = pinnedOrgan || hoveredOrgan;
   const [cardPos, setCardPos] = useState({ x: 0, y: 0 });
   const wrapRef = useRef(null);
 
   const gender = donorProfile?.gender === "female" ? "female" : "male";
   const organsPledged = donorProfile?.organs_pledged || [];
-  const donatesOrgans = donorProfile?.donor_type === "organ" || donorProfile?.donor_type === "both";
+  const donatesOrgans =
+    donorProfile?.donor_type === "organ" || donorProfile?.donor_type === "both";
 
   const handleEnter = useCallback(
     (organKey) => {
-      setActiveOrgan(organKey);
+      if (pinnedOrgan) return;
+
+      setHoveredOrgan(organKey);
+
       const anchor =
         ORGAN_INFO[organKey]?.anchor?.[gender] || FALLBACK_ORGAN_ANCHOR;
+
       setCardPos(anchor);
     },
-    [gender]
+    [gender, pinnedOrgan],
   );
-  const handleLeave = useCallback(() => setActiveOrgan(null), []);
+  const handleLeave = useCallback(() => {
+    if (!pinnedOrgan) {
+      setHoveredOrgan(null);
+    }
+  }, [pinnedOrgan]);
+
+  const handlePin = (organKey) => {
+    if (pinnedOrgan === organKey) {
+      setPinnedOrgan(null);
+      return;
+    }
+
+    setPinnedOrgan(organKey);
+
+    const anchor =
+      ORGAN_INFO[organKey]?.anchor?.[gender] || FALLBACK_ORGAN_ANCHOR;
+
+    setCardPos(anchor);
+  };
 
   const activeInfo = activeOrgan ? ORGAN_INFO[activeOrgan] : null;
 
@@ -208,7 +319,11 @@ export default function DonorAvatarPanel({ donorProfile, firstName }) {
           </div>
 
           <dl className="grid grid-cols-2 gap-3">
-            <StatTile label={t("bloodType")} value={donorProfile?.blood_type || "—"} accent />
+            <StatTile
+              label={t("bloodType")}
+              value={donorProfile?.blood_type || "—"}
+              accent
+            />
             <StatTile
               label={t("gender")}
               value={
@@ -219,11 +334,19 @@ export default function DonorAvatarPanel({ donorProfile, firstName }) {
             />
             <StatTile
               label={t("height")}
-              value={donorProfile?.height_cm ? `${donorProfile.height_cm} cm` : t("avatar.notSet")}
+              value={
+                donorProfile?.height_cm
+                  ? `${donorProfile.height_cm} cm`
+                  : t("avatar.notSet")
+              }
             />
             <StatTile
               label={t("weight")}
-              value={donorProfile?.weight_kg ? `${donorProfile.weight_kg} kg` : t("avatar.notSet")}
+              value={
+                donorProfile?.weight_kg
+                  ? `${donorProfile.weight_kg} kg`
+                  : t("avatar.notSet")
+              }
             />
           </dl>
 
@@ -243,14 +366,18 @@ export default function DonorAvatarPanel({ donorProfile, firstName }) {
                     </span>
                   ))
                 ) : (
-                  <span className="font-body text-xs text-cream/50 italic">{t("avatar.noOrgans")}</span>
+                  <span className="font-body text-xs text-cream/50 italic">
+                    {t("avatar.noOrgans")}
+                  </span>
                 )}
               </div>
             </div>
           )}
 
           <p className="font-body text-xs text-cream/50 mt-auto pt-4 leading-relaxed">
-            {donatesOrgans ? t("checkout your avatar ") : t("avatar.hintBloodOnly")}
+            {donatesOrgans
+              ? t("checkout your avatar ")
+              : t("avatar.hintBloodOnly")}
           </p>
         </div>
 
@@ -259,22 +386,35 @@ export default function DonorAvatarPanel({ donorProfile, firstName }) {
           ref={wrapRef}
           className="md:col-span-3 relative bg-ruby-deep min-h-90 flex items-center justify-center px-4 py-8"
         >
-          <svg viewBox="0 0 240 520" className="w-full max-w-65 h-auto" aria-hidden={false} role="img">
+          <div className="absolute w-96 h-96 rounded-full blur-3xl bg-ruby/20" />
+          <svg
+            viewBox="0 0 240 520"
+            className="w-full max-w-70 h-auto animate-breathe"
+            aria-hidden={false}
+            role="img"
+          >
             <title>{t("avatar.svgTitle")}</title>
             {gender === "female" ? <FemaleFigure /> : <MaleFigure />}
 
             {donatesOrgans &&
               organsPledged.map((organKey) => {
-                const anchorPct = ORGAN_INFO[organKey]?.anchor?.[gender] || FALLBACK_ORGAN_ANCHOR;
-                const anchor = { x: (anchorPct.x / 100) * 240, y: (anchorPct.y / 100) * 520 };
+                const anchorPct =
+                  ORGAN_INFO[organKey]?.anchor?.[gender] ||
+                  FALLBACK_ORGAN_ANCHOR;
+                const anchor = {
+                  x: (anchorPct.x / 100) * 240,
+                  y: (anchorPct.y / 100) * 520,
+                };
                 return (
                   <OrganMarker
                     key={organKey}
                     organKey={organKey}
                     anchor={anchor}
                     active={activeOrgan === organKey}
+                    pinned={pinnedOrgan === organKey}
                     onEnter={handleEnter}
                     onLeave={handleLeave}
+                    onClick={handlePin}
                     t={t}
                   />
                 );
@@ -290,7 +430,7 @@ export default function DonorAvatarPanel({ donorProfile, firstName }) {
           {/* Hover/focus card */}
           {activeInfo && (
             <div
-              className="absolute z-10 w-64 rounded-2xl bg-cream text-ink p-4 shadow-xl border border-ink/8 animate-riseIn pointer-events-none"
+              className="absolute z-10 w-[clamp(280px,30vw,380px)] rounded-2xl bg-white/90 backdrop-blur-xl border border-white/40 text-ink p-4 shadow-xl animate-riseIn pointer-events-auto"
               style={{
                 left: `${Math.min(Math.max(cardPos.x, 22), 78)}%`,
                 top: `${Math.min(Math.max(cardPos.y, 8), 80)}%`,
@@ -298,8 +438,22 @@ export default function DonorAvatarPanel({ donorProfile, firstName }) {
                 animationDuration: "180ms",
               }}
             >
-              <p className="font-display text-lg text-ruby leading-tight">{activeInfo.label}</p>
-              <p className="font-body text-xs text-ink/65 mt-1.5 leading-relaxed">{activeInfo.summary}</p>
+              <button
+                onClick={() => {
+                  setPinnedOrgan(null);
+                  setHoveredOrgan(null);
+                }}
+                className="absolute top-3 right-3 w-7 h-7 rounded-full hover:bg-black/10"
+              >
+                ✕
+              </button>
+              ;
+              <p className="font-display text-lg text-ruby leading-tight">
+                {activeInfo.label}
+              </p>
+              <p className="font-body text-xs text-ink/65 mt-1.5 leading-relaxed">
+                {activeInfo.summary}
+              </p>
               <dl className="mt-3 space-y-1.5">
                 <CardRow label={t("quantity")} value={activeInfo.massDonated} />
                 <CardRow label={t("recovery")} value={activeInfo.recovery} />
@@ -322,9 +476,17 @@ export default function DonorAvatarPanel({ donorProfile, firstName }) {
 
 function StatTile({ label, value, accent }) {
   return (
-    <div className={`rounded-2xl px-4 py-3.5 ${accent ? "bg-mist/15 border border-mist/25" : "bg-cream/5 border border-cream/10"}`}>
-      <dt className="font-body text-[10px] font-semibold text-cream/55 uppercase tracking-wider">{label}</dt>
-      <dd className={`font-display text-xl mt-1.5 ${accent ? "text-mist font-semibold" : "text-cream font-medium"}`}>{value}</dd>
+    <div
+      className={`rounded-2xl px-4 py-3.5 ${accent ? "bg-mist/15 border border-mist/25" : "bg-cream/5 border border-cream/10"}`}
+    >
+      <dt className="font-body text-[10px] font-semibold text-cream/55 uppercase tracking-wider">
+        {label}
+      </dt>
+      <dd
+        className={`font-display text-xl mt-1.5 ${accent ? "text-mist font-semibold" : "text-cream font-medium"}`}
+      >
+        {value}
+      </dd>
     </div>
   );
 }
@@ -332,8 +494,12 @@ function StatTile({ label, value, accent }) {
 function CardRow({ label, value }) {
   return (
     <div className="flex items-baseline justify-between gap-3">
-      <dt className="font-body text-[11px] text-ink/45 uppercase tracking-wide whitespace-nowrap">{label}</dt>
-      <dd className="font-body text-xs text-ink font-medium text-right">{value}</dd>
+      <dt className="font-body text-[11px] text-ink/45 uppercase tracking-wide whitespace-nowrap">
+        {label}
+      </dt>
+      <dd className="font-body text-xs text-ink font-medium text-right">
+        {value}
+      </dd>
     </div>
   );
 }
