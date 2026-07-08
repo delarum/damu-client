@@ -100,7 +100,7 @@ export default function HospitalRequests() {
                 </div>
                 <div className="space-y-4">
                   {pending.map((req) => (
-                    <HospitalRequestCard key={req.request_id} request={req} />
+                    <HospitalRequestCard key={req.request_id ?? req.id} request={req} />
                   ))}
                 </div>
               </section>
@@ -117,7 +117,7 @@ export default function HospitalRequests() {
                 </div>
                 <div className="space-y-4">
                   {responded.map((req) => (
-                    <HospitalRequestCard key={req.request_id} request={req} />
+                    <HospitalRequestCard key={req.request_id ?? req.id} request={req} />
                   ))}
                 </div>
               </section>
@@ -131,8 +131,16 @@ export default function HospitalRequests() {
 
 function HospitalRequestCard({ request }) {
   const { t } = useLanguage();
-  const { status, donor_name, blood_type, organ_type, reason, requested_at, distance_km } =
-    request;
+  const {
+    status,
+    donor_name,
+    donor_phone,
+    blood_type,
+    organ_type,
+    reason,
+    requested_at,
+    distance_km,
+  } = request;
   const isPending = status === "pending";
   const isAccepted = status === "accepted";
 
@@ -143,34 +151,36 @@ function HospitalRequestCard({ request }) {
     : "border-ink/15 bg-white/80 hover:shadow-lg hover:border-ink/25 hover:-translate-y-0.5";
 
   const statusBadge = isPending
-    ? { 
-        label: t("requests.status.pending"), 
+    ? {
+        label: t("requests.status.pending"),
         cls: "bg-gradient-to-r from-mist to-clementine-soft text-ruby-night shadow-sm shadow-mist/50",
-        icon: "⏳"
+        icon: "⏳",
       }
     : isAccepted
-    ? { 
-        label: t("requests.status.accepted"), 
+    ? {
+        label: t("requests.status.accepted"),
         cls: "bg-gradient-to-r from-sage to-sage/90 text-white shadow-sm shadow-sage/50",
-        icon: "✓"
+        icon: "✓",
       }
-    : { 
-        label: t("requests.status.declined"), 
+    : {
+        label: t("requests.status.declined"),
         cls: "bg-ink/10 text-ink/60",
-        icon: "✕"
+        icon: "✕",
       };
 
   return (
     <div className={`rounded-3xl border-2 p-5 md:p-6 ${cardStyles} transition-all duration-300 ease-out`}>
       <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
         <div className="flex items-start gap-3">
-          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
-            isPending 
-              ? "bg-linear-to-br from-mist/20 to-clementine-soft/20" 
-              : isAccepted 
-              ? "bg-linear-to-br from-sage/20 to-sage-soft/30" 
-              : "bg-ink/5"
-          }`}>
+          <div
+            className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
+              isPending
+                ? "bg-linear-to-br from-mist/20 to-clementine-soft/20"
+                : isAccepted
+                ? "bg-linear-to-br from-sage/20 to-sage-soft/30"
+                : "bg-ink/5"
+            }`}
+          >
             <span className="text-lg">{isPending ? "🩸" : isAccepted ? "💚" : "💔"}</span>
           </div>
           <div>
@@ -193,7 +203,12 @@ function HospitalRequestCard({ request }) {
               {distance_km != null && (
                 <span className="inline-flex items-center gap-1 font-body text-xs text-ink/50 bg-ink/5 px-2.5 py-1 rounded-lg">
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                   {distance_km} {t("requests.hospital.kmAway")}
@@ -202,7 +217,12 @@ function HospitalRequestCard({ request }) {
               {requested_at && (
                 <span className="inline-flex items-center gap-1 font-mono text-[11px] text-ink/40">
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                   {formatWhen(requested_at)}
                 </span>
@@ -226,6 +246,30 @@ function HospitalRequestCard({ request }) {
           </p>
         </div>
       )}
+
+      {isAccepted && donor_phone && (
+        <div className="mt-4 pt-4 border-t border-ink/8">
+          <p className="font-body text-xs font-semibold text-sage uppercase tracking-wide mb-2">
+            Donor accepted — contact them directly
+          </p>
+          <div className="flex items-center gap-3">
+            <a
+              href={`tel:${donor_phone}`}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sage text-white font-body text-sm font-semibold hover:bg-sage/90 transition-colors"
+            >
+              📞 Call {donor_phone}
+            </a>
+            <a
+              href={`https://wa.me/${donor_phone.replace(/[^0-9]/g, "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-ink/15 text-ink/70 font-body text-sm font-semibold hover:bg-ink/5 transition-colors"
+            >
+              💬 WhatsApp
+            </a>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -243,4 +287,3 @@ function formatWhen(isoString) {
     return isoString;
   }
 }
-
