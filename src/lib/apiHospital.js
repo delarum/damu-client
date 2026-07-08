@@ -56,16 +56,16 @@ export const thirdPartyApi = {
 
 export const adminApi = {
   hospitals: {
-    list: () => api.get("/admin/hospitals/"),
-    approve: (id) => api.post(`/admin/hospitals/${id}/approve/`),
-    reject: (id, reason) => api.post(`/admin/hospitals/${id}/reject/`, { reason }),
+    list: () => api.get("/admin/superadmin/hospitals/"),
+    approve: (id) => api.post(`/admin/superadmin/hospitals/${id}/approve/`),
+    reject: (id, reason) => api.post(`/admin/superadmin/hospitals/${id}/reject/`, { reason }),
   },
-  auditLogs: () => api.get("/admin/audit-logs/"),
-  metrics: () => api.get("/admin/metrics/"),
+  auditLogs: () => api.get("/admin/superadmin/audit-logs/"),
+  metrics: () => api.get("/admin/superadmin/stats/"),
   users: {
-    list: (params) => api.get("/admin/users/", { params }),
-    update: (id, payload) => api.patch(`/admin/users/${id}/`, payload),
-    remove: (id) => api.delete(`/admin/users/${id}/`),
-    resetPassword: (id, payload) => api.post(`/admin/users/${id}/reset-password/`, payload),
+    list: (params) => api.get("/admin/superadmin/users/", { params }),
+    update: (id, payload) => api.patch(`/admin/superadmin/users/${id}/`, payload),
+    remove: (id) => api.delete(`/admin/superadmin/users/${id}/`),
+    resetPassword: (id, payload) => api.post(`/admin/superadmin/users/${id}/reset-password/`, payload),
   },
 };
