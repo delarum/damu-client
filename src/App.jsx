@@ -24,6 +24,7 @@ import Credits from "./pages/Credits";
 import Badges from "./pages/Badges";
 import Verification from "./pages/Verification";
 import ThirdPartyApply from "./pages/ThirdPartyApply";
+import DonorContactRequests from "./pages/DonorContactRequests";
 
 import HospitalLogin from "./pages/HospitalLogin";
 import HospitalRegister from "./pages/HospitalRegister";
@@ -46,7 +47,18 @@ import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 
 export default function App() {
-  const [introDone, setIntroDone] = useState(false);
+  const [introDone, setIntroDone] = useState(() => {
+    // Check if user has already seen the intro
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("damulink_intro_done") === "true";
+    }
+    return false;
+  });
+
+  const handleIntroComplete = () => {
+    setIntroDone(true);
+    localStorage.setItem("damulink_intro_done", "true");
+  };
 
   return (
     <LanguageProvider>
@@ -61,7 +73,7 @@ export default function App() {
                   <AnimatePresence mode="wait">
                     {!introDone && (
                       <VideoIntro
-                        onComplete={() => setIntroDone(true)}
+                        onComplete={handleIntroComplete}
                       />
                     )}
                   </AnimatePresence>
@@ -81,6 +93,7 @@ export default function App() {
             <Route path="/verification" element={<PageShell><ProtectedRoute><Verification /></ProtectedRoute></PageShell>} />
             <Route path="/third-party/apply" element={<PageShell><ProtectedRoute><ThirdPartyApply /></ProtectedRoute></PageShell>} />
             <Route path="/about" element={<PageShell><ProtectedRoute><About/></ProtectedRoute></PageShell>} />
+            <Route path="/messages" element={<PageShell><ProtectedRoute><DonorContactRequests /></ProtectedRoute></PageShell>} />
 
             <Route path="/hospital/login" element={<PageShell><HospitalAuthProvider><HospitalLogin /></HospitalAuthProvider></PageShell>} />
             <Route path="/hospital/register" element={<PageShell><HospitalAuthProvider><HospitalRegister /></HospitalAuthProvider></PageShell>} />

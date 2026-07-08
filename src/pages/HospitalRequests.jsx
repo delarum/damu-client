@@ -130,6 +130,7 @@ export default function HospitalRequests() {
 }
 
 function HospitalRequestCard({ request }) {
+  const { t } = useLanguage();
   const { status, donor_name, blood_type, organ_type, reason, requested_at, distance_km } =
     request;
   const isPending = status === "pending";

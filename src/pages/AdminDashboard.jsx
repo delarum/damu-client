@@ -54,7 +54,7 @@ export default function AdminDashboard() {
             <StatCard label="Total donors" value={metrics?.total_donors ?? "—"} />
             <StatCard label="Hospitals" value={metrics?.total_hospitals ?? "—"} />
             <StatCard label="Active subscriptions" value={metrics?.active_subscriptions ?? "—"} />
-            <StatCard label="Pending reviews" value={metrics?.pending_reviews ?? "—"} />
+            <StatCard label="Pending reviews" value={metrics?.pending_hospitals ?? "—"} />
           </div>
         )}
 

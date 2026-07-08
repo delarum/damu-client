@@ -29,6 +29,10 @@ export default function HospitalSearch() {
   const [selectedDonor, setSelectedDonor] = useState(null);
   const [donorDetails, setDonorDetails] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
+  const [contactReason, setContactReason] = useState("");
+const [sendingContact, setSendingContact] = useState(false);
+const [contactSentIds, setContactSentIds] = useState(new Set());
+const [contactError, setContactError] = useState("");
 
   useEffect(() => {
     if (!user) window.location.href = "/hospital/login";
@@ -89,11 +93,30 @@ export default function HospitalSearch() {
     }
   }
 
-  function handleCloseModal() {
-    setSelectedDonor(null);
-    setDonorDetails(null);
+  async function handleSendContactRequest(donorId) {
+  if (!contactReason.trim()) {
+    setContactError("Please enter a reason before sending.");
+    return;
   }
+  setSendingContact(true);
+  setContactError("");
+  try {
+    await hospitalApi.contactRequests.create(donorId, contactReason.trim());
+    setContactSentIds((prev) => new Set(prev).add(donorId));
+    setContactReason("");
+  } catch (err) {
+    setContactError(err.message || "Couldn't send the request. Please try again.");
+  } finally {
+    setSendingContact(false);
+  }
+}
 
+  function handleCloseModal() {
+  setSelectedDonor(null);
+  setDonorDetails(null);
+  setContactReason("");
+  setContactError("");
+}
   return (
     <div className="min-h-screen bg-clay">
       <header className="flex items-center justify-between px-6 md:px-12 py-6 bg-ruby-night">
@@ -526,20 +549,43 @@ export default function HospitalSearch() {
                     </div>
                   </div>
                   
-                  <div className="mt-6 flex gap-3">
-                    <button
-                      onClick={() => alert("Contact request feature coming soon!")}
-                      className="flex-1 px-6 py-3 rounded-full bg-ruby text-cream font-body text-sm font-semibold hover:bg-ruby-deep transition-colors"
-                    >
-                      Request Contact
-                    </button>
-                    <button
-                      onClick={handleCloseModal}
-                      className="px-6 py-3 rounded-full bg-ink/10 text-ink font-body text-sm font-semibold hover:bg-ink/20 transition-colors"
-                    >
-                      Close
-                    </button>
-                  </div>
+                  <div className="mt-6">
+  {contactSentIds.has(selectedDonor) ? (
+    <div className="rounded-2xl bg-sage-soft/40 border border-sage/20 px-5 py-4 text-center">
+      <p className="font-body text-sm font-semibold text-sage">
+        Request sent — waiting for the donor to respond.
+      </p>
+    </div>
+  ) : (
+    <div className="space-y-3">
+      <textarea
+        value={contactReason}
+        onChange={(e) => setContactReason(e.target.value)}
+        placeholder="Why do you need to reach this donor? e.g. 'Urgent O+ transfusion needed for a patient in ICU.'"
+        rows={3}
+        className="w-full px-4 py-3 rounded-2xl border border-ink/10 bg-white font-body text-sm text-ink focus:outline-none focus:ring-2 focus:ring-ruby-warm/35 resize-none"
+      />
+      {contactError && (
+        <p className="font-body text-xs text-ruby-warm">{contactError}</p>
+      )}
+      <div className="flex gap-3">
+        <button
+          onClick={() => handleSendContactRequest(selectedDonor)}
+          disabled={sendingContact}
+          className="flex-1 px-6 py-3 rounded-full bg-ruby text-cream font-body text-sm font-semibold hover:bg-ruby-deep transition-colors disabled:opacity-50"
+        >
+          {sendingContact ? "Sending..." : "Send Contact Request"}
+        </button>
+        <button
+          onClick={handleCloseModal}
+          className="px-6 py-3 rounded-full bg-ink/10 text-ink font-body text-sm font-semibold hover:bg-ink/20 transition-colors"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  )}
+</div>
                 </div>
               ) : (
                 <div className="p-10 text-center">

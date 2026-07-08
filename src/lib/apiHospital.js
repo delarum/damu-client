@@ -13,11 +13,11 @@ export const hospitalApi = {
     add: (payload) => api.post("/hospitals/staff/add/", payload),
     remove: (id) => api.delete(`/hospitals/staff/${id}/remove/`),
   },
-  subscription: {
-    current: () => api.get("/subscriptions/current/"),
-    create: (payload) => api.post("/subscriptions/", payload),
-    cancel: () => api.post("/subscriptions/cancel/"),
-  },
+ subscription: {
+  current: () => api.get("/hospitals/subscription/"),
+  create: (payload) => api.post("/hospitals/subscription/activate/", payload),
+  cancel: () => api.post("/hospitals/subscription/cancel/"),
+},
   search: {
     blood: (params) => api.get("/matching/search/blood/", { params }),
     organs: (params) => api.get("/matching/search/organs/", { params }),
@@ -27,8 +27,10 @@ export const hospitalApi = {
     details: (donorId) => api.get(`/donors/profile/${donorId}/hospital-view/`),
   },
   contactRequests: {
-    list: () => api.get("/matching/contact-requests/"),
-  },
+  list: () => api.get("/matching/contact-requests/"),
+  create: (donorId, reason) =>
+    api.post("/matching/contact-request/", { donor_id: donorId, reason }),
+},
 };
 
 export const verificationApi = {
