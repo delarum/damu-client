@@ -77,7 +77,7 @@ async function refreshAccessToken() {
  * 401 by refreshing the access token, and normalizes error shapes coming
  * back from DRF (validation errors, auth errors, permission errors).
  */
-async function request(path, { method = "GET", body, auth = true, isForm = false } = {}) {
+async function request(path, { method = "GET", body, auth = true, isForm = false, params } = {}) {
   const headers = {};
   if (!isForm) headers["Content-Type"] = "application/json";
 
@@ -86,8 +86,16 @@ async function request(path, { method = "GET", body, auth = true, isForm = false
     if (token) headers["Authorization"] = `Bearer ${token}`;
   }
 
+  let url = `${BASE_URL}${path}`;
+  if (params) {
+    const query = new URLSearchParams(
+      Object.entries(params).filter(([, v]) => v !== undefined && v !== null && v !== "")
+    ).toString();
+    if (query) url += `?${query}`;
+  }
+
   const doFetch = async () => {
-    return fetch(`${BASE_URL}${path}`, {
+    return fetch(url, {
       method,
       headers,
       body: body ? (isForm ? body : JSON.stringify(body)) : undefined,
@@ -96,7 +104,6 @@ async function request(path, { method = "GET", body, auth = true, isForm = false
 
   let res = await doFetch();
 
-  // Attempt a single silent refresh-and-retry on auth expiry.
   if (res.status === 401 && auth && getRefreshToken()) {
     try {
       const newAccess = await refreshAccessToken();
@@ -118,14 +125,12 @@ async function request(path, { method = "GET", body, auth = true, isForm = false
     throw new ApiError(message, res.status, payload?.details);
   }
 
-  // Some endpoints (e.g. USSD) return plain text.
   const contentType = res.headers.get("content-type") || "";
   if (contentType.includes("application/json")) {
     return res.json();
   }
   return res.text();
 }
-
 export const api = {
   get: (path, opts) => request(path, { ...opts, method: "GET" }),
   post: (path, body, opts) => request(path, { ...opts, method: "POST", body }),
