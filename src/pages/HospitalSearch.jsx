@@ -83,7 +83,7 @@ const [contactError, setContactError] = useState("");
     setLoadingDetails(true);
     setDonorDetails(null);
     try {
-      const data = await hospitalApi.getDonorDetails(donorId);
+      const data = await hospitalApi.donors.details(donorId);
       setDonorDetails(data);
     } catch (error) {
       console.error("Failed to load donor details:", error);

@@ -3,27 +3,29 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ruby: #570300;
-  --color-ruby-warm: #7A1410;
-  --color-ruby-deep: #3D0200;
-  --color-ruby-night: #220301;
-  --color-ruby-50: #FBEEED;
-  --color-mist: #F7E493;
-  --color-mist-soft: #FBF0BE;
-  --color-cream: #FFFBF5;
-  --color-clay: #F0E4DC;
-  --color-ink: #2B1B16;
+  --color-ruby:        #8F3027;
+--color-ruby-warm:   #A9473D;
+--color-ruby-deep:   #6E211B;
+--color-ruby-night:  #3A120F;
 
-  --color-sage: #5C7A5E;
-  --color-sage-soft: #E3EBE0;
-  --color-clementine: #D97742;
-  --color-clementine-soft: #F7E1CF;
-  --color-dusk: #3E5C76;
-  --color-dusk-soft: #E1E8ED;
+--color-ruby-50:     #FDF3F2;
 
-  --font-display: "Fraunces", "Georgia", serif;
-  --font-body: "Inter", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
+--color-mist:        #F9EAAE;
+--color-mist-soft:   #FEF6D7;
+
+--color-cream:       #FFFDFB;
+--color-clay:        #FCF8F5;
+
+--color-ink:         #2D2A28;
+
+--color-sage:        #6E9170;
+--color-sage-soft:   #EDF4EB;
+
+--color-clementine:      #E58A57;
+--color-clementine-soft: #FAE8DB;
+
+--color-dusk:        #587A97;
+--color-dusk-soft:   #EDF4F8;
 }
 
 :root {
@@ -46,8 +48,8 @@ html, body, #root {
    only shows through if a page's root container collapses in height. */
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background: #FFFBF5;
-  color: #2B1B16;
+  background: #FAFAFA;
+  color: #1a1a1a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
